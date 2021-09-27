@@ -144,6 +144,7 @@ const getTemplateToolStyle = `
 function getPrintTemplate (body = '', options = {}) {
   return `
     <!DOCTYPE html>
+
     <html>
       <head>
         <meta charset="utf-8" />
@@ -158,6 +159,7 @@ function getPrintTemplate (body = '', options = {}) {
         <style>${printTemplateDefaultStyle}</style>
         <style>${getTemplateToolStyle}</style>
       </head>
+
       <body>
           <article class="print-wrapper" style="width: ${options.width};">
             ${body}
