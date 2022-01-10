@@ -1,4 +1,4 @@
-import compare from './src/levenshteinDistance'
+import compare from './levenshteinDistance'
 
 interface IOptions {
   keyNameList?: string | string[]

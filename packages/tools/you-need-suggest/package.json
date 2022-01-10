@@ -14,7 +14,7 @@
     "url": "git+https://github.com/lihaizhong/toolkit.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "build": "rm -rf ./lib ./types && tsc --build tsconfig.json"
   },
   "bugs": {
     "url": "https://github.com/lihaizhong/toolkit/issues"

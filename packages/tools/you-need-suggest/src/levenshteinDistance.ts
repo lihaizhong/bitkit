@@ -1,10 +1,10 @@
-import { IResultWrapper, TResult } from '../typings.d'
+import { IResultWrapper, TResult } from './typings'
 
 class ResultWrapper implements IResultWrapper {
-  private continuous
-  private count
-  private position
-  private distance
+  private continuous: number
+  private count: number
+  private position: number
+  private distance: number
 
   constructor(continuous: number, count: number, position: number, distance: number) {
     // 最大的匹配词长度
