@@ -2,66 +2,90 @@
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
-import Tools from "./tools";
-import transform from "./transform";
+import Tools from "./tools"
+import transform from "./transform"
 
-class ValueParser {
-  typeOfString(fieldValue: string | number, defaultValue: any) {
+export default {
+  typeOfString(fieldValue: string | number, defaultValue: any, key: string) {
     if (Tools.isSameType(fieldValue, String)) {
-      return fieldValue;
+      return fieldValue
     }
 
     if (Tools.isSameType(fieldValue, Number)) {
-      return fieldValue.toString();
+      return fieldValue.toString()
     }
 
-    return defaultValue;
-  }
+    if (!Tools.isVoid(fieldValue)){
+      console.warn(`【MKFS.typeOfString】${key} is not a string or number!`, fieldValue)
+    }
 
-  typeOfNumber(fieldValue: string | number, defaultValue: any) {
+    return defaultValue
+  },
+
+  typeOfNumber(fieldValue: string | number, defaultValue: any, key: string) {
     if (Tools.isSameType(fieldValue, Number)) {
-      return fieldValue;
+      return fieldValue
     }
 
     if (
       Tools.isSameType(fieldValue, String) &&
       /^\d+$/.test(fieldValue as unknown as string)
     ) {
-      return Number(fieldValue);
+      return Number(fieldValue)
     }
 
-    return defaultValue;
-  }
+    if (!Tools.isVoid(fieldValue)) {
+      console.warn(`【MKFS.typeOfNumber】${key} is not a number or numeric string`, fieldValue)
+    }
 
-  typeOfBoolean(fieldValue: boolean, defaultValue: any) {
+    return defaultValue
+  },
+
+  typeOfBoolean(fieldValue: boolean, defaultValue: any, key: string) {
     if (Tools.isSameType(fieldValue, Boolean)) {
-      return fieldValue;
+      return fieldValue
     }
 
-    return defaultValue;
-  }
+    if (!Tools.isVoid(fieldValue)) {
+      console.warn(`【MKFS.typeOfBoolean】${key} is not a boolean`, fieldValue)
+    }
 
-  typeOfObject(fieldValue: object, defaultValue: any) {
+    return defaultValue
+  },
+
+  typeOfObject(fieldValue: object, defaultValue: any, key: string) {
     if (Tools.isSameType(fieldValue, Object)) {
-      return fieldValue;
+      return fieldValue
     }
 
-    return defaultValue;
-  }
+    if (!Tools.isVoid(fieldValue)) {
+      console.warn(`【MKFS.typeOfObject】${key} is not a plain object`, fieldValue)
+    }
 
-  typeOfArray(type: any, fieldValue: any[], defaultValue: any, config: any) {
-    return (fieldValue || defaultValue).map((value) =>
-      transform(config, { type }, value, "")
-    );
-  }
+    return defaultValue
+  },
+
+  typeOfArray(type: any, fieldValue: any[], defaultValue: any, key: string, config: any) {
+    if (Tools.isArray(fieldValue)) {
+      return fieldValue.map((value) => transform(config, { type }, value, ""))
+    }
+
+    if (!Tools.isVoid(fieldValue)) {
+      console.warn(`【MKFS.typeOfArray】${key} is not a array!`, fieldValue)
+    }
+
+    return defaultValue
+  },
 
   typeOfAny(fieldValue: any) {
-    return fieldValue;
-  }
+    return fieldValue
+  },
 
-  typeOfDefault(CustomBean: any, data: any, config: any) {
-    return new CustomBean(data).valueOf(config);
+  typeOfDefault(MiddlewareBean: any, data: any, config: any) {
+    const middlewareBean = new MiddlewareBean(config)
+
+    middlewareBean.transform(data)
+
+    return new middlewareBean.valueOf()
   }
 }
-
-export default new ValueParser();

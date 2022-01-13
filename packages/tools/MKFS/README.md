@@ -1,11 +1,12 @@
-# `DataDock`
+# `mkfs`
 
-> TODO: description
+> 这是一个前端数据格式化工具，主要用于后台接口请求和返回的数据转换工作。它主要做两件事：
+> 1. 补全数据结构，减少前端对接口返回数据的判断和处理。
+> 2. 调整数据结构，保证前端
+> 这样的方式有利于对数据的维护，减少数据结构判断，
 
 ## Usage
 
 ```
-const dataDock = require('DataDock');
 
-// TODO: DEMONSTRATE API
 ```

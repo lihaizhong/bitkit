@@ -2,42 +2,54 @@
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
-import { Any } from "./Types";
-import Tools from "./tools";
-import ValueParser from "./ValueParser";
-import { ITransformBean } from "./typings";
+import { Any } from "./Types"
+import Tools from "./tools"
+import ValueParser from "./valueParser"
+import { ITransformBean } from "./typings"
+
+function getConfigKey(key: string): string | void {
+  switch (key) {
+    case "loose":
+      return "looseFields"
+    default:
+  }
+}
 
 function getFieldProfile(
   config: ITransformBean.GlobalOptions,
   fieldConfig: ITransformBean.FieldConfig
 ): ITransformBean.FieldOptions {
-  const keys = ["loose"];
+  const keys: string[] = ["loose"]
 
   return keys.reduce((_config: any, key: string) => {
     if (!Tools.isVoid(fieldConfig[key])) {
-      _config[key] = fieldConfig[key];
+      _config[key] = fieldConfig[key]
 
-      return _config;
+      return _config
     }
 
-    const value: any = (config as Record<string, any>)[key];
+    const configKey = getConfigKey(key)
+    if (Tools.isString(configKey)) {
+      const value: any = (config as Record<string, any>)[configKey as string]
 
     switch (key) {
       case "loose":
         if (Tools.isBoolean(value)) {
-          _config[key] = value;
+          _config[key] = value
         } else if (Tools.isArray(value)) {
-          _config[key] = value.includes(fieldConfig.__name__ as string);
+          _config[key] = value.includes(fieldConfig.__name__ as string)
         } else {
-          _config[key] = false;
+          _config[key] = false
         }
-        break;
+        break
       default:
-        _config[key] = value;
+        _config[key] = value
+    }
     }
 
-    return _config;
-  }, {});
+
+    return _config
+  }, {})
 }
 
 /**
@@ -53,11 +65,11 @@ function getDefaultValue(
   placeholderValue: any,
   options: ITransformBean.FieldOptions
 ): any {
-  if (options.loose || Tools.isSameType(defaultValue, type)) {
-    return defaultValue;
+  if (options.loose || Tools.isSameType(defaultValue, type) || Tools.isNull(defaultValue)) {
+    return defaultValue
   }
 
-  return placeholderValue;
+  return placeholderValue
 }
 
 /**
@@ -68,18 +80,18 @@ function getDefaultValue(
  */
 function parseFieldValue(target: any, field: any, key: string): any {
   if (Tools.isString(field)) {
-    return target[field];
+    return target[field]
   }
 
   if (Tools.isFunction(field)) {
-    return field(target);
+    return field(target)
   }
 
   if (Tools.isString(key) && key !== "") {
-    return target[key];
+    return target[key]
   }
 
-  return target;
+  return target
 }
 
 /**
@@ -97,41 +109,46 @@ export default function transform(
   data: any,
   key: string
 ): any {
-  const { type, itemType, field, defaultValue } = fieldConfig;
-  const fieldValue = parseFieldValue(data, field, key);
-  const options = getFieldProfile(config, fieldConfig);
+  const { __name__: name, type, itemType, field, defaultValue } = fieldConfig
+  const fieldValue: any = parseFieldValue(data, field, key)
+  const options: ITransformBean.FieldOptions = getFieldProfile(config, fieldConfig)
 
   switch (type) {
     case Any:
-      return ValueParser.typeOfAny(fieldValue);
+      return ValueParser.typeOfAny(fieldValue)
     case String:
       return ValueParser.typeOfString(
         fieldValue,
-        getDefaultValue(type, defaultValue, "", options)
-      );
+        getDefaultValue(type, defaultValue, "", options),
+        name
+      )
     case Number:
       return ValueParser.typeOfNumber(
         fieldValue,
-        getDefaultValue(type, defaultValue, null, options)
-      );
+        getDefaultValue(type, defaultValue, null, options),
+        name
+      )
     case Boolean:
       return ValueParser.typeOfBoolean(
         fieldValue,
-        getDefaultValue(type, defaultValue, null, options)
-      );
+        getDefaultValue(type, defaultValue, null, options),
+        name
+      )
     case Array:
       return ValueParser.typeOfArray(
         itemType,
         fieldValue,
         getDefaultValue(type, defaultValue, [], options),
+        name,
         config
-      );
+      )
     case Object:
       return ValueParser.typeOfObject(
         fieldValue,
-        getDefaultValue(type, defaultValue, {}, options)
-      );
+        getDefaultValue(type, defaultValue, {}, options),
+        name
+      )
     default:
-      return ValueParser.typeOfDefault(type, fieldValue, config);
+      return ValueParser.typeOfDefault(type, fieldValue, config)
   }
 }

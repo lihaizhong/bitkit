@@ -5,11 +5,11 @@
 
 export namespace ITransformBean {
   export interface GlobalOptions {
-    loose?: boolean | string[];
+    looseFields?: boolean | string[]
 
-    abandonUndefinedValue?: boolean;
+    abandonUndefinedValue?: boolean
 
-    strict?: boolean;
+    strict?: boolean
   }
 
   export interface FieldOptions {
@@ -17,16 +17,16 @@ export namespace ITransformBean {
   }
 
   export interface FieldConfig extends Partial<FieldOptions> {
-    __name__?: string;
+    __name__?: string
 
-    type: any;
+    type: any
 
-    field?: string | ((data: any) => any);
+    field?: string | ((data: any) => any)
 
-    itemType?: any;
+    itemType?: any
 
-    defaultValue?: any;
+    defaultValue?: any
 
-    [key: string]: any;
+    [key: string]: any
   }
 }
