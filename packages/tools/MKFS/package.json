@@ -1,6 +1,6 @@
 {
   "name": "mkfs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "数据扩展坞,将传入数据按照定义好的schema转换为新数据",
   "keywords": [
     "data",
