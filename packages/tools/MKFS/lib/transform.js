@@ -4,7 +4,14 @@
 // https://opensource.org/licenses/MIT
 import { Any } from "./Types";
 import Tools from "./tools";
-import ValueParser from "./ValueParser";
+import ValueParser from "./valueParser";
+function getConfigKey(key) {
+    switch (key) {
+        case "loose":
+            return "looseFields";
+        default:
+    }
+}
 function getFieldProfile(config, fieldConfig) {
     var keys = ["loose"];
     return keys.reduce(function (_config, key) {
@@ -12,21 +19,24 @@ function getFieldProfile(config, fieldConfig) {
             _config[key] = fieldConfig[key];
             return _config;
         }
-        var value = config[key];
-        switch (key) {
-            case "loose":
-                if (Tools.isBoolean(value)) {
+        var configKey = getConfigKey(key);
+        if (Tools.isString(configKey)) {
+            var value = config[configKey];
+            switch (key) {
+                case "loose":
+                    if (Tools.isBoolean(value)) {
+                        _config[key] = value;
+                    }
+                    else if (Tools.isArray(value)) {
+                        _config[key] = value.includes(fieldConfig.__name__);
+                    }
+                    else {
+                        _config[key] = false;
+                    }
+                    break;
+                default:
                     _config[key] = value;
-                }
-                else if (Tools.isArray(value)) {
-                    _config[key] = value.includes(fieldConfig.__name__);
-                }
-                else {
-                    _config[key] = false;
-                }
-                break;
-            default:
-                _config[key] = value;
+            }
         }
         return _config;
     }, {});
@@ -39,7 +49,7 @@ function getFieldProfile(config, fieldConfig) {
  * @param {any} options 数据类型判断
  */
 function getDefaultValue(type, defaultValue, placeholderValue, options) {
-    if (options.loose || Tools.isSameType(defaultValue, type)) {
+    if (options.loose || Tools.isSameType(defaultValue, type) || Tools.isNull(defaultValue)) {
         return defaultValue;
     }
     return placeholderValue;
@@ -72,22 +82,22 @@ function parseFieldValue(target, field, key) {
  * @param {string} key 数据的key值
  */
 export default function transform(config, fieldConfig, data, key) {
-    var type = fieldConfig.type, itemType = fieldConfig.itemType, field = fieldConfig.field, defaultValue = fieldConfig.defaultValue;
+    var name = fieldConfig.__name__, type = fieldConfig.type, itemType = fieldConfig.itemType, field = fieldConfig.field, defaultValue = fieldConfig.defaultValue;
     var fieldValue = parseFieldValue(data, field, key);
     var options = getFieldProfile(config, fieldConfig);
     switch (type) {
         case Any:
             return ValueParser.typeOfAny(fieldValue);
         case String:
-            return ValueParser.typeOfString(fieldValue, getDefaultValue(type, defaultValue, "", options));
+            return ValueParser.typeOfString(fieldValue, getDefaultValue(type, defaultValue, "", options), name);
         case Number:
-            return ValueParser.typeOfNumber(fieldValue, getDefaultValue(type, defaultValue, null, options));
+            return ValueParser.typeOfNumber(fieldValue, getDefaultValue(type, defaultValue, null, options), name);
         case Boolean:
-            return ValueParser.typeOfBoolean(fieldValue, getDefaultValue(type, defaultValue, null, options));
+            return ValueParser.typeOfBoolean(fieldValue, getDefaultValue(type, defaultValue, null, options), name);
         case Array:
-            return ValueParser.typeOfArray(itemType, fieldValue, getDefaultValue(type, defaultValue, [], options), config);
+            return ValueParser.typeOfArray(itemType, fieldValue, getDefaultValue(type, defaultValue, [], options), name, config);
         case Object:
-            return ValueParser.typeOfObject(fieldValue, getDefaultValue(type, defaultValue, {}, options));
+            return ValueParser.typeOfObject(fieldValue, getDefaultValue(type, defaultValue, {}, options), name);
         default:
             return ValueParser.typeOfDefault(type, fieldValue, config);
     }

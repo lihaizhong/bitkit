@@ -4,19 +4,20 @@
 // https://opensource.org/licenses/MIT
 import Tools from "./tools";
 import transform from "./transform";
-var ValueParser = /** @class */ (function () {
-    function ValueParser() {
-    }
-    ValueParser.prototype.typeOfString = function (fieldValue, defaultValue) {
+export default {
+    typeOfString: function (fieldValue, defaultValue, key) {
         if (Tools.isSameType(fieldValue, String)) {
             return fieldValue;
         }
         if (Tools.isSameType(fieldValue, Number)) {
             return fieldValue.toString();
         }
+        if (!Tools.isVoid(fieldValue)) {
+            console.warn("\u3010MKFS.typeOfString\u3011" + key + " is not a string or number!", fieldValue);
+        }
         return defaultValue;
-    };
-    ValueParser.prototype.typeOfNumber = function (fieldValue, defaultValue) {
+    },
+    typeOfNumber: function (fieldValue, defaultValue, key) {
         if (Tools.isSameType(fieldValue, Number)) {
             return fieldValue;
         }
@@ -24,32 +25,45 @@ var ValueParser = /** @class */ (function () {
             /^\d+$/.test(fieldValue)) {
             return Number(fieldValue);
         }
+        if (!Tools.isVoid(fieldValue)) {
+            console.warn("\u3010MKFS.typeOfNumber\u3011" + key + " is not a number or numeric string", fieldValue);
+        }
         return defaultValue;
-    };
-    ValueParser.prototype.typeOfBoolean = function (fieldValue, defaultValue) {
+    },
+    typeOfBoolean: function (fieldValue, defaultValue, key) {
         if (Tools.isSameType(fieldValue, Boolean)) {
             return fieldValue;
         }
+        if (!Tools.isVoid(fieldValue)) {
+            console.warn("\u3010MKFS.typeOfBoolean\u3011" + key + " is not a boolean", fieldValue);
+        }
         return defaultValue;
-    };
-    ValueParser.prototype.typeOfObject = function (fieldValue, defaultValue) {
+    },
+    typeOfObject: function (fieldValue, defaultValue, key) {
         if (Tools.isSameType(fieldValue, Object)) {
             return fieldValue;
         }
+        if (!Tools.isVoid(fieldValue)) {
+            console.warn("\u3010MKFS.typeOfObject\u3011" + key + " is not a plain object", fieldValue);
+        }
         return defaultValue;
-    };
-    ValueParser.prototype.typeOfArray = function (type, fieldValue, defaultValue, config) {
-        return (fieldValue || defaultValue).map(function (value) {
-            return transform(config, { type: type }, value, "");
-        });
-    };
-    ValueParser.prototype.typeOfAny = function (fieldValue) {
+    },
+    typeOfArray: function (type, fieldValue, defaultValue, key, config) {
+        if (Tools.isArray(fieldValue)) {
+            return fieldValue.map(function (value) { return transform(config, { type: type }, value, ""); });
+        }
+        if (!Tools.isVoid(fieldValue)) {
+            console.warn("\u3010MKFS.typeOfArray\u3011" + key + " is not a array!", fieldValue);
+        }
+        return defaultValue;
+    },
+    typeOfAny: function (fieldValue) {
         return fieldValue;
-    };
-    ValueParser.prototype.typeOfDefault = function (CustomBean, data, config) {
-        return new CustomBean(data).valueOf(config);
-    };
-    return ValueParser;
-}());
-export default new ValueParser();
-//# sourceMappingURL=ValueParser.js.map
+    },
+    typeOfDefault: function (MiddlewareBean, data, config) {
+        var middlewareBean = new MiddlewareBean(config);
+        middlewareBean.transform(data);
+        return new middlewareBean.valueOf();
+    }
+};
+//# sourceMappingURL=valueParser.js.map

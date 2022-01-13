@@ -29,6 +29,9 @@ var TransformTools = /** @class */ (function () {
     TransformTools.prototype.isString = function (value) {
         return typeof value === "string";
     };
+    TransformTools.prototype.isNull = function (value) {
+        return value === null;
+    };
     TransformTools.prototype.isUndefined = function (value) {
         return typeof value === "undefined";
     };
