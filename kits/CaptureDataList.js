@@ -29,9 +29,7 @@ export default class CaptureDataList {
     this.options = Object.assign(
       {
         preSize: 50,
-        onCompare: function (target, source) {
-          return target === source
-        },
+        onCompare: (target, source) => target === source,
         transform: null
       },
       options

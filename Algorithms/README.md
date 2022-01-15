@@ -34,5 +34,5 @@
 
 ## 算法实现
 
-- [编辑距离](./EditDistanceAlgorithm/index.js)
-- [洗牌算法](./FisherYatesShuffle/index.js)
+- [编辑距离](./EditDistanceAlgorithm/README.md)
+- [洗牌算法](./FisherYatesShuffle/README.md)

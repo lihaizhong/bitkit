@@ -1,6 +1,11 @@
-import ValidatorToolbox, { TriggerTypes, completeSync } from './toolbox'
+/**
+ * Copyright (c) 2022 Sangbaipi
+ *
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
 
-function IdentityCodeValid (code) {
+export function IdentityCodeValidator (code) {
   const city = {
     11: '北京',
     12: '天津',
@@ -65,47 +70,4 @@ function IdentityCodeValid (code) {
     }
   }
   return pass
-}
-
-/**
- * @param {string} property
- * @param {object} customErrors
- * @property {string|function} message 错误信息
- * @default {string} 请输入正确的身份证号码！
- * 注：需要使用call或者apply调用，将当前的组件实例绑定到验证器中
- */
-export default function identityValidator(property, customErrors) {
-  const toolbox = new ValidatorToolbox(this)
-
-  toolbox.initProperty(property)
-  toolbox.initErrors('请输入正确的身份证号码！', customErrors)
-
-  return [
-    {
-      trigger: TriggerTypes.change,
-      validator(rule, value) {
-        const reg = /[^\dxX]/
-        return completeSync(() => {
-          if (reg.test(value)) {
-            value = value.replace(reg, '')
-            toolbox.setValue(value)
-          }
-        })
-      },
-    },
-    {
-      trigger: TriggerTypes.blur,
-      validator(rule, value) {
-        const errors = []
-
-        return completeSync(() => {
-          if (!IdentityCodeValid(value)) {
-            errors.push(toolbox.$errors.getItem('default'))
-          }
-
-          return errors
-        })
-      },
-    },
-  ]
 }
