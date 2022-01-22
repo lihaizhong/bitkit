@@ -1,6 +1,6 @@
 {
   "name": "mkfs",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "数据扩展坞,将传入数据按照定义好的schema转换为新数据",
   "keywords": [
     "data",
@@ -32,5 +32,5 @@
   "bugs": {
     "url": "https://github.com/lihaizhong/toolkit/issues"
   },
-  "gitHead": "653c25a662e2f2276f862a2a7a63e3b0da06a467"
+  "gitHead": "170aefd64cb2f4c7bcfd0b3257d01fc69f3ce4c7"
 }
