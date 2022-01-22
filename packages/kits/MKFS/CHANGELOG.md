@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.2](https://github.com/lihaizhong/toolkit/compare/mkfs@0.1.1...mkfs@0.1.2) (2022-01-22)
+
+
+### Bug Fixes
+
+* 调整transform ([a03bf2a](https://github.com/lihaizhong/toolkit/commit/a03bf2a26866a79edc8b35d2c8b0c968d285d8b4))
+* 修复valueOfDefault constructor is not function 问题 ([76d7a6d](https://github.com/lihaizhong/toolkit/commit/76d7a6d135786cb48c74b305ca983e9267cae3e3))
+
+
+
+
+
 ## [0.1.1](https://github.com/lihaizhong/toolkit/compare/mkfs@0.1.0...mkfs@0.1.1) (2022-01-13)
 
 
