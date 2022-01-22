@@ -86,6 +86,6 @@ export default {
 
     middlewareBean.transform(data)
 
-    return new middlewareBean.valueOf()
+    return middlewareBean.valueOf()
   }
 }
