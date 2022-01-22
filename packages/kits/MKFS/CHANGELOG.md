@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.2](https://github.com/lihaizhong/toolkit/compare/mkfs@0.1.2...mkfs@0.0.2) (2022-01-22)
+
+
+### Bug Fixes
+
+* 版本调整 ([2429eff](https://github.com/lihaizhong/toolkit/commit/2429effdd064424aa21b9119699d2893fc3cd47d))
+
+
+
+
+
 ## [0.1.2](https://github.com/lihaizhong/toolkit/compare/mkfs@0.1.1...mkfs@0.1.2) (2022-01-22)
 
 
