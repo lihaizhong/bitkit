@@ -3,20 +3,13 @@ module.exports = {
     browser: true,
     es6: true,
     node: true,
-    'jest/globals': true
+    "jest/globals": true
   },
-  extends: ['standard'],
+  extends: ["prettier"],
   globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly'
+    Atomics: "readonly",
+    SharedArrayBuffer: "readonly"
   },
-  parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: 'module'
-  },
-  plugins: ['html', 'jest'],
-  rules: {
-    'no-debugger': 0,
-    'space-before-function-paren': ['error', 'always']
-  }
+  plugins: ["html", "jest", "node"],
+  rules: {}
 }

@@ -7,11 +7,7 @@
     "esModuleInterop": true,
     "noEmitOnError": true,
     "declaration": true,
-    "declarationDir": "types",
-    "rootDir": "src",
-    "outDir": "lib",
-    "baseUrl": "",
     "lib": ["esnext", "dom"]
   },
-  "include": ["src/*"]
+  "include": ["Algorithms/*", "DesignPatterns/*", "kits/*", "NativeImpls/*"]
 }
