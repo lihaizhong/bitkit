@@ -1,13 +1,24 @@
 {
   "compilerOptions": {
-    "module": "es6",
-    "moduleResolution": "node",
-    "target": "es5",
-    "sourceMap": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "module": "CommonJS",
+    "target": "ES2020",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "noEmitOnError": true,
-    "declaration": true,
-    "lib": ["esnext", "dom"]
+    "experimentalDecorators": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "alwaysStrict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "baseUrl": ".",
+    "strictPropertyInitialization": true,
+    "lib": ["ES2020"]
   },
-  "include": ["Algorithms/*", "DesignPatterns/*", "kits/*", "NativeImpls/*"]
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules", "packages"]
 }
