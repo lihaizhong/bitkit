@@ -5,8 +5,8 @@
   "author": "sky",
   "private": true,
   "license": "ISC",
+  "workspaces": ["packages/**"],
   "scripts": {
-    "serve": "serve -p 3000 ./tools",
     "test": "jest"
   },
   "prettier": {

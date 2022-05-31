@@ -1,10 +1,3 @@
-/**
- * Copyright (c) 2022 Sangbaipi
- *
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
- */
-
 export function IdentityCodeValidator (code) {
   const city = {
     11: '北京',
@@ -45,26 +38,29 @@ export function IdentityCodeValidator (code) {
   }
   let pass = true
   const reg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/i
+
   if (!code || !reg.test(code)) {
     pass = false
   } else if (!city[code.substr(0, 2)]) {
     pass = false
   }
+
   if (code.length === 18) {
     code = code.toUpperCase()
     code = code.split('')
+
     const factor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
     const parity = [1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2]
     let sum = 0
     let ai = 0
     let wi = 0
+
     for (let i = 0; i < 17; i++) {
       ai = code[i]
       wi = factor[i]
       sum += ai * wi
     }
-    /* eslint-disable */
-    const a = parity[sum % 11]
+
     if (parity[sum % 11] != code[17]) {
       pass = false
     }

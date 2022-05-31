@@ -1,23 +1,29 @@
 {
-  "name": "you-need-suggest",
-  "version": "0.0.3",
-  "description": "> TODO: description",
+  "name": "@lihzsky/anchor",
+  "version": "0.0.1",
+  "description": "打包工具",
   "author": "sky <854323752@qq.com>",
   "homepage": "https://github.com/lihaizhong/toolkit#readme",
   "license": "ISC",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmmirror.com/"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lihaizhong/toolkit.git"
   },
   "scripts": {
-    "build": "rm -rf ./lib ./types && tsc --build tsconfig.json"
+    "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
     "url": "https://github.com/lihaizhong/toolkit/issues"
-  },
-  "gitHead": "170aefd64cb2f4c7bcfd0b3257d01fc69f3ce4c7"
+  }
 }

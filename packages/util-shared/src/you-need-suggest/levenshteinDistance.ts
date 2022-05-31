@@ -1,73 +1,73 @@
 import { IResultWrapper, TResult } from './typings'
 
-class ResultWrapper implements IResultWrapper {
-  private continuous: number
-  private count: number
-  private position: number
-  private distance: number
+namespace Utility {
+  export class ResultWrapper implements IResultWrapper {
+    private continuous: number
+    private count: number
+    private position: number
+    private distance: number
 
-  constructor(continuous: number, count: number, position: number, distance: number) {
-    // 最大的匹配词长度
-    this.continuous = continuous
-    // 匹配词总个数
-    this.count = count
-    // 首个匹配字符的位置
-    this.position = position
-    // 最短编辑路径
-    this.distance = distance
-  }
-
-  get() {
-    const { continuous, count, position, distance } = this
-    return { continuous, count, position, distance }
-  }
-
-  setContinuous(continuous) {
-    if (this.continuous < continuous) {
+    constructor(continuous: number, count: number, position: number, distance: number) {
+      // 最大的匹配词长度
       this.continuous = continuous
+      // 匹配词总个数
+      this.count = count
+      // 首个匹配字符的位置
+      this.position = position
+      // 最短编辑路径
+      this.distance = distance
+    }
+
+    get() {
+      const { continuous, count, position, distance } = this
+      return { continuous, count, position, distance }
+    }
+
+    setContinuous(continuous) {
+      if(this.continuous < continuous) {
+        this.continuous = continuous
+      }
+    }
+
+    getContinuous() {
+      return this.continuous
+    }
+
+    setCount(count) {
+      this.count = count
+    }
+
+    getCount() {
+      return this.count
+    }
+
+    setPosition(position) {
+      this.position = position
+    }
+
+    getPosition() {
+      return this.position
+    }
+
+    setDistance(distance) {
+      this.distance = distance
+    }
+
+    getDistance() {
+      return this.distance
     }
   }
 
-  getContinuous() {
-    return this.continuous
-  }
-
-  setCount(count) {
-    this.count = count
-  }
-
-  getCount() {
-    return this.count
-  }
-
-  setPosition(position) {
-    this.position = position
-  }
-
-  getPosition() {
-    return this.position
-  }
-
-  setDistance(distance) {
-    this.distance = distance
-  }
-
-  getDistance() {
-    return this.distance
-  }
-}
-
-namespace Utility {
   export function levenshteinDistance(source: string, target: string): TResult {
     const sourceLength: number = source.length
     const targetLength: number = target.length
     const space: number[] = new Array(targetLength)
-    const result: IResultWrapper = new ResultWrapper(0, 0, targetLength, -1)
+    const result: IResultWrapper = new Utility.ResultWrapper(0, 0, targetLength, -1)
 
     // 过滤目标或者比较值为空字符串的情况
-    if (sourceLength === 0) {
+    if(sourceLength === 0) {
       result.setDistance(targetLength)
-    } else if (targetLength === 0) {
+    } else if(targetLength === 0) {
       result.setDistance(sourceLength)
     } else {
       // 保存所有匹配到的字符的index
@@ -77,28 +77,28 @@ namespace Utility {
       // 0 为不需要做增删改的操作，1 为需要做增删改操作
       let modifyNum: number = 0
 
-      for (let i = 0; i < sourceLength; i++) {
+      for(let i = 0; i < sourceLength; i++) {
         const sourceChar: string = source[i]
         let temp: number = i
         let matchIndex: number = -1
 
-        for (let j = 0; j < targetLength; j++) {
+        for(let j = 0; j < targetLength; j++) {
           const targetChar: string = target[j]
           // 前一个编辑距离
           const prevDistance: number = j === 0 ? i + 1 : space[j - 1]
           // 上一个编辑距离
           const topDistance: number = space[j] === undefined ? j + 1 : space[j]
 
-          if (sourceChar === targetChar) {
+          if(sourceChar === targetChar) {
             modifyNum = 0
 
             // 解决重复匹配的问题
-            if (matchIndex === -1 && !matchPositionList.includes(j)) {
+            if(matchIndex === -1 && !matchPositionList.includes(j)) {
               matchIndex = j
             }
 
             // 设置首位匹配到的字符
-            if (result.getPosition() === targetLength) {
+            if(result.getPosition() === targetLength) {
               result.setPosition(j)
             }
           } else {
@@ -114,14 +114,14 @@ namespace Utility {
         }
 
         // 如果匹配到了结果
-        if (matchIndex !== -1) {
-          if (i > 0 && matchIndex > 0 && source[i - 1] === target[matchIndex - 1]) {
-            if (continuous === 0) {
+        if(matchIndex !== -1) {
+          if(i > 0 && matchIndex > 0 && source[i - 1] === target[matchIndex - 1]) {
+            if(continuous === 0) {
               continuous = 2
             } else {
               continuous++
             }
-          } else if (continuous === 0) {
+          } else if(continuous === 0) {
             continuous++
           } else {
             // 设置最长的连续字符

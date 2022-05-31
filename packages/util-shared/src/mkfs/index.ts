@@ -19,7 +19,7 @@ import { ITransformBean } from "./typings"
  *  * field {string|function} 选填，表示后台对应的字段，如果不指定，就是当前的key。field可以是一个方法，参数为data，主要用于自定义数据
  *  - reverseField {function} 选填，只有在field为function时，需要将当前的值返还给field字段，用于后台提交，参数为data
  */
-export default class TransformBean {
+export class TransformBean {
   private __bean_target__: any = null
 
   private __bean_config__: ITransformBean.GlobalOptions = {}

@@ -12,7 +12,7 @@ interface IYouNeedSuggest {
   get(value: string): any[]
 }
 
-export default class YouNeedSuggest implements IYouNeedSuggest {
+export class YouNeedSuggest implements IYouNeedSuggest {
   private keyNameList: string[]
   private list: string[] | object[]
   private options: IOptions = {
@@ -41,21 +41,6 @@ export default class YouNeedSuggest implements IYouNeedSuggest {
     this.list = list
     this.options = Object.assign(this.options, options)
     this.keyNameList = this.parseKeyNameList(this.options.keyNameList)
-  }
-
-  get(value) {
-    const result = []
-    value = this.parseValue(value)
-
-    for (let i = 0; i < this.list.length; i++) {
-      const match = this.list[i]
-      const similarity = this.getMaxSimilarity(value, match)
-      if (similarity >= this.options.minSimilarity) {
-        result.push({ data: match, similarity })
-      }
-    }
-
-    return result.sort((a, b) => b.similarity - a.similarity)
   }
 
   private parseValue(value: string): string {
@@ -93,5 +78,20 @@ export default class YouNeedSuggest implements IYouNeedSuggest {
 
       return Math.max(lastSimilarity, currentSimilarity)
     }, -Infinity)
+  }
+
+  get(value) {
+    const result = []
+    value = this.parseValue(value)
+
+    for (let i = 0; i < this.list.length; i++) {
+      const match = this.list[i]
+      const similarity = this.getMaxSimilarity(value, match)
+      if (similarity >= this.options.minSimilarity) {
+        result.push({ data: match, similarity })
+      }
+    }
+
+    return result.sort((a, b) => b.similarity - a.similarity)
   }
 }
