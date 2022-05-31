@@ -1,14 +1,14 @@
-import compare from './levenshteinDistance'
+import { compare } from './levenshteinDistance'
 
-interface IOptions {
-  keyNameList?: string | string[]
-  filterNoMatch?: boolean
-  caseSensitive?: boolean
-  minSimilarity?: number
+export interface IOptions {
+  keyNameList: string | string[]
+  filterNoMatch: boolean
+  caseSensitive: boolean
+  minSimilarity: number
   compare: (source: string, target: string) => number
 }
 
-interface IYouNeedSuggest {
+export interface IYouNeedSuggest {
   get(value: string): any[]
 }
 
@@ -37,7 +37,7 @@ export class YouNeedSuggest implements IYouNeedSuggest {
     }),
   }
 
-  constructor(list: string[] | object[], options: IOptions) {
+  constructor(list: string[] | object[], options: Partial<IOptions>) {
     this.list = list
     this.options = Object.assign(this.options, options)
     this.keyNameList = this.parseKeyNameList(this.options.keyNameList)
@@ -46,21 +46,21 @@ export class YouNeedSuggest implements IYouNeedSuggest {
   private parseValue(value: string): string {
     const { caseSensitive } = this.options
 
-    if (typeof value !== 'string') {
+    if(typeof value !== 'string') {
       return ''
     }
 
-    if (caseSensitive) {
+    if(caseSensitive) {
       value = value.toUpperCase()
     }
 
     return value
   }
 
-  private parseKeyNameList(keyNameList: string | string[]): string[] {
-    if (typeof keyNameList === 'string') {
+  private parseKeyNameList(keyNameList?: string | string[]): string[] {
+    if(typeof keyNameList === 'string') {
       return keyNameList.split(',')
-    } else if (keyNameList instanceof Array) {
+    } else if(keyNameList instanceof Array) {
       return keyNameList
     }
 
@@ -68,7 +68,7 @@ export class YouNeedSuggest implements IYouNeedSuggest {
   }
 
   private getMaxSimilarity(value: string, match: any): number {
-    if (typeof match === 'string') {
+    if(typeof match === 'string') {
       return this.options.compare(this.parseValue(match), value)
     }
 
@@ -80,14 +80,14 @@ export class YouNeedSuggest implements IYouNeedSuggest {
     }, -Infinity)
   }
 
-  get(value) {
+  get(value: string): any[] {
     const result = []
     value = this.parseValue(value)
 
-    for (let i = 0; i < this.list.length; i++) {
+    for(let i = 0; i < this.list.length; i++) {
       const match = this.list[i]
       const similarity = this.getMaxSimilarity(value, match)
-      if (similarity >= this.options.minSimilarity) {
+      if(similarity >= this.options.minSimilarity) {
         result.push({ data: match, similarity })
       }
     }

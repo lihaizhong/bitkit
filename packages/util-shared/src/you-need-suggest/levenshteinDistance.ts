@@ -1,7 +1,12 @@
-import { IResultWrapper, TResult } from './typings'
+export type TResult = {
+  continuous: number
+  count: number
+  position: number
+  distance: number
+}
 
 namespace Utility {
-  export class ResultWrapper implements IResultWrapper {
+  export class ResultWrapper {
     private continuous: number
     private count: number
     private position: number
@@ -20,40 +25,41 @@ namespace Utility {
 
     get() {
       const { continuous, count, position, distance } = this
+
       return { continuous, count, position, distance }
     }
 
-    setContinuous(continuous) {
+    setContinuous(continuous: number): void {
       if(this.continuous < continuous) {
         this.continuous = continuous
       }
     }
 
-    getContinuous() {
+    getContinuous(): number {
       return this.continuous
     }
 
-    setCount(count) {
+    setCount(count: number): void {
       this.count = count
     }
 
-    getCount() {
+    getCount(): number {
       return this.count
     }
 
-    setPosition(position) {
+    setPosition(position: number): void {
       this.position = position
     }
 
-    getPosition() {
+    getPosition(): number {
       return this.position
     }
 
-    setDistance(distance) {
+    setDistance(distance: number): void {
       this.distance = distance
     }
 
-    getDistance() {
+    getDistance(): number {
       return this.distance
     }
   }
@@ -62,7 +68,7 @@ namespace Utility {
     const sourceLength: number = source.length
     const targetLength: number = target.length
     const space: number[] = new Array(targetLength)
-    const result: IResultWrapper = new Utility.ResultWrapper(0, 0, targetLength, -1)
+    const result: Utility.ResultWrapper = new Utility.ResultWrapper(0, 0, targetLength, -1)
 
     // 过滤目标或者比较值为空字符串的情况
     if(sourceLength === 0) {
@@ -147,7 +153,8 @@ namespace Utility {
 
     return result.get()
   }
-  export function calc(sourceLength, targetLength, data: TResult, weight: TResult): number {
+
+  export function calc(sourceLength: number, targetLength: number, data: TResult, weight: TResult): number {
     return (1 - data.distance / Math.max(sourceLength, targetLength)) * weight.distance +
       (1 - data.position / targetLength) * weight.position +
       (data.continuous / targetLength) * weight.continuous +
@@ -155,7 +162,7 @@ namespace Utility {
   }
 }
 
-export default function compare(weight: TResult): any {
+export function compare(weight: TResult): any {
   return function compare_inner(source: string, target: string) {
     const result = Utility.levenshteinDistance(source, target)
     return Utility.calc(source.length, target.length, result, weight)
