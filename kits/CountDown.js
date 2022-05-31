@@ -17,7 +17,7 @@
  * @sub-key {Number} remain 剩余时间（单位：秒）
  */
 
-export default class CountDown {
+export class CountDown {
   constructor (needRemainFormat) {
     this.init(needRemainFormat)
   }

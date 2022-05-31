@@ -372,6 +372,6 @@ export class AsyncPrint {
  * 3. 请使用pt作为单位，因为打印设备真正识别的单位为pt
  * 4. 打印的公共样式可以查看 getTemplateToolStyle 变量
  */
-export default function print (options = {}) {
+export function print (options = {}) {
   return new AsyncPrint(options)
 }

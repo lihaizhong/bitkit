@@ -66,28 +66,3 @@ export class OSSImageHandler {
     return this.url
   }
 }
-
-export function handleOSSStyle (url, styleName) {
-  if (typeof url === 'string' && url !== '') {
-    return url.replace(/\?.*/, '') + '?' + styleName
-  }
-
-  return ''
-}
-
-let installed = false
-
-export default {
-  install (Vue, options = {}) {
-    if (installed) {
-      return false
-    }
-
-    installed = true
-
-    Vue.prototype.$oss = function (url) {
-      return new OSSImageHandler(url, options)
-    }
-    Vue.prototype.$ossStyle = handleOSSStyle
-  }
-}

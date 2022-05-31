@@ -24,7 +24,7 @@ function removeDuplicates (target = [], source = [], equal) {
   )
 }
 
-export default class CaptureDataList {
+export class CaptureDataList {
   constructor (options) {
     this.options = Object.assign(
       {
