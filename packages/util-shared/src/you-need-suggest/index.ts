@@ -39,18 +39,17 @@ export default class YouNeedSuggest<T> implements IYouNeedSuggest {
     this.keyNameList = this.parseKeyNameList(this.options.keyNameList)
   }
 
-  private parseValue(value: string): string {
+  private parseValue(value: any): string {
     const { caseSensitive } = this.options
 
-    if(typeof value !== 'string') {
-      return ''
+    if (typeof value !== "string") {
+      return ""
     }
 
-    if(caseSensitive) {
-      value = value.toUpperCase()
-    }
-
-    return value
+    // 不区分大小写时，需要将字符串转换为小写
+    return caseSensitive
+      ? value
+      : value.toLowerCase()
   }
 
   private parseKeyNameList(keyNameList?: string | string[]): string[] {
@@ -63,7 +62,7 @@ export default class YouNeedSuggest<T> implements IYouNeedSuggest {
     return ['value']
   }
 
-  private getMaxSimilarity(value: string, match: any): number {
+  private getMaxSimilarity(value: string, match: T): number {
     if (typeof value === "string" && value === "" && this.options.filterEmptyValue) {
       return 100
     }
@@ -73,20 +72,20 @@ export default class YouNeedSuggest<T> implements IYouNeedSuggest {
     }
 
     return this.keyNameList.reduce((lastSimilarity, key) => {
-      const sourceStr = this.parseValue(match[key])
-      const currentSimilarity = this.options.compare(sourceStr, value)
+      const sourceStr: string = this.parseValue((match as any)[key])
+      const currentSimilarity: number = this.options.compare(sourceStr, value)
 
       return Math.max(lastSimilarity, currentSimilarity)
     }, -Infinity)
   }
 
-  get(value: string): any[] {
+  get(value: string): IYouNeedSuggestResult<T>[] {
     const result: IYouNeedSuggestResult<T>[] = []
     value = this.parseValue(value)
 
     for(let i = 0; i < this.dataSource.length; i++) {
-      const match = this.dataSource[i]
-      const similarity = this.getMaxSimilarity(value, match)
+      const match: T = this.dataSource[i]
+      const similarity: number = this.getMaxSimilarity(value, match)
       if(similarity >= this.options.minSimilarity) {
         result.push({ data: match, similarity })
       }
