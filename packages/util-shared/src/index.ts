@@ -1,3 +1,6 @@
 export { TransformBean } from "./mkfs"
 export { default as YouNeedSuggest } from "./you-need-suggest"
 export { default as Types } from "./popular/type-validation"
+export { formValidate } from "./popular/form-validator"
+export { IdentityCodeValidator } from "././popular/identity-code-validator"
+export { dateFormatter } from "./popular/date-formatter"
