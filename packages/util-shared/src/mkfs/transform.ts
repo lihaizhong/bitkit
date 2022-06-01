@@ -120,33 +120,33 @@ export default function transform(
       return ValueParser.typeOfString(
         fieldValue,
         getDefaultValue(type, defaultValue, "", options),
-        name
+        name as string
       )
     case Number:
       return ValueParser.typeOfNumber(
         fieldValue,
         getDefaultValue(type, defaultValue, null, options),
-        name
+        name as string
       )
     case Boolean:
       return ValueParser.typeOfBoolean(
         fieldValue,
         getDefaultValue(type, defaultValue, null, options),
-        name
+        name as string
       )
     case Array:
       return ValueParser.typeOfArray(
         itemType,
         fieldValue,
         getDefaultValue(type, defaultValue, [], options),
-        name,
+        name as string,
         config
       )
     case Object:
       return ValueParser.typeOfObject(
         fieldValue,
         getDefaultValue(type, defaultValue, {}, options),
-        name
+        name as string
       )
     default:
       return ValueParser.typeOfDefault(type, fieldValue, config)
