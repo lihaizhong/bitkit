@@ -1,44 +1,40 @@
-import { compare } from './levenshteinDistance'
+export { compare as LevenshteinDistanceCompare } from './compare/levenshtein-distance'
 
 export interface IOptions {
   keyNameList: string | string[]
-  filterNoMatch: boolean
+  filterEmptyValue: boolean
   caseSensitive: boolean
   minSimilarity: number
-  compare: (source: string, target: string) => number
+  compare: (sourceStr: string, targetStr: string) => number
 }
 
 export interface IYouNeedSuggest {
   get(value: string): any[]
 }
 
-export class YouNeedSuggest implements IYouNeedSuggest {
+export interface IYouNeedSuggestResult<T> {
+  data: T;
+  similarity: number;
+}
+
+export default class YouNeedSuggest<T> implements IYouNeedSuggest {
   private keyNameList: string[]
-  private list: string[] | object[]
+  private dataSource: T[]
   private options: IOptions = {
     // 进行匹配的字段
-    keyNameList: ['value'],
-    // 是否过滤相似度为0的数据
-    filterNoMatch: true,
+    keyNameList: [],
+    // 是否过滤空值
+    filterEmptyValue: true,
     // 是否区分大小写
     caseSensitive: false,
     // 最小相似度
     minSimilarity: 0,
     // 计算算法
-    compare: compare({
-      // 最大的匹配词长度权重
-      continuous: 40,
-      // 匹配词总个数权重
-      count: 20,
-      // 首个匹配字符的位置权重
-      position: 5,
-      // 最短编辑路径权重
-      distance: 35,
-    }),
+    compare: () => 100,
   }
 
-  constructor(list: string[] | object[], options: Partial<IOptions>) {
-    this.list = list
+  constructor(dataSource: T[], options: Partial<IOptions>) {
+    this.dataSource = dataSource
     this.options = Object.assign(this.options, options)
     this.keyNameList = this.parseKeyNameList(this.options.keyNameList)
   }
@@ -60,7 +56,7 @@ export class YouNeedSuggest implements IYouNeedSuggest {
   private parseKeyNameList(keyNameList?: string | string[]): string[] {
     if(typeof keyNameList === 'string') {
       return keyNameList.split(',')
-    } else if(keyNameList instanceof Array) {
+    } else if(Array.isArray(keyNameList)) {
       return keyNameList
     }
 
@@ -68,30 +64,34 @@ export class YouNeedSuggest implements IYouNeedSuggest {
   }
 
   private getMaxSimilarity(value: string, match: any): number {
+    if (typeof value === "string" && value === "" && this.options.filterEmptyValue) {
+      return 100
+    }
+
     if(typeof match === 'string') {
       return this.options.compare(this.parseValue(match), value)
     }
 
     return this.keyNameList.reduce((lastSimilarity, key) => {
-      const source = this.parseValue(match[key])
-      const currentSimilarity = this.options.compare(source, value)
+      const sourceStr = this.parseValue(match[key])
+      const currentSimilarity = this.options.compare(sourceStr, value)
 
       return Math.max(lastSimilarity, currentSimilarity)
     }, -Infinity)
   }
 
   get(value: string): any[] {
-    const result = []
+    const result: IYouNeedSuggestResult<T>[] = []
     value = this.parseValue(value)
 
-    for(let i = 0; i < this.list.length; i++) {
-      const match = this.list[i]
+    for(let i = 0; i < this.dataSource.length; i++) {
+      const match = this.dataSource[i]
       const similarity = this.getMaxSimilarity(value, match)
       if(similarity >= this.options.minSimilarity) {
         result.push({ data: match, similarity })
       }
     }
 
-    return result.sort((a, b) => b.similarity - a.similarity)
+    return result.sort((a: IYouNeedSuggestResult<T>, b: IYouNeedSuggestResult<T>) => b.similarity - a.similarity)
   }
 }

@@ -1,2 +1,2 @@
 export { TransformBean } from "./mkfs"
-export { YouNeedSuggest } from "./you-need-suggest"
+export { default as YouNeedSuggest } from "./you-need-suggest"
