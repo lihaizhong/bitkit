@@ -8,16 +8,12 @@ export interface IOptions {
   compare: (sourceStr: string, targetStr: string) => number
 }
 
-export interface IYouNeedSuggest {
-  get(value: string): any[]
-}
-
 export interface IYouNeedSuggestResult<T> {
   data: T;
   similarity: number;
 }
 
-export default class YouNeedSuggest<T> implements IYouNeedSuggest {
+export default class YouNeedSuggest<T> {
   private keyNameList: string[]
   private dataSource: T[]
   private options: IOptions = {
