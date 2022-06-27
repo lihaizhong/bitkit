@@ -17,7 +17,7 @@ import { ITransformBean } from "./typings"
  *  * itemType {any} 必填（数组），表示数组子集类型
  *  * defaultValue {string} 选填，表示默认值，如果不指定，Bean类会根据类型指定字符串
  *  * field {string|function} 选填，表示后台对应的字段，如果不指定，就是当前的key。field可以是一个方法，参数为data，主要用于自定义数据
- *  - reverseField {function} 选填，只有在field为function时，需要将当前的值返还给field字段，用于后台提交，参数为data
+ *  // reverse {function} 选填，表示前端对应字段由多个字段组成时，如何进行拆分。参数为data，主要用于自定义数据
  */
 export class TransformBean {
   private __bean_target__: any = null
