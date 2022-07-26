@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 import { Any } from "./Types"
-import Tools from "./tools"
+import Checker from "./checker"
 import transform from "./transform"
 import { ITransformBean } from "./typings"
 
@@ -37,7 +37,7 @@ export class DataX {
   }
 
   constructor(config?: ITransformBean.GlobalOptions) {
-    if (Tools.isObject(config)) {
+    if (Checker.isObject(config)) {
       Object.assign(this.__bean_config__, DataX.globalConfig, config)
     }
   }
@@ -45,7 +45,7 @@ export class DataX {
   transform(data: any = {}) {
     const target: any = {}
     const keys = Object.keys(this).filter((key) =>
-      Tools.isReservedProperty(key)
+      Checker.isReservedProperty(key)
     )
     const rawKeys = Object.keys(data)
     let defaultKeys: string[] = []
@@ -65,7 +65,7 @@ export class DataX {
         const value = transform(this.__bean_config__, config, data, key)
 
         // 判断是否丢弃undefined的数据
-        if (this.__bean_config__.abandonUndefinedValue && Tools.isUndefined(value)) {
+        if (this.__bean_config__.abandonUndefinedValue && Checker.isUndefined(value)) {
           continue
         }
 
@@ -76,7 +76,7 @@ export class DataX {
     }
 
     // 设置未配置的属性
-    if (!this.__bean_config__.strict && Tools.isArray(defaultKeys)) {
+    if (!this.__bean_config__.strict && Checker.isArray(defaultKeys)) {
       for (let i = 0; i < defaultKeys.length; i++) {
         const key = defaultKeys[i]
         const value = transform(
@@ -87,7 +87,7 @@ export class DataX {
         )
 
         // 判断是否丢弃undefined的数据
-        if (this.__bean_config__.abandonUndefinedValue && Tools.isUndefined(value)) {
+        if (this.__bean_config__.abandonUndefinedValue && Checker.isUndefined(value)) {
           continue
         }
 

@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 import { Any } from "./Types"
-import Tools from "./tools"
+import Checker from "./checker"
 import ValueParser from "./valueParser"
 import { ITransformBean } from "./typings"
 
@@ -22,21 +22,21 @@ function getFieldProfile(
   const keys: string[] = ["loose"]
 
   return keys.reduce((_config: any, key: string) => {
-    if (!Tools.isVoid(fieldConfig[key])) {
+    if (!Checker.isVoid(fieldConfig[key])) {
       _config[key] = fieldConfig[key]
 
       return _config
     }
 
     const configKey = getConfigKey(key)
-    if (Tools.isString(configKey)) {
+    if (Checker.isString(configKey)) {
       const value: any = (config as Record<string, any>)[configKey as string]
 
     switch (key) {
       case "loose":
-        if (Tools.isBoolean(value)) {
+        if (Checker.isBoolean(value)) {
           _config[key] = value
-        } else if (Tools.isArray(value)) {
+        } else if (Checker.isArray(value)) {
           _config[key] = value.includes(fieldConfig.__name__ as string)
         } else {
           _config[key] = false
@@ -65,7 +65,7 @@ function getDefaultValue(
   placeholderValue: any,
   options: ITransformBean.FieldOptions
 ): any {
-  if (options.loose || Tools.isSameType(defaultValue, type) || Tools.isNull(defaultValue)) {
+  if (options.loose || Checker.isSameType(defaultValue, type) || Checker.isNull(defaultValue)) {
     return defaultValue
   }
 
@@ -79,15 +79,15 @@ function getDefaultValue(
  * @param {string} key
  */
 function parseFieldValue(target: any, field: any, key: string): any {
-  if (Tools.isString(field)) {
+  if (Checker.isString(field)) {
     return target[field]
   }
 
-  if (Tools.isFunction(field)) {
+  if (Checker.isFunction(field)) {
     return field(target)
   }
 
-  if (Tools.isString(key) && key !== "") {
+  if (Checker.isString(key) && key !== "") {
     return target[key]
   }
 

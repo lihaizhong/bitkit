@@ -5,9 +5,10 @@
 ## 目录结构
 
 ``` text
-|-- design 个人设计
+|-- Algorithms 算法学习
+|-- kits 个人未整理工具
+|-- NativeImpls 原生实现
 |-- packages 一部分npm仓库中的包
-|-- tools 个人写的一些小工具
 ```
 
 ## pnpm使用
