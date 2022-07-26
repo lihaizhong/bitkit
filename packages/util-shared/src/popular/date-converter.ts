@@ -1,4 +1,4 @@
-export function dateFormatter(
+export function dateConverter(
   date: Date | string | number,
   format: string = "yyyy/MM/dd hh:mm:ss"
 ): string {

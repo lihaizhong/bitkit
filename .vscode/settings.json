@@ -1,10 +1,14 @@
 {
     "cSpell.words": [
+        "changesets",
         "commitlint",
         "Impls",
         "levenshein",
         "lihzsky",
         "Mdhmsq",
-        "nonoctal"
+        "nonoctal",
+        "pnpm",
+        "preinstall",
+        "Prereleases"
     ]
 }

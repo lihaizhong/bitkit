@@ -9,6 +9,8 @@
     "packages/**"
   ],
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "build": "pnpm --filter=* --parallel run build",
     "test": "jest"
   },
   "prettier": {
@@ -21,16 +23,16 @@
   "devDependencies": {
     "@babel/core": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
+    "@changesets/cli": "^2.24.1",
     "@types/jest": "^27.5.2",
+    "@types/node": "^18.6.1",
     "babel-jest": "^28.1.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-html": "^6.2.0",
     "eslint-plugin-jest": "^26.4.6",
     "eslint-plugin-node": "^11.1.0",
-    "husky": "^8.0.1",
     "jest": "^28.1.0",
-    "lerna": "^5.0.0",
     "prettier": "^2.6.2",
     "serve": "^13.0.2",
     "ts-jest": "^28.0.3",
