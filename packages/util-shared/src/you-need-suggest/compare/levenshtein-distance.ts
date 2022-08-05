@@ -72,9 +72,9 @@ class DistanceCalculator {
   }
 }
 
-function levenshteinDistance(distanceCalculator: DistanceCalculator, source: string, target: string): void {
-  const sourceLength: number = source.length
-  const targetLength: number = target.length
+function levenshteinDistance(distanceCalculator: DistanceCalculator, inputValue: string, comparedValue: string): void {
+  const sourceLength: number = inputValue.length
+  const targetLength: number = comparedValue.length
   const space: number[] = new Array(targetLength)
   // const distanceCalculator: DistanceCalculator = new DistanceCalculator(0, 0, targetLength, -1)
 
@@ -91,29 +91,29 @@ function levenshteinDistance(distanceCalculator: DistanceCalculator, source: str
     // 0 为不需要做增删改的操作，1 为需要做增删改操作
     let modifyNum: number = 0
 
-    for(let i = 0; i < sourceLength; i++) {
-      const sourceChar: string = source[i]
-      let temp: number = i
+    for(let row = 0; row < sourceLength; row++) {
+      const sourceChar: string = inputValue[row]
+      let temp: number = row
       let matchIndex: number = -1
 
-      for(let j = 0; j < targetLength; j++) {
-        const targetChar: string = target[j]
+      for(let col = 0; col < targetLength; col++) {
+        const targetChar: string = comparedValue[col]
         // 前一个编辑距离
-        const prevDistance: number = j === 0 ? i + 1 : space[j - 1]
+        const prevDistance: number = col === 0 ? row + 1 : space[col - 1]
         // 上一个编辑距离
-        const topDistance: number = space[j] === undefined ? j + 1 : space[j]
+        const topDistance: number = space[col] === undefined ? col + 1 : space[col]
 
         if(sourceChar === targetChar) {
           modifyNum = 0
 
           // 解决重复匹配的问题
-          if(matchIndex === -1 && !matchPositionList.includes(j)) {
-            matchIndex = j
+          if(matchIndex === -1 && !matchPositionList.includes(col)) {
+            matchIndex = col
           }
 
           // 设置首位匹配到的字符
           if(distanceCalculator.getPosition() === targetLength) {
-            distanceCalculator.setPosition(j)
+            distanceCalculator.setPosition(col)
           }
         } else {
           modifyNum = 1
@@ -124,12 +124,12 @@ function levenshteinDistance(distanceCalculator: DistanceCalculator, source: str
 
         // 保存左上角的数据，计算最小值时需要用到
         temp = topDistance
-        space[j] = min
+        space[col] = min
       }
 
       // 如果匹配到了结果
       if(matchIndex !== -1) {
-        if(i > 0 && matchIndex > 0 && source[i - 1] === target[matchIndex - 1]) {
+        if(row > 0 && matchIndex > 0 && inputValue[row - 1] === comparedValue[matchIndex - 1]) {
           if(continuous === 0) {
             continuous = 2
           } else {
@@ -160,10 +160,12 @@ function levenshteinDistance(distanceCalculator: DistanceCalculator, source: str
   }
 }
 
-export const compare = (weight: TWeightOptions) => (source: string, target: string) => {
-  const distanceCalculator = new DistanceCalculator(0, 0, target.length, -1)
+export const compare = (weight: TWeightOptions) => (inputValue: string, comparedValue: string) => {
+  const distanceCalculator = new DistanceCalculator(0, 0, comparedValue.length, -1)
 
-  levenshteinDistance(distanceCalculator, source, target)
+  // 通过编辑距离算法计算相关数据
+  levenshteinDistance(distanceCalculator, inputValue, comparedValue)
 
-  return distanceCalculator.calc(source.length, target.length, weight)
+  // 根据权重关系计算获取最终结果
+  return distanceCalculator.calc(inputValue.length, comparedValue.length, weight)
 }

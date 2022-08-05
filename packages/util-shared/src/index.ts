@@ -1,6 +1,6 @@
 export { DataX } from "./data-x"
-export { default as YouNeedSuggest } from "./you-need-suggest"
+export { YouNeedSuggestion, LevenshteinDistanceCompare, IYouNeedSuggestionOptions, IYouNeedSuggestResult } from "./you-need-suggest"
 export * as TypeChecker from "./popular/type-checker"
-export { formValidate } from "./popular/form-validator"
+export { formValidate, IFormRule } from "./popular/form-validator"
 export { IdentityCodeValidator } from "./popular/identity-code-validator"
 export { dateConverter } from "./popular/date-converter"

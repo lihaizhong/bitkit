@@ -5,6 +5,7 @@ module.exports = {
     node: true,
     "jest/globals": true
   },
+  sourceType: "module",
   extends: ["prettier"],
   globals: {
     Atomics: "readonly",

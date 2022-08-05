@@ -1,6 +1,6 @@
 export { compare as LevenshteinDistanceCompare } from './compare/levenshtein-distance'
 
-export interface IOptions {
+export interface IYouNeedSuggestionOptions {
   keyNameList: string | string[]
   filterEmptyValue: boolean
   caseSensitive: boolean
@@ -13,10 +13,10 @@ export interface IYouNeedSuggestResult<T> {
   similarity: number;
 }
 
-export default class YouNeedSuggest<T> {
+export class YouNeedSuggestion<T> {
   private keyNameList: string[]
   private dataSource: T[]
-  private options: IOptions = {
+  private options: IYouNeedSuggestionOptions = {
     // 进行匹配的字段
     keyNameList: [],
     // 是否过滤空值
@@ -29,7 +29,7 @@ export default class YouNeedSuggest<T> {
     compare: () => 100,
   }
 
-  constructor(dataSource: T[], options: Partial<IOptions>) {
+  constructor(dataSource: T[], options: Partial<IYouNeedSuggestionOptions>) {
     this.dataSource = dataSource
     this.options = Object.assign(this.options, options)
     this.keyNameList = this.parseKeyNameList(this.options.keyNameList)
