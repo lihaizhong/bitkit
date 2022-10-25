@@ -1,7 +1,3 @@
-// Copyright (c) 2021 Sangbaipi
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
 import { Any } from "./Types"
 import Checker from "./checker"
 import transform from "./transform"

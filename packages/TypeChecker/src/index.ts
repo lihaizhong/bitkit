@@ -1,4 +1,4 @@
-const hasOwn = (target: any, property: string) => {
+export const hasOwn = (target: any, property: string) => {
   if('hasOwn' in Object) {
     return Object.hasOwn(target, property);
   }

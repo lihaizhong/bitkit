@@ -17,6 +17,6 @@
   "author": "sky",
   "license": "ISC",
   "dependencies": {
-    "@toolkit/type-checker": "workspace:^1.0.0"
+    "@lihzsky/type-checker": "workspace:^0.0.1"
   }
 }
