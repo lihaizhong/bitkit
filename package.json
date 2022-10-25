@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "build": "pnpm --filter=* --parallel run build",
+    "build": "pnpm --filter=* run build",
     "test": "jest"
   },
   "prettier": {
