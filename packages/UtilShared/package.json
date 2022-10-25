@@ -1,6 +1,7 @@
 {
   "name": "@lihzsky/util-shared",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "private": true,
   "description": "数据扩展坞,将传入数据按照定义好的schema转换为新数据",
   "keywords": [
     "data",
@@ -11,6 +12,7 @@
   "license": "ISC",
   "main": "lib/index.js",
   "module": "es/index.js",
+  "types": "es/index.d.ts",
   "files": [
     "lib",
     "src",

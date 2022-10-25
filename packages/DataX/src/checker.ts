@@ -1,4 +1,4 @@
-import { isSameType, isObject, isArray, isBoolean, isString, isNull, isUndefined, isVoid, isFunction } from "../popular/type-checker"
+import { isSameType, isObject, isArray, isBoolean, isString, isNull, isUndefined, isVoid, isFunction } from "@toolkit/type-checker"
 
 class TransformChecker {
   hasOwn(target: any, key: string): boolean {

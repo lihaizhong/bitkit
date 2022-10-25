@@ -24,6 +24,9 @@
 ### 进入Prereleases模式发布测试包
 
 ``` bash
+# 对所有包进行打包处理
+npm run build
+
 # 非正式包使用此命令进入Prereleases模式
 pnpm changeset pre enter <tag>
 
@@ -42,9 +45,20 @@ pnpm changeset pre exit
 ### 发布npm包
 
 ``` bash
+# 对所有包进行打包处理
+npm run build
+# 对所有包进行文档生成
+npm run docs
+
 npx changeset
 
 npx changeset version
 
 npx changeset publish
 ```
+
+## 参考
+
+- [为XHR对象所有方法和属性提供钩子 全局拦截AJAX](https://juejin.cn/post/6844903629497827341)
+- [TypeDoc 中文文档](https://typedoc.bootcss.com/)
+

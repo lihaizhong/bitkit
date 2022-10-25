@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "declaration": true,
+    "declarationDir": "./es",
+    "rootDir": "./src",
+    "outDir": "./es",
+    "baseUrl": ".",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "lib": ["ESNext"]
+  },
+  "include": ["src/*"],
+  "exclude": ["node_modules", "test", "lib", "**/*.spec.ts"]
+}

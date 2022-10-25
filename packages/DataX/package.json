@@ -1,0 +1,22 @@
+{
+  "name": "@lihzsky/data-x",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "es/index.d.ts",
+  "files": [
+    "lib",
+    "src",
+    "es"
+  ],
+  "scripts": {
+    "build": "rm -rf ./lib ./types ./es && tsc --build tsconfig.json && tsc --build tsconfig.lib.json"
+  },
+  "keywords": [],
+  "author": "sky",
+  "license": "ISC",
+  "dependencies": {
+    "@toolkit/type-checker": "workspace:^1.0.0"
+  }
+}
