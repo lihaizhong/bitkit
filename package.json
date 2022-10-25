@@ -5,9 +5,6 @@
   "author": "sky",
   "private": true,
   "license": "ISC",
-  "workspaces": [
-    "packages/**"
-  ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "build": "pnpm --filter=* run build",

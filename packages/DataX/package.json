@@ -16,6 +16,10 @@
   "keywords": [],
   "author": "sky",
   "license": "ISC",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "dependencies": {
     "@lihzsky/type-checker": "workspace:^0.0.1"
   }

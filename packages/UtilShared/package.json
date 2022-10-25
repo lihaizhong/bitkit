@@ -18,15 +18,16 @@
     "src",
     "es"
   ],
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lihaizhong/toolkit.git"
   },
   "scripts": {
     "build": "rm -rf ./lib ./es && tsc --build tsconfig.json && tsc --build tsconfig.lib.json"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "bugs": {
     "url": "https://github.com/lihaizhong/toolkit/issues"
