@@ -6,10 +6,10 @@ import Checker from "./checker";
 import transform from "./transform";
 export default {
     typeOfString: function (fieldValue, defaultValue, key) {
-        if (Checker.isSameType(fieldValue, String)) {
+        if (Checker.isSameClass(fieldValue, String)) {
             return fieldValue;
         }
-        if (Checker.isSameType(fieldValue, Number)) {
+        if (Checker.isSameClass(fieldValue, Number)) {
             return fieldValue.toString();
         }
         if (!Checker.isVoid(fieldValue)) {
@@ -18,10 +18,10 @@ export default {
         return defaultValue;
     },
     typeOfNumber: function (fieldValue, defaultValue, key) {
-        if (Checker.isSameType(fieldValue, Number)) {
+        if (Checker.isSameClass(fieldValue, Number)) {
             return fieldValue;
         }
-        if (Checker.isSameType(fieldValue, String) &&
+        if (Checker.isSameClass(fieldValue, String) &&
             /^\d+$/.test(fieldValue)) {
             return Number(fieldValue);
         }
@@ -31,7 +31,7 @@ export default {
         return defaultValue;
     },
     typeOfBoolean: function (fieldValue, defaultValue, key) {
-        if (Checker.isSameType(fieldValue, Boolean)) {
+        if (Checker.isSameClass(fieldValue, Boolean)) {
             return fieldValue;
         }
         if (!Checker.isVoid(fieldValue)) {
@@ -40,7 +40,7 @@ export default {
         return defaultValue;
     },
     typeOfObject: function (fieldValue, defaultValue, key) {
-        if (Checker.isSameType(fieldValue, Object)) {
+        if (Checker.isSameClass(fieldValue, Object)) {
             return fieldValue;
         }
         if (!Checker.isVoid(fieldValue)) {

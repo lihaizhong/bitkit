@@ -50,7 +50,7 @@ function getFieldProfile(config, fieldConfig) {
  * @param {any} options 数据类型判断
  */
 function getDefaultValue(type, defaultValue, placeholderValue, options) {
-    if (options.loose || checker_1["default"].isSameType(defaultValue, type) || checker_1["default"].isNull(defaultValue)) {
+    if (options.loose || checker_1["default"].isSameClass(defaultValue, type) || checker_1["default"].isNull(defaultValue)) {
         return defaultValue;
     }
     return placeholderValue;

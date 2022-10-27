@@ -61,7 +61,7 @@ function getDefaultValue(
   placeholderValue: any,
   options: ITransformBean.FieldOptions
 ): any {
-  if (options.loose || Checker.isSameType(defaultValue, type) || Checker.isNull(defaultValue)) {
+  if (options.loose || Checker.isSameClass(defaultValue, type) || Checker.isNull(defaultValue)) {
     return defaultValue
   }
 

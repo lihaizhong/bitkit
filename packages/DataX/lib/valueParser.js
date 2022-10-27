@@ -11,10 +11,10 @@ var checker_1 = __importDefault(require("./checker"));
 var transform_1 = __importDefault(require("./transform"));
 exports["default"] = {
     typeOfString: function (fieldValue, defaultValue, key) {
-        if (checker_1["default"].isSameType(fieldValue, String)) {
+        if (checker_1["default"].isSameClass(fieldValue, String)) {
             return fieldValue;
         }
-        if (checker_1["default"].isSameType(fieldValue, Number)) {
+        if (checker_1["default"].isSameClass(fieldValue, Number)) {
             return fieldValue.toString();
         }
         if (!checker_1["default"].isVoid(fieldValue)) {
@@ -23,10 +23,10 @@ exports["default"] = {
         return defaultValue;
     },
     typeOfNumber: function (fieldValue, defaultValue, key) {
-        if (checker_1["default"].isSameType(fieldValue, Number)) {
+        if (checker_1["default"].isSameClass(fieldValue, Number)) {
             return fieldValue;
         }
-        if (checker_1["default"].isSameType(fieldValue, String) &&
+        if (checker_1["default"].isSameClass(fieldValue, String) &&
             /^\d+$/.test(fieldValue)) {
             return Number(fieldValue);
         }
@@ -36,7 +36,7 @@ exports["default"] = {
         return defaultValue;
     },
     typeOfBoolean: function (fieldValue, defaultValue, key) {
-        if (checker_1["default"].isSameType(fieldValue, Boolean)) {
+        if (checker_1["default"].isSameClass(fieldValue, Boolean)) {
             return fieldValue;
         }
         if (!checker_1["default"].isVoid(fieldValue)) {
@@ -45,7 +45,7 @@ exports["default"] = {
         return defaultValue;
     },
     typeOfObject: function (fieldValue, defaultValue, key) {
-        if (checker_1["default"].isSameType(fieldValue, Object)) {
+        if (checker_1["default"].isSameClass(fieldValue, Object)) {
             return fieldValue;
         }
         if (!checker_1["default"].isVoid(fieldValue)) {

@@ -7,11 +7,11 @@ import transform from "./transform"
 
 export default {
   typeOfString(fieldValue: string | number, defaultValue: any, key: string) {
-    if (Checker.isSameType(fieldValue, String)) {
+    if (Checker.isSameClass(fieldValue, String)) {
       return fieldValue
     }
 
-    if (Checker.isSameType(fieldValue, Number)) {
+    if (Checker.isSameClass(fieldValue, Number)) {
       return fieldValue.toString()
     }
 
@@ -23,12 +23,12 @@ export default {
   },
 
   typeOfNumber(fieldValue: string | number, defaultValue: any, key: string) {
-    if (Checker.isSameType(fieldValue, Number)) {
+    if (Checker.isSameClass(fieldValue, Number)) {
       return fieldValue
     }
 
     if (
-      Checker.isSameType(fieldValue, String) &&
+      Checker.isSameClass(fieldValue, String) &&
       /^\d+$/.test(fieldValue as unknown as string)
     ) {
       return Number(fieldValue)
@@ -42,7 +42,7 @@ export default {
   },
 
   typeOfBoolean(fieldValue: boolean, defaultValue: any, key: string) {
-    if (Checker.isSameType(fieldValue, Boolean)) {
+    if (Checker.isSameClass(fieldValue, Boolean)) {
       return fieldValue
     }
 
@@ -54,7 +54,7 @@ export default {
   },
 
   typeOfObject(fieldValue: object, defaultValue: any, key: string) {
-    if (Checker.isSameType(fieldValue, Object)) {
+    if (Checker.isSameClass(fieldValue, Object)) {
       return fieldValue
     }
 
