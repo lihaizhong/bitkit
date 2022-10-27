@@ -1,5 +1,10 @@
 # @lihzsky/data-x
 
+## 0.0.3
+### Patch Changes
+
+- 55a8d2c: 优化嵌套结构解析
+
 ## 0.0.2
 ### Patch Changes
 
