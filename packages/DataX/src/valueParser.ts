@@ -82,6 +82,10 @@ export default {
   },
 
   typeOfDefault(MiddlewareBean: any, data: any, config: any) {
+    if (Checker.isVoid(MiddlewareBean)) {
+      return MiddlewareBean
+    }
+
     const middlewareBean = new MiddlewareBean(config)
 
     middlewareBean.transform(data)

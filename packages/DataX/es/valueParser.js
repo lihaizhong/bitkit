@@ -61,6 +61,9 @@ export default {
         return fieldValue;
     },
     typeOfDefault: function (MiddlewareBean, data, config) {
+        if (Checker.isVoid(MiddlewareBean)) {
+            return MiddlewareBean;
+        }
         var middlewareBean = new MiddlewareBean(config);
         middlewareBean.transform(data);
         return middlewareBean.valueOf();
