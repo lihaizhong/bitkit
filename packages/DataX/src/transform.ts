@@ -75,6 +75,10 @@ function getDefaultValue(
  * @param {string} key
  */
 function parseFieldValue(target: any, field: any, key: string): any {
+  if (!Checker.isObject(target)) {
+    return target
+  }
+
   if (Checker.isString(field)) {
     return target[field]
   }

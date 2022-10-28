@@ -7,7 +7,6 @@
   "types": "es/index.d.ts",
   "files": [
     "lib",
-    "src",
     "es"
   ],
   "scripts": {

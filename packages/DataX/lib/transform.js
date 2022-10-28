@@ -62,6 +62,9 @@ function getDefaultValue(type, defaultValue, placeholderValue, options) {
  * @param {string} key
  */
 function parseFieldValue(target, field, key) {
+    if (!checker_1["default"].isObject(target)) {
+        return target;
+    }
     if (checker_1["default"].isString(field)) {
         return target[field];
     }

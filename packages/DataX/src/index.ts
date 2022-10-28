@@ -38,12 +38,13 @@ export class DataX {
     }
   }
 
-  transform(data: any = {}) {
+  transform(data: any) {
+    const rawData: Record<string, any> = { ...data }
     const target: any = {}
     const keys = Object.keys(this).filter((key) =>
       Checker.isReservedProperty(key)
     )
-    const rawKeys = Object.keys(data)
+    const rawKeys = Object.keys(rawData)
     let defaultKeys: string[] = []
 
     if (!this.__bean_config__.strict && rawKeys.length > keys.length) {
@@ -58,7 +59,7 @@ export class DataX {
       config["__name__"] = key
 
       if (typeof config === "object") {
-        const value = transform(this.__bean_config__, config, data, key)
+        const value = transform(this.__bean_config__, config, rawData, key)
 
         // 判断是否丢弃undefined的数据
         if (this.__bean_config__.abandonUndefinedValue && Checker.isUndefined(value)) {
@@ -78,7 +79,7 @@ export class DataX {
         const value = transform(
           this.__bean_config__,
           { __name__: key, type: Any },
-          data,
+          rawData,
           key
         )
 

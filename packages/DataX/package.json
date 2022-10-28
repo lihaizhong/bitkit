@@ -1,13 +1,12 @@
 {
   "name": "@lihzsky/data-x",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
   "files": [
     "lib",
-    "src",
     "es"
   ],
   "scripts": {

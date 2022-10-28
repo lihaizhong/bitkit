@@ -1,30 +1,36 @@
-export function dateConverter(
-  date: Date | string | number,
-  format: string = "yyyy/MM/dd hh:mm:ss"
-): string {
-  if (typeof date === "string") {
-    const mts = (date as string).match(/(\/Date\((\d+)\)\/)/)
+function getDateInstance(value: any): Date | null {
+  const INVALID_DATE: string = "Invalid Date"
 
-    if (mts && mts.length >= 3) {
-      date = parseInt(mts[2])
-    }
+  if (value instanceof Date) {
+    return value
+  } else if (typeof value === "number" && new Date(value).toUTCString() !== INVALID_DATE) {
+    return new Date(value)
+  } else if (typeof value === "string") {
+    
   }
 
-  const _date: Date = new Date(date)
+  return null
+}
 
-  if (!_date || _date.toUTCString() == "Invalid Date") {
+export function dateConverter(
+  value: any,
+  format: string = "yyyy/MM/dd hh:mm:ss"
+): string {
+  const date: Date | null = getDateInstance(value)
+
+  if (date === null) {
     return ""
   }
 
   const map: Record<string, () => number> = {
-    y: () => _date.getFullYear(),
-    M: () => _date.getMonth() + 1, //月份
-    d: () => _date.getDate(), //日
-    h: () => _date.getHours(), //小时
-    m: () => _date.getMinutes(), //分
-    s: () => _date.getSeconds(), //秒
-    q: () => Math.floor((_date.getMonth() + 3) / 3), //季度
-    S: () => _date.getMilliseconds(), //毫秒
+    y: () => date.getFullYear(),
+    M: () => date.getMonth() + 1, //月份
+    d: () => date.getDate(), //日
+    h: () => date.getHours(), //小时
+    m: () => date.getMinutes(), //分
+    s: () => date.getSeconds(), //秒
+    q: () => Math.floor((date.getMonth() + 3) / 3), //季度
+    S: () => date.getMilliseconds(), //毫秒
   }
 
   return format.replace(/([yMdhmsqS])+/g, (all: string, t: string) => {

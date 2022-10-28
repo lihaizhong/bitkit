@@ -1,5 +1,10 @@
 # @lihzsky/data-x
 
+## 0.0.4
+### Patch Changes
+
+- 修复data为null的情况
+
 ## 0.0.3
 ### Patch Changes
 
