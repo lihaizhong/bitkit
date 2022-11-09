@@ -1,5 +1,10 @@
 # @lihzsky/data-x
 
+## 0.0.5
+### Patch Changes
+
+- 修复打包文件未更新问题
+
 ## 0.0.4
 ### Patch Changes
 
