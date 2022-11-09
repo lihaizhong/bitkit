@@ -36,12 +36,12 @@ var DataX = /** @class */ (function () {
         Object.assign(DataX.globalConfig, config);
     };
     DataX.prototype.transform = function (data) {
-        if (data === void 0) { data = {}; }
+        var rawData = __assign({}, data);
         var target = {};
         var keys = Object.keys(this).filter(function (key) {
             return Checker.isReservedProperty(key);
         });
-        var rawKeys = Object.keys(data);
+        var rawKeys = Object.keys(rawData);
         var defaultKeys = [];
         if (!this.__bean_config__.strict && rawKeys.length > keys.length) {
             defaultKeys = rawKeys.filter(function (key) { return !keys.includes(key); });
@@ -52,7 +52,7 @@ var DataX = /** @class */ (function () {
             var config = this[key];
             config["__name__"] = key;
             if (typeof config === "object") {
-                var value = transform(this.__bean_config__, config, data, key);
+                var value = transform(this.__bean_config__, config, rawData, key);
                 // 判断是否丢弃undefined的数据
                 if (this.__bean_config__.abandonUndefinedValue && Checker.isUndefined(value)) {
                     continue;
@@ -67,7 +67,7 @@ var DataX = /** @class */ (function () {
         if (!this.__bean_config__.strict && Checker.isArray(defaultKeys)) {
             for (var i = 0; i < defaultKeys.length; i++) {
                 var key = defaultKeys[i];
-                var value = transform(this.__bean_config__, { __name__: key, type: Any }, data, key);
+                var value = transform(this.__bean_config__, { __name__: key, type: Any }, rawData, key);
                 // 判断是否丢弃undefined的数据
                 if (this.__bean_config__.abandonUndefinedValue && Checker.isUndefined(value)) {
                     continue;

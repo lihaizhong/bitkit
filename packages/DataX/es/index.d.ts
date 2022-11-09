@@ -25,7 +25,7 @@ export declare class DataX {
     };
     static setGlobalConfig(config: ITransformBean.GlobalOptions): void;
     constructor(config?: ITransformBean.GlobalOptions);
-    transform(data?: any): void;
+    transform(data: any): void;
     valueOf(): any;
     toString(): string;
 }

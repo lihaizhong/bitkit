@@ -1,1 +1,1 @@
-export declare function dateConverter(date: Date | string | number, format?: string): string;
+export declare function dateConverter(value: any, format?: string): string;
