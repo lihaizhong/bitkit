@@ -48,7 +48,10 @@ importers:
     specifiers: {}
 
   packages/UtilShared:
-    specifiers: {}
+    specifiers:
+      '@lihzsky/type-checker': workspace:^0.0.1
+    dependencies:
+      '@lihzsky/type-checker': link:../TypeChecker
 
   packages/YouNeedSuggest:
     specifiers: {}
