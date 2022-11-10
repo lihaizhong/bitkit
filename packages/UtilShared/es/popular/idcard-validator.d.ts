@@ -10,4 +10,4 @@
  * 53: '云南', 54: '西藏', 61: '陕西', 62: '甘肃', 63: '青海', 64: '宁夏', 65: '新疆', 71: '台湾'
  * 81: '香港', 82: '澳门', 91: '国外'
  */
-export declare function IdentityCodeValidator(code: string): boolean;
+export declare function IdCardValidator(code: string): boolean;

@@ -9,7 +9,7 @@
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.IdentityCodeValidator = void 0;
+    exports.IdCardValidator = void 0;
     /**
      * 校验中国居民身份证号码
      * @param {string} code
@@ -22,7 +22,7 @@
      * 53: '云南', 54: '西藏', 61: '陕西', 62: '甘肃', 63: '青海', 64: '宁夏', 65: '新疆', 71: '台湾'
      * 81: '香港', 82: '澳门', 91: '国外'
      */
-    function IdentityCodeValidator(code) {
+    function IdCardValidator(code) {
         const city = [11, 12, 13, 14, 15, 21, 22, 23, 31, 32, 33, 34, 35, 36, 37, 41, 42, 43, 44, 45, 46, 50, 51, 52, 53, 54, 61, 62, 63, 64, 65, 71, 81, 82, 91];
         const reg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/i;
         // 保证格式正确
@@ -53,5 +53,5 @@
         }
         return true;
     }
-    exports.IdentityCodeValidator = IdentityCodeValidator;
+    exports.IdCardValidator = IdCardValidator;
 });

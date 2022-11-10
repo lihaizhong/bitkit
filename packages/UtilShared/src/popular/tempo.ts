@@ -3,7 +3,7 @@ import TypeChecker from '@lihzsky/type-checker'
 export type TDateArgs = [number, number, number, number, number, number]
 
 export class Tempo {
-  static STANDARD_TIME: Record<string, number> = {
+  static ST: Record<string, number> = {
     ONE_DAY: 86400000,
     ONE_HOUR: 3600000,
     ONE_MINUTE: 60000,
@@ -12,12 +12,16 @@ export class Tempo {
 
   static remainTime: number = 0
 
-  static getRemainByStandardTime(standardTime: number): string {
+  static getRemainByStandardTime(standardTime: number, gapStr: string): string {
+    if (Tempo.remainTime === 0) {
+      return ''
+    }
+
     const remain: number = Math.floor(Tempo.remainTime / standardTime)
 
     Tempo.remainTime = Tempo.remainTime % standardTime
 
-    return String(remain)
+    return String(remain) + gapStr
   }
 
   format(
@@ -70,16 +74,16 @@ export class Tempo {
 
     Tempo.remainTime = +value
 
-    return format.replace(/([dhms]+)/g, (_: string, t: string) => {
+    return format.replace(/([dhms]+)([^dhms]+)/g, (_: string, t: string, gapStr: string) => {
       switch (t) {
         case 'd':
-          return Tempo.getRemainByStandardTime(Tempo.STANDARD_TIME.ONE_DAY)
+          return Tempo.getRemainByStandardTime(Tempo.ST.ONE_DAY, gapStr)
         case 'h':
-          return Tempo.getRemainByStandardTime(Tempo.STANDARD_TIME.ONE_HOUR)
+          return Tempo.getRemainByStandardTime(Tempo.ST.ONE_HOUR, gapStr)
         case 'm':
-          return Tempo.getRemainByStandardTime(Tempo.STANDARD_TIME.ONE_MINUTE)
+          return Tempo.getRemainByStandardTime(Tempo.ST.ONE_MINUTE, gapStr)
         case 's':
-          return Tempo.getRemainByStandardTime(Tempo.STANDARD_TIME.ONE_SECOND)
+          return Tempo.getRemainByStandardTime(Tempo.ST.ONE_SECOND, gapStr)
         default:
       }
 
