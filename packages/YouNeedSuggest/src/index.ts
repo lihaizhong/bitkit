@@ -1,4 +1,4 @@
-export { compare as LevenshteinDistanceCompare } from './compare/levenshtein-distance'
+import { compare } from './compare/levenshtein-distance'
 
 export interface IYouNeedSuggestionOptions {
   keyNameList: string | string[]
@@ -18,7 +18,7 @@ export class YouNeedSuggestion<T> {
   private dataSource: T[]
   private options: IYouNeedSuggestionOptions = {
     // 进行匹配的字段
-    keyNameList: [],
+    keyNameList: ['text'],
     // 是否过滤空值
     filterEmptyValue: true,
     // 是否区分大小写
@@ -26,7 +26,12 @@ export class YouNeedSuggestion<T> {
     // 最小相似度
     minSimilarity: 0,
     // 计算算法
-    compare: () => 100,
+    compare: compare({
+      continuous: 0.3,
+      count: 0.2,
+      position: 0.1,
+      distance: 0.4
+    })
   }
 
   constructor(dataSource: T[], options: Partial<IYouNeedSuggestionOptions>) {

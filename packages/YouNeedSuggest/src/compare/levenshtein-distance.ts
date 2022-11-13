@@ -65,10 +65,12 @@ class DistanceCalculator {
   calc(sourceLength: number, targetLength: number, weight: TWeightOptions): number {
     const { continuous, count, position, distance } = this;
 
-    return (1 - distance / Math.max(sourceLength, targetLength)) * weight.distance +
+    return (
+      (1 - distance / Math.max(sourceLength, targetLength)) * weight.distance +
       (1 - position / targetLength) * weight.position +
       (continuous / targetLength) * weight.continuous +
       (count / targetLength) * weight.count
+    )
   }
 }
 
