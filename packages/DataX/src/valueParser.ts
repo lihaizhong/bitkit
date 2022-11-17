@@ -1,6 +1,6 @@
 import Checker from "./checker"
 import { Convertor } from "./Convertor"
-import { ITransformBean } from "./typings"
+import { ITransformBean } from "../typings"
 
 export default {
   typeOfString(fieldValue: string | number, defaultValue: any, key: string): string {

@@ -10,11 +10,11 @@
     "baseUrl": ".",
     "sourceMap": true,
     "esModuleInterop": true,
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM"],
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "typings.d.ts"],
   "exclude": ["node_modules", "test", "lib", "**/*.spec.ts"]
 }

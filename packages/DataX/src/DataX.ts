@@ -1,7 +1,7 @@
 import Checker from "./checker"
 import { Convertor } from "./Convertor"
 import { Any } from "./Types"
-import { ITransformBean } from "./typings"
+import { ITransformBean } from "../typings"
 
 /**
  * ** Global Config

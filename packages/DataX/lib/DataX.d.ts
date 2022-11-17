@@ -1,5 +1,5 @@
 import { Any } from "./Types";
-import { ITransformBean } from "./typings";
+import { ITransformBean } from "../typings";
 /**
  * ** Global Config
  *  * loose 是否自动填充默认值。如果值为undefined，将根据类型自动填充默认值

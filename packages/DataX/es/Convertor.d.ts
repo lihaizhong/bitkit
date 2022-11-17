@@ -1,4 +1,4 @@
-import { ITransformBean } from "./typings";
+import { ITransformBean } from "../typings";
 export declare class Convertor {
     private options;
     private name;

@@ -1,6 +1,6 @@
 import Checker from "./checker"
 import { Any } from "./Types"
-import { ITransformBean } from "./typings"
+import { ITransformBean } from "../typings"
 import ValueParser from "./valueParser"
 
 export class Convertor {

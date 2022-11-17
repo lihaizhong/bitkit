@@ -3,7 +3,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",
-    "lib": ["ES5", "ES2022.Object"],
+    "lib": ["ES2016", "ES2022.Object", "DOM"],
     "baseUrl": ".",
     "declarationDir": "./lib",
     "outDir": "./lib"

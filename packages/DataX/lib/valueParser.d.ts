@@ -1,4 +1,4 @@
-import { ITransformBean } from "./typings";
+import { ITransformBean } from "../typings";
 declare const _default: {
     typeOfString(fieldValue: string | number, defaultValue: any, key: string): string;
     typeOfNumber(fieldValue: string | number, defaultValue: any, key: string): number;
