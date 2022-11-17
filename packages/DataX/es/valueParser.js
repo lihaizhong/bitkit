@@ -1,9 +1,5 @@
-// Copyright (c) 2021 Sangbaipi
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
 import Checker from "./checker";
-import transform from "./transform";
+import { Convertor } from "./Convertor";
 export default {
     typeOfString: function (fieldValue, defaultValue, key) {
         if (Checker.isSameClass(fieldValue, String)) {
@@ -48,9 +44,12 @@ export default {
         }
         return defaultValue;
     },
-    typeOfArray: function (type, fieldValue, defaultValue, key, config) {
+    typeOfArray: function (fieldValue, defaultValue, key, fieldConfig, config) {
         if (Checker.isArray(fieldValue)) {
-            return fieldValue.map(function (value) { return transform(config, { type: type }, value, ""); });
+            return fieldValue.map(function (value, index) {
+                var convertor = new Convertor("__DATA_X_ITEM__".concat(key, "_").concat(index, "__"), config);
+                return convertor.transform(fieldConfig, value);
+            });
         }
         if (!Checker.isVoid(fieldValue)) {
             console.warn("\u3010MKFS.typeOfArray\u3011".concat(key, " is not a array!"), fieldValue);
@@ -62,7 +61,7 @@ export default {
     },
     typeOfDefault: function (MiddlewareBean, data, config) {
         if (Checker.isVoid(MiddlewareBean)) {
-            return MiddlewareBean;
+            return data;
         }
         var middlewareBean = new MiddlewareBean(config);
         middlewareBean.transform(data);

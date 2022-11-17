@@ -3,12 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-// Copyright (c) 2021 Sangbaipi
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
 var checker_1 = __importDefault(require("./checker"));
-var transform_1 = __importDefault(require("./transform"));
+var Convertor_1 = require("./Convertor");
 exports["default"] = {
     typeOfString: function (fieldValue, defaultValue, key) {
         if (checker_1["default"].isSameClass(fieldValue, String)) {
@@ -53,9 +49,12 @@ exports["default"] = {
         }
         return defaultValue;
     },
-    typeOfArray: function (type, fieldValue, defaultValue, key, config) {
+    typeOfArray: function (fieldValue, defaultValue, key, fieldConfig, config) {
         if (checker_1["default"].isArray(fieldValue)) {
-            return fieldValue.map(function (value) { return (0, transform_1["default"])(config, { type: type }, value, ""); });
+            return fieldValue.map(function (value, index) {
+                var convertor = new Convertor_1.Convertor("__DATA_X_ITEM__".concat(key, "_").concat(index, "__"), config);
+                return convertor.transform(fieldConfig, value);
+            });
         }
         if (!checker_1["default"].isVoid(fieldValue)) {
             console.warn("\u3010MKFS.typeOfArray\u3011".concat(key, " is not a array!"), fieldValue);
@@ -67,7 +66,7 @@ exports["default"] = {
     },
     typeOfDefault: function (MiddlewareBean, data, config) {
         if (checker_1["default"].isVoid(MiddlewareBean)) {
-            return MiddlewareBean;
+            return data;
         }
         var middlewareBean = new MiddlewareBean(config);
         middlewareBean.transform(data);
