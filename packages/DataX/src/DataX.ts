@@ -34,14 +34,14 @@ export class DataX {
   }
 
   static transformArray(data: any[], fieldConfig: ITransformBean.FieldConfig | DataX, config?: ITransformBean.GlobalOptions) {
-    const convertor = new Convertor("__ROOT_ITEM", config)
+    const convertor = new Convertor("__DATA_X_ITEM__ROOT__", config)
 
     if (fieldConfig instanceof DataX) {
-      return convertor.transform({ type: fieldConfig }, data, "")
+      return convertor.transform({ type: fieldConfig }, data)
     }
 
     if (Checker.isObject(fieldConfig) && fieldConfig.type instanceof DataX) {
-      return convertor.transform(fieldConfig, data, "")
+      return convertor.transform(fieldConfig, data)
     }
 
     throw new Error('【MKFS.typeOfString】second param must be a type of DataX!')
@@ -82,7 +82,7 @@ export class DataX {
       if (typeof config === "object") {
         const convertor = new Convertor(key, this.__bean_config__)
         // 调用核心的转换函数
-        const value = convertor.transform(config, rawData, key)
+        const value = convertor.transform(config, rawData)
 
         // 判断是否丢弃undefined的数据
         if (this.__bean_config__.abandonUndefinedValue && Checker.isUndefined(value)) {
@@ -101,11 +101,7 @@ export class DataX {
       for (let i = 0; i < defaultKeys.length; i++) {
         const key = defaultKeys[i]
         const convertor = new Convertor(key, this.__bean_config__)
-        const value = convertor.transform(
-          { type: Any },
-          rawData,
-          key
-        )
+        const value = convertor.transform({ type: Any }, rawData)
 
         // 判断是否丢弃undefined的数据
         if (this.__bean_config__.abandonUndefinedValue && Checker.isUndefined(value)) {

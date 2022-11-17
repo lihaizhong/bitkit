@@ -1,15 +1,11 @@
-// Copyright (c) 2021 Sangbaipi
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
 import Checker from "./checker"
 import { Convertor } from "./Convertor"
 import { ITransformBean } from "./typings"
 
 export default {
-  typeOfString(fieldValue: string | number, defaultValue: any, key: string) {
+  typeOfString(fieldValue: string | number, defaultValue: any, key: string): string {
     if (Checker.isSameClass(fieldValue, String)) {
-      return fieldValue
+      return fieldValue as string
     }
 
     if (Checker.isSameClass(fieldValue, Number)) {
@@ -23,9 +19,9 @@ export default {
     return defaultValue
   },
 
-  typeOfNumber(fieldValue: string | number, defaultValue: any, key: string) {
+  typeOfNumber(fieldValue: string | number, defaultValue: any, key: string): number {
     if (Checker.isSameClass(fieldValue, Number)) {
-      return fieldValue
+      return fieldValue as number
     }
 
     if (
@@ -42,7 +38,7 @@ export default {
     return defaultValue
   },
 
-  typeOfBoolean(fieldValue: boolean, defaultValue: any, key: string) {
+  typeOfBoolean(fieldValue: boolean, defaultValue: any, key: string): boolean {
     if (Checker.isSameClass(fieldValue, Boolean)) {
       return fieldValue
     }
@@ -54,7 +50,7 @@ export default {
     return defaultValue
   },
 
-  typeOfObject(fieldValue: object, defaultValue: any, key: string) {
+  typeOfObject(fieldValue: object, defaultValue: any, key: string): Record<string, any> {
     if (Checker.isSameClass(fieldValue, Object)) {
       return fieldValue
     }
@@ -66,12 +62,18 @@ export default {
     return defaultValue
   },
 
-  typeOfArray(fieldValue: any[], defaultValue: any, key: string, fieldConfig: ITransformBean.FieldConfig, config: ITransformBean.GlobalOptions) {
+  typeOfArray(
+    fieldValue: any[],
+    defaultValue: any,
+    key: string,
+    fieldConfig: ITransformBean.FieldConfig,
+    config: ITransformBean.GlobalOptions
+  ): any[] {
     if (Checker.isArray(fieldValue)) {
       return fieldValue.map((value: any, index: number) => {
-        const convertor = new Convertor(`__${key}_ITEM_${index}__`, config)
+        const convertor = new Convertor(`__DATA_X_ITEM__${key}_${index}__`, config)
 
-        return convertor.transform(fieldConfig, value, "")
+        return convertor.transform(fieldConfig, value)
       })
     }
 
@@ -82,11 +84,11 @@ export default {
     return defaultValue
   },
 
-  typeOfAny(fieldValue: any) {
+  typeOfAny(fieldValue: any): any {
     return fieldValue
   },
 
-  typeOfDefault(MiddlewareBean: any, data: any, config: any) {
+  typeOfDefault(MiddlewareBean: any, data: any, config: any): any {
     if (Checker.isVoid(MiddlewareBean)) {
       return data
     }

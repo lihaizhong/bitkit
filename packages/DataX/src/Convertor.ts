@@ -45,17 +45,20 @@ export class Convertor {
       loose: 'looseFields'
     }
 
-    return fieldOptionKeys.reduce((fieldOptions: Partial<ITransformBean.FieldOptions>, key: string) => {
-      if (!Checker.isVoid(fieldConfig[key])) {
-        fieldOptions[key] = fieldConfig[key]
-      } else {
-        const globalOptionKey = OPTION_MAPPING[key]
+    return fieldOptionKeys.reduce(
+      (fieldOptions: Partial<ITransformBean.FieldOptions>, key: string) => {
+        if (!Checker.isVoid(fieldConfig[key])) {
+          fieldOptions[key] = fieldConfig[key]
+        } else {
+          const globalOptionKey = OPTION_MAPPING[key]
 
-        fieldOptions[key] = this.options[globalOptionKey]
-      }
+          fieldOptions[key] = this.options[globalOptionKey]
+        }
 
-      return fieldOptions
-    }, {}) as ITransformBean.FieldOptions
+        return fieldOptions
+      },
+      {}
+    ) as ITransformBean.FieldOptions
   }
 
   /**
@@ -77,7 +80,7 @@ export class Convertor {
       return field(target)
     }
 
-    if (Checker.isString(defaultField) && defaultField !== "") {
+    if (Checker.isString(defaultField) && defaultField !== "" && !/^__DATA_X_ITEM__/.test(defaultField)) {
       return target[defaultField]
     }
 
@@ -86,18 +89,12 @@ export class Convertor {
 
   /**
    * 设置各种类型的值
-   * @param {string} name 本地字段名称
    * @param {object} fieldConfig 字段配置信息
    * @param {any} data 数据
-   * @param {string} key 数据的key值
    */
-  transform(
-    fieldConfig: ITransformBean.FieldConfig,
-    data: any,
-    defaultField: string
-  ): any {
+  transform(fieldConfig: ITransformBean.FieldConfig, data: any): any {
     const { type, itemType, field, defaultValue } = fieldConfig
-    const fieldValue: any = this.parseFieldValue(data, field, defaultField)
+    const fieldValue: any = this.parseFieldValue(data, field, this.name)
     const options: ITransformBean.FieldOptions = this.generateFieldOptions(fieldConfig)
 
     switch (type) {
