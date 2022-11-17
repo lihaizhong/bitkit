@@ -3,7 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 import Checker from "./checker"
-import transform from "./transform"
+import { Convertor } from "./Convertor"
+import { ITransformBean } from "./typings"
 
 export default {
   typeOfString(fieldValue: string | number, defaultValue: any, key: string) {
@@ -65,9 +66,13 @@ export default {
     return defaultValue
   },
 
-  typeOfArray(type: any, fieldValue: any[], defaultValue: any, key: string, config: any) {
+  typeOfArray(fieldValue: any[], defaultValue: any, key: string, fieldConfig: ITransformBean.FieldConfig, config: ITransformBean.GlobalOptions) {
     if (Checker.isArray(fieldValue)) {
-      return fieldValue.map((value) => transform(config, { type }, value, ""))
+      return fieldValue.map((value: any, index: number) => {
+        const convertor = new Convertor(`__${key}_ITEM_${index}__`, config)
+
+        return convertor.transform(fieldConfig, value, "")
+      })
     }
 
     if (!Checker.isVoid(fieldValue)) {
@@ -83,7 +88,7 @@ export default {
 
   typeOfDefault(MiddlewareBean: any, data: any, config: any) {
     if (Checker.isVoid(MiddlewareBean)) {
-      return MiddlewareBean
+      return data
     }
 
     const middlewareBean = new MiddlewareBean(config)

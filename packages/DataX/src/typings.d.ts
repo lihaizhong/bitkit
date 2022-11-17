@@ -1,6 +1,6 @@
 export namespace ITransformBean {
   export interface GlobalOptions {
-    looseFields?: boolean | string[]
+    looseFields?: boolean
 
     abandonUndefinedValue?: boolean
 
@@ -12,8 +12,6 @@ export namespace ITransformBean {
   }
 
   export interface FieldConfig extends Partial<FieldOptions> {
-    __name__?: string
-
     type: any
 
     field?: string | ((data: any) => any)
