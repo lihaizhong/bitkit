@@ -1,5 +1,10 @@
 # @lihzsky/data-x
 
+## 1.0.0
+### Major Changes
+
+- 重构转化类
+
 ## 0.0.5
 ### Patch Changes
 
