@@ -1,17 +1,18 @@
+import { ITransformBean } from "../typings"
 import Checker from "./checker"
 import { Convertor } from "./Convertor"
 import { Any } from "./Types"
-import { ITransformBean } from "../typings"
 
 /**
  * ** Global Config
- *  * loose 是否自动填充默认值。如果值为undefined，将根据类型自动填充默认值
- *  * abandonUndefinedValue 如果值为undefined，直接过滤，需要配合loose一起使用
- *  * strict 如果没有配置，则不添加
+ *  * looseFields 是否自动填充默认值。如果值为undefined，将根据类型自动填充默认值
+ *  * abandonUndefinedValue 如果值为undefined，直接过滤，需要配合loose/looseFields一起使用
+ *  * strict 如果设置为true，则会将不合并没有定义的数据
  * ** Item Config
  *  * type {any} 必填，表示类型  可以是String、Number、Boolean、Array、泛型
  *  * itemType {any} 必填（数组），表示数组子集类型
  *  * defaultValue {string} 选填，表示默认值，如果不指定，Bean类会根据类型指定字符串
+ *  * loose {boolean} 是否自动填充默认值。如果值为undefined，将根据类型自动填充默认值
  *  * field {string|function} 选填，表示后台对应的字段，如果不指定，就是当前的key。field可以是一个方法，参数为data，主要用于自定义数据
  *  // reverse {function} 选填，表示前端对应字段由多个字段组成时，如何进行拆分。参数为data，主要用于自定义数据
  */
@@ -25,8 +26,8 @@ export class DataX {
   static globals = {
     config: {
       looseFields: false,
-      abandonUndefinedValue: false,
-      strict: true
+      abandonUndefinedValue: true,
+      strict: false
     },
     set(config: ITransformBean.GlobalOptions) {
       Object.assign(DataX.globals.config, config)
