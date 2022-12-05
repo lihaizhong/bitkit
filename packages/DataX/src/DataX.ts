@@ -29,7 +29,13 @@ export class DataX {
       looseFields: false,
       abandonUndefinedValue: true,
       strict: false,
-      debug: false
+      debug: false,
+      parser: (
+        _key: string,
+        fieldConfig: ITransformBean.FieldConfig,
+        _fieldValue: any,
+        _options: ITransformBean.FieldOptions
+      ) => new Error(`【DataX.CustomValueParser】${fieldConfig.type} is unknown type!`)
     },
     set(config: ITransformBean.GlobalOptions) {
       Object.assign(DataX.globals.config, config)
@@ -40,11 +46,11 @@ export class DataX {
     const convertor = new Convertor("__DATA_X_ITEM__ROOT__", config)
 
     if (fieldConfig instanceof DataX) {
-      return convertor.convert({ type: fieldConfig }, data)
+      return convertor.convert({ type: fieldConfig }, data, DataX.globals.config.parser)
     }
 
     if (Checker.isObject(fieldConfig) && fieldConfig.type instanceof DataX) {
-      return convertor.convert(fieldConfig, data)
+      return convertor.convert(fieldConfig, data, DataX.globals.config.parser)
     }
 
     throw new Error('【DataX.transformArray】second param must be a type of DataX!')
@@ -85,7 +91,7 @@ export class DataX {
       if (typeof config === "object") {
         const convertor = new Convertor(key, this.__bean_config__)
         // 调用核心的转换函数
-        const value = convertor.convert(config, rawData)
+        const value = convertor.convert(config, rawData, DataX.globals.config.parser)
 
         // 判断是否丢弃undefined的数据
         if (this.__bean_config__.abandonUndefinedValue && Checker.isUndefined(value)) {
@@ -104,7 +110,7 @@ export class DataX {
       for (let i = 0; i < defaultKeys.length; i++) {
         const key = defaultKeys[i]
         const convertor = new Convertor(key, this.__bean_config__)
-        const value = convertor.convert({ type: Any }, rawData)
+        const value = convertor.convert({ type: Any }, rawData, DataX.globals.config.parser)
 
         // 判断是否丢弃undefined的数据
         if (this.__bean_config__.abandonUndefinedValue && Checker.isUndefined(value)) {

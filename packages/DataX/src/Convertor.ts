@@ -1,5 +1,6 @@
 import { ITransformBean } from "../typings"
 import Checker from "./checker"
+import { DataX } from "./DataX"
 import { debug } from "./log"
 import { Any } from "./Types"
 import ValueParser from "./valueParser"
@@ -91,7 +92,7 @@ export class Convertor {
    * @param {object} fieldConfig 字段配置信息
    * @param {any} data 数据
    */
-  convert(fieldConfig: ITransformBean.FieldConfig, data: any): any {
+  convert(fieldConfig: ITransformBean.FieldConfig, data: any, CustomValueParser: ITransformBean.GlobalOptions['parser']): any {
     const { type, itemType, field, defaultValue } = fieldConfig
     const fieldValue: any = this.parseFieldValue(data, field, this.name)
     const options: ITransformBean.FieldOptions = this.generateFieldOptions(fieldConfig)
@@ -134,6 +135,7 @@ export class Convertor {
           this.name
         )
       default:
+        if (type instanceof DataX)
         return ValueParser.typeOfDefault(type, fieldValue, this.name, this.options)
     }
   }

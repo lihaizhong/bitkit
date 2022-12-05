@@ -7,6 +7,8 @@ export namespace ITransformBean {
     strict?: boolean
 
     debug?: boolean
+
+    parser?: (key: string, fieldConfig: ITransformBean.FieldConfig, fieldValue: any, options: ITransformBean.FieldOptions) => void
   }
 
   export interface FieldOptions {
