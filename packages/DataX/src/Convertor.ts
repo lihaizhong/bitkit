@@ -1,6 +1,7 @@
-import Checker from "./checker"
-import { Any } from "./Types"
 import { ITransformBean } from "../typings"
+import Checker from "./checker"
+import { debug } from "./log"
+import { Any } from "./Types"
 import ValueParser from "./valueParser"
 
 export class Convertor {
@@ -68,20 +69,18 @@ export class Convertor {
    * @param {string} defaultField
    */
   private parseFieldValue(target: any, field: any, defaultField: string): any {
-    if (!Checker.isObject(target)) {
-      return target
-    }
+    if (Checker.isObject(target)) {
+      if (Checker.isString(field)) {
+        return target[field]
+      }
 
-    if (Checker.isString(field)) {
-      return target[field]
-    }
+      if (Checker.isFunction(field)) {
+        return field(target)
+      }
 
-    if (Checker.isFunction(field)) {
-      return field(target)
-    }
-
-    if (Checker.isString(defaultField) && defaultField !== "" && !/^__DATA_X_ITEM__/.test(defaultField)) {
-      return target[defaultField]
+      if (Checker.isString(defaultField) && defaultField !== "") {
+        return target[defaultField]
+      }
     }
 
     return target
@@ -92,10 +91,12 @@ export class Convertor {
    * @param {object} fieldConfig 字段配置信息
    * @param {any} data 数据
    */
-  transform(fieldConfig: ITransformBean.FieldConfig, data: any): any {
+  convert(fieldConfig: ITransformBean.FieldConfig, data: any): any {
     const { type, itemType, field, defaultValue } = fieldConfig
     const fieldValue: any = this.parseFieldValue(data, field, this.name)
     const options: ITransformBean.FieldOptions = this.generateFieldOptions(fieldConfig)
+
+    debug('DataX.convert', this.name, fieldConfig, options, data)
 
     switch (type) {
       case Any:
@@ -133,7 +134,7 @@ export class Convertor {
           this.name
         )
       default:
-        return ValueParser.typeOfDefault(type, fieldValue, this.options)
+        return ValueParser.typeOfDefault(type, fieldValue, this.name, this.options)
     }
   }
 }

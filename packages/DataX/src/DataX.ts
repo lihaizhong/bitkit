@@ -8,6 +8,7 @@ import { Any } from "./Types"
  *  * looseFields 是否自动填充默认值。如果值为undefined，将根据类型自动填充默认值
  *  * abandonUndefinedValue 如果值为undefined，直接过滤，需要配合loose/looseFields一起使用
  *  * strict 如果设置为true，则会将不合并没有定义的数据
+ *  * debug 获取更详细的操作信息
  * ** Item Config
  *  * type {any} 必填，表示类型  可以是String、Number、Boolean、Array、泛型
  *  * itemType {any} 必填（数组），表示数组子集类型
@@ -27,7 +28,8 @@ export class DataX {
     config: {
       looseFields: false,
       abandonUndefinedValue: true,
-      strict: false
+      strict: false,
+      debug: false
     },
     set(config: ITransformBean.GlobalOptions) {
       Object.assign(DataX.globals.config, config)
@@ -38,14 +40,14 @@ export class DataX {
     const convertor = new Convertor("__DATA_X_ITEM__ROOT__", config)
 
     if (fieldConfig instanceof DataX) {
-      return convertor.transform({ type: fieldConfig }, data)
+      return convertor.convert({ type: fieldConfig }, data)
     }
 
     if (Checker.isObject(fieldConfig) && fieldConfig.type instanceof DataX) {
-      return convertor.transform(fieldConfig, data)
+      return convertor.convert(fieldConfig, data)
     }
 
-    throw new Error('【MKFS.typeOfString】second param must be a type of DataX!')
+    throw new Error('【DataX.transformArray】second param must be a type of DataX!')
   }
 
   constructor(config?: ITransformBean.GlobalOptions) {
@@ -83,7 +85,7 @@ export class DataX {
       if (typeof config === "object") {
         const convertor = new Convertor(key, this.__bean_config__)
         // 调用核心的转换函数
-        const value = convertor.transform(config, rawData)
+        const value = convertor.convert(config, rawData)
 
         // 判断是否丢弃undefined的数据
         if (this.__bean_config__.abandonUndefinedValue && Checker.isUndefined(value)) {
@@ -102,7 +104,7 @@ export class DataX {
       for (let i = 0; i < defaultKeys.length; i++) {
         const key = defaultKeys[i]
         const convertor = new Convertor(key, this.__bean_config__)
-        const value = convertor.transform({ type: Any }, rawData)
+        const value = convertor.convert({ type: Any }, rawData)
 
         // 判断是否丢弃undefined的数据
         if (this.__bean_config__.abandonUndefinedValue && Checker.isUndefined(value)) {

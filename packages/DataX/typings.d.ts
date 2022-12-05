@@ -5,6 +5,8 @@ export namespace ITransformBean {
     abandonUndefinedValue?: boolean
 
     strict?: boolean
+
+    debug?: boolean
   }
 
   export interface FieldOptions {
@@ -19,6 +21,8 @@ export namespace ITransformBean {
     itemType?: any
 
     defaultValue?: any
+
+    convert?: (convertor: any, key: string, fieldConfig: FieldConfig, config: GlobalOptions) => any
 
     [key: string]: any
   }
