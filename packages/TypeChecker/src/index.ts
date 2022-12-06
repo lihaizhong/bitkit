@@ -193,7 +193,7 @@ export function isFalsy(value: any): boolean {
   return value === false || value === 0;
 }
 
-export class TypeChecker {
+export class Checker {
   // 反向扩展类型校验集合
   not: Partial<ITypes> = {};
 
@@ -292,17 +292,17 @@ export class TypeChecker {
   }
 }
 
-const typeChecker = new TypeChecker();
+const checker = new Checker();
 
-export default new Proxy(typeChecker, {
-  get(target: TypeChecker, p: string) {
+export default new Proxy(checker, {
+  get(target: Checker, p: string) {
     if(target.extensions[p]) {
       return Reflect.get(target.extensions, p);
     }
 
     return Reflect.get(target, p);
   },
-  set(_target: TypeChecker, _value: any) {
-    throw new Error('TypeChecker不支持扩展！');
+  set(_target: Checker, _value: any) {
+    throw new Error('TypeChecker不支持直接扩展，请使用TypeChecker.extend方法代替！');
   }
-}) as TypeChecker & ITypes;
+}) as Checker & ITypes;
