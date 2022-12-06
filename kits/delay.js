@@ -1,5 +1,5 @@
 /**
- * 节流函数实现
+ * 节流函数
  * @author sky
  * @email 854323752@qq.com
  * @param {function} fn 目标函数
@@ -19,16 +19,22 @@ export function throttle (fn, interval = 500) {
       firstTime = false
     } else {
       // 计时器还没销毁，延迟尚未完成
-      timer ||
-        (timer = setTimeout(() => {
-          clearTimeout(timer)
-          timer = null
+      if (timer) {
+        timer = setTimeout(() => {
           fn.apply(__self__, rest)
-        }, interval))
+          timer = null
+        }, interval)
+      }
     }
   }
 }
 
+/**
+ * 防抖函数
+ * @param {Function} fn
+ * @param {number} interval
+ * @returns 为避免在短时间内多次触发造成的性能影响，我们需要过滤未完成的操作
+ */
 export function debounce (fn, interval = 500) {
   let timer = null
 
@@ -37,9 +43,8 @@ export function debounce (fn, interval = 500) {
 
     clearTimeout(timer)
     timer = setTimeout(() => {
-      clearTimeout(timer)
-      timer = null
       fn.apply(__self__, rest)
+      timer = null
     }, interval)
   }
 }
