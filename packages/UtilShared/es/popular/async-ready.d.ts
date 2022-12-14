@@ -1,4 +1,4 @@
-export declare type IAsyncReadyOption = {
+export type IAsyncReadyOption = {
     only: boolean;
 };
 export default class AsyncReady {

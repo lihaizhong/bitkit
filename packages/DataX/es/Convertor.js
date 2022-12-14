@@ -10,6 +10,8 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import Checker from "./checker";
+import { DataX } from "./DataX";
+import { debug } from "./log";
 import { Any } from "./Types";
 import ValueParser from "./valueParser";
 var Convertor = /** @class */ (function () {
@@ -60,17 +62,16 @@ var Convertor = /** @class */ (function () {
      * @param {string} defaultField
      */
     Convertor.prototype.parseFieldValue = function (target, field, defaultField) {
-        if (!Checker.isObject(target)) {
-            return target;
-        }
-        if (Checker.isString(field)) {
-            return target[field];
-        }
-        if (Checker.isFunction(field)) {
-            return field(target);
-        }
-        if (Checker.isString(defaultField) && defaultField !== "" && !/^__DATA_X_ITEM__/.test(defaultField)) {
-            return target[defaultField];
+        if (Checker.isObject(target)) {
+            if (Checker.isString(field)) {
+                return target[field];
+            }
+            if (Checker.isFunction(field)) {
+                return field(target);
+            }
+            if (Checker.isString(defaultField) && defaultField !== "") {
+                return target[defaultField];
+            }
         }
         return target;
     };
@@ -79,10 +80,11 @@ var Convertor = /** @class */ (function () {
      * @param {object} fieldConfig 字段配置信息
      * @param {any} data 数据
      */
-    Convertor.prototype.transform = function (fieldConfig, data) {
+    Convertor.prototype.convert = function (fieldConfig, data, CustomValueParser) {
         var type = fieldConfig.type, itemType = fieldConfig.itemType, field = fieldConfig.field, defaultValue = fieldConfig.defaultValue;
         var fieldValue = this.parseFieldValue(data, field, this.name);
         var options = this.generateFieldOptions(fieldConfig);
+        debug('DataX.convert', this.name, fieldConfig, options, data);
         switch (type) {
             case Any:
                 return ValueParser.typeOfAny(fieldValue);
@@ -93,11 +95,14 @@ var Convertor = /** @class */ (function () {
             case Boolean:
                 return ValueParser.typeOfBoolean(fieldValue, this.getDefaultValue(type, defaultValue, null, options), this.name);
             case Array:
-                return ValueParser.typeOfArray(fieldValue, this.getDefaultValue(type, defaultValue, [], options), this.name, __assign(__assign({}, options), { type: itemType }), this.options);
+                return ValueParser.typeOfArray(fieldValue, this.getDefaultValue(type, defaultValue, [], options), this.name, __assign(__assign({}, options), { type: itemType }), this.options, CustomValueParser);
             case Object:
                 return ValueParser.typeOfObject(fieldValue, this.getDefaultValue(type, defaultValue, {}, options), this.name);
             default:
-                return ValueParser.typeOfDefault(type, fieldValue, this.options);
+                if (type instanceof DataX) {
+                    return ValueParser.typeOfDefault(type, fieldValue, this.name, this.options);
+                }
+                return CustomValueParser(this.name, fieldConfig, fieldValue, options);
         }
     };
     return Convertor;

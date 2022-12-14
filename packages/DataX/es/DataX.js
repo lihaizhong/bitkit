@@ -17,6 +17,7 @@ import { Any } from "./Types";
  *  * looseFields 是否自动填充默认值。如果值为undefined，将根据类型自动填充默认值
  *  * abandonUndefinedValue 如果值为undefined，直接过滤，需要配合loose/looseFields一起使用
  *  * strict 如果设置为true，则会将不合并没有定义的数据
+ *  * debug 获取更详细的操作信息
  * ** Item Config
  *  * type {any} 必填，表示类型  可以是String、Number、Boolean、Array、泛型
  *  * itemType {any} 必填（数组），表示数组子集类型
@@ -36,12 +37,12 @@ var DataX = /** @class */ (function () {
     DataX.transformArray = function (data, fieldConfig, config) {
         var convertor = new Convertor("__DATA_X_ITEM__ROOT__", config);
         if (fieldConfig instanceof DataX) {
-            return convertor.transform({ type: fieldConfig }, data);
+            return convertor.convert({ type: fieldConfig }, data, DataX.globals.config.parser);
         }
         if (Checker.isObject(fieldConfig) && fieldConfig.type instanceof DataX) {
-            return convertor.transform(fieldConfig, data);
+            return convertor.convert(fieldConfig, data, DataX.globals.config.parser);
         }
-        throw new Error('【MKFS.typeOfString】second param must be a type of DataX!');
+        throw new Error('【DataX.transformArray】second param must be a type of DataX!');
     };
     DataX.prototype.transform = function (data) {
         // 初始化原生数据，使之能作为一个对象输入
@@ -69,7 +70,7 @@ var DataX = /** @class */ (function () {
             if (typeof config === "object") {
                 var convertor = new Convertor(key, this.__bean_config__);
                 // 调用核心的转换函数
-                var value = convertor.transform(config, rawData);
+                var value = convertor.convert(config, rawData, DataX.globals.config.parser);
                 // 判断是否丢弃undefined的数据
                 if (this.__bean_config__.abandonUndefinedValue && Checker.isUndefined(value)) {
                     continue;
@@ -86,7 +87,7 @@ var DataX = /** @class */ (function () {
             for (var i = 0; i < defaultKeys.length; i++) {
                 var key = defaultKeys[i];
                 var convertor = new Convertor(key, this.__bean_config__);
-                var value = convertor.transform({ type: Any }, rawData);
+                var value = convertor.convert({ type: Any }, rawData, DataX.globals.config.parser);
                 // 判断是否丢弃undefined的数据
                 if (this.__bean_config__.abandonUndefinedValue && Checker.isUndefined(value)) {
                     continue;
@@ -110,7 +111,12 @@ var DataX = /** @class */ (function () {
         config: {
             looseFields: false,
             abandonUndefinedValue: true,
-            strict: false
+            strict: false,
+            debug: false,
+            parser: function (_key, fieldConfig, _fieldValue, _options) {
+                console.warn("\u3010DataX.CustomValueParser\u3011".concat(fieldConfig.type, " is unknown type!"));
+                return _fieldValue;
+            }
         },
         set: function (config) {
             Object.assign(DataX.globals.config, config);

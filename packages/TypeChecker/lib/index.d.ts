@@ -1,5 +1,5 @@
 export declare const hasOwn: (target: any, property: string) => any;
-export declare type TValidator = (value: any, type?: any) => boolean;
+export type TValidator = (value: any, type?: any) => boolean;
 export interface ITypes {
     isSameClass: TValidator;
     isValidDate: TValidator;
@@ -112,7 +112,7 @@ export declare function isTruthy(value: any): boolean;
  * @param value
  */
 export declare function isFalsy(value: any): boolean;
-export declare class TypeChecker {
+export declare class Checker {
     not: Partial<ITypes>;
     extensions: ITypes;
     constructor();
@@ -134,5 +134,5 @@ export declare class TypeChecker {
      */
     extend(name: string, validator: TValidator, addonToNot?: boolean): void;
 }
-declare const _default: TypeChecker & ITypes;
+declare const _default: Checker & ITypes;
 export default _default;

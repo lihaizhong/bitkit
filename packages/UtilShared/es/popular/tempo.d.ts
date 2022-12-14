@@ -1,4 +1,4 @@
-export declare type TDateArgs = [number, number, number, number, number, number];
+export type TDateArgs = [number, number, number, number, number, number];
 export declare class Tempo {
     static ST: Record<string, number>;
     static remainTime: number;

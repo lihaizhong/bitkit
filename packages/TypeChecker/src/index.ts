@@ -3,7 +3,9 @@ export const hasOwn = (target: any, property: string) => {
     return Object.hasOwn(target, property);
   }
 
-  return Object.prototype.hasOwnProperty.call(target, property);
+  const hasOwn = (Object as ObjectConstructor).prototype.hasOwnProperty
+
+  return hasOwn.call(target, property);
 }
 
 export type TValidator = (value: any, type?: any) => boolean;

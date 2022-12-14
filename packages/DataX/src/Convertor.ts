@@ -126,7 +126,8 @@ export class Convertor {
           this.getDefaultValue(type, defaultValue, [], options),
           this.name,
           { ...options, type: itemType },
-          this.options
+          this.options,
+          CustomValueParser
         )
       case Object:
         return ValueParser.typeOfObject(
@@ -135,8 +136,11 @@ export class Convertor {
           this.name
         )
       default:
-        if (type instanceof DataX)
-        return ValueParser.typeOfDefault(type, fieldValue, this.name, this.options)
+        if (type instanceof DataX) {
+          return ValueParser.typeOfDefault(type, fieldValue, this.name, this.options)
+        }
+
+        return CustomValueParser(this.name, fieldConfig, fieldValue, options)
     }
   }
 }

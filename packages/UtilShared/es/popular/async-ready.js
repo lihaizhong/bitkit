@@ -1,14 +1,14 @@
 export default class AsyncReady {
-    constructor(option) {
-        this.status = AsyncReady.ReadyStatus.initialize;
-        this.callbacks = [];
-        this.options = Object.assign({ only: false }, option);
-    }
     static callReadyFunc(callback, ...args) {
         if (typeof callback === "function") {
             return callback(...args);
         }
         return null;
+    }
+    constructor(option) {
+        this.status = AsyncReady.ReadyStatus.initialize;
+        this.callbacks = [];
+        this.options = Object.assign({ only: false }, option);
     }
     updateParams(params) {
         this.params = params;

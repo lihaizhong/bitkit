@@ -30,5 +30,5 @@ export declare class Convertor {
      * @param {object} fieldConfig 字段配置信息
      * @param {any} data 数据
      */
-    transform(fieldConfig: ITransformBean.FieldConfig, data: any): any;
+    convert(fieldConfig: ITransformBean.FieldConfig, data: any, CustomValueParser: ITransformBean.GlobalOptions['parser']): any;
 }

@@ -105,7 +105,8 @@ export default {
     defaultValue: any,
     key: string,
     fieldConfig: ITransformBean.FieldConfig,
-    config: ITransformBean.GlobalOptions
+    config: ITransformBean.GlobalOptions,
+    parser: any
   ): any[] {
     if (Checker.isArray(fieldValue)) {
       const { convert } = fieldConfig
@@ -117,7 +118,7 @@ export default {
       return fieldValue.map((value: any, index: number) => {
         const convertor = new Convertor(`__DATA_X_ITEM__${key}_${index}__`, config)
 
-        return convertor.convert(fieldConfig, value)
+        return convertor.convert(fieldConfig, value, parser)
       })
     }
 

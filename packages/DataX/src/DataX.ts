@@ -35,7 +35,11 @@ export class DataX {
         fieldConfig: ITransformBean.FieldConfig,
         _fieldValue: any,
         _options: ITransformBean.FieldOptions
-      ) => new Error(`【DataX.CustomValueParser】${fieldConfig.type} is unknown type!`)
+      ) => {
+        console.warn(`【DataX.CustomValueParser】${fieldConfig.type} is unknown type!`)
+
+        return _fieldValue
+      }
     },
     set(config: ITransformBean.GlobalOptions) {
       Object.assign(DataX.globals.config, config)

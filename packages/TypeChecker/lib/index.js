@@ -1,11 +1,12 @@
 "use strict";
 exports.__esModule = true;
-exports.TypeChecker = exports.isFalsy = exports.isTruthy = exports.isLikePromise = exports.isPromise = exports.isError = exports.isRegExp = exports.isObject = exports.isArray = exports.isFunction = exports.isBoolean = exports.isNumber = exports.isString = exports.isPrimitive = exports.isVoid = exports.isUndefined = exports.isNull = exports.isValidDate = exports.isSameClass = exports.hasOwn = void 0;
+exports.Checker = exports.isFalsy = exports.isTruthy = exports.isLikePromise = exports.isPromise = exports.isError = exports.isRegExp = exports.isObject = exports.isArray = exports.isFunction = exports.isBoolean = exports.isNumber = exports.isString = exports.isPrimitive = exports.isVoid = exports.isUndefined = exports.isNull = exports.isValidDate = exports.isSameClass = exports.hasOwn = void 0;
 var hasOwn = function (target, property) {
     if ('hasOwn' in Object) {
         return Object.hasOwn(target, property);
     }
-    return Object.prototype.hasOwnProperty.call(target, property);
+    var hasOwn = Object.prototype.hasOwnProperty;
+    return hasOwn.call(target, property);
 };
 exports.hasOwn = hasOwn;
 /**
@@ -162,8 +163,8 @@ function isFalsy(value) {
     return value === false || value === 0;
 }
 exports.isFalsy = isFalsy;
-var TypeChecker = /** @class */ (function () {
-    function TypeChecker() {
+var Checker = /** @class */ (function () {
+    function Checker() {
         var _this = this;
         // 反向扩展类型校验集合
         this.not = {};
@@ -197,7 +198,7 @@ var TypeChecker = /** @class */ (function () {
      * 注入反向扩展类型校验
      * @param property
      */
-    TypeChecker.prototype.injectReverseValidator = function (property) {
+    Checker.prototype.injectReverseValidator = function (property) {
         var _this = this;
         this.not[property] = function (value, type) {
             if (property in _this.extensions) {
@@ -209,7 +210,7 @@ var TypeChecker = /** @class */ (function () {
      * 反向扩展类型校验
      * @param properties
      */
-    TypeChecker.prototype.reverse = function (properties) {
+    Checker.prototype.reverse = function (properties) {
         var _this = this;
         if (this.extensions.isString(properties)) {
             this.injectReverseValidator(properties);
@@ -226,7 +227,7 @@ var TypeChecker = /** @class */ (function () {
      * @param validator 校验函数
      * @param addonToNot 是否添加到not模块中
      */
-    TypeChecker.prototype.extend = function (name, validator, addonToNot) {
+    Checker.prototype.extend = function (name, validator, addonToNot) {
         if (addonToNot === void 0) { addonToNot = false; }
         if (this.extensions[name]) {
             console.warn("\u6269\u5C55\u7C7B\u578B".concat(name, "\u5DF2\u5B58\u5728\uFF0C\u5EFA\u8BAE\u66F4\u6362\u4E00\u4E2A\u540D\u79F0\uFF01"));
@@ -236,11 +237,11 @@ var TypeChecker = /** @class */ (function () {
             this.reverse(name);
         }
     };
-    return TypeChecker;
+    return Checker;
 }());
-exports.TypeChecker = TypeChecker;
-var typeChecker = new TypeChecker();
-exports["default"] = new Proxy(typeChecker, {
+exports.Checker = Checker;
+var checker = new Checker();
+exports["default"] = new Proxy(checker, {
     get: function (target, p) {
         if (target.extensions[p]) {
             return Reflect.get(target.extensions, p);
@@ -248,7 +249,7 @@ exports["default"] = new Proxy(typeChecker, {
         return Reflect.get(target, p);
     },
     set: function (_target, _value) {
-        throw new Error('TypeChecker不支持扩展！');
+        throw new Error('TypeChecker不支持直接扩展，请使用TypeChecker.extend方法代替！');
     }
 });
 //# sourceMappingURL=index.js.map

@@ -21,7 +21,7 @@ export class Tempo {
             m: () => date.getMinutes(),
             s: () => date.getSeconds(),
             q: () => Math.floor((date.getMonth() + 3) / 3),
-            S: () => date.getMilliseconds(), //毫秒
+            S: () => date.getMilliseconds(), // 毫秒
         };
         return format.replace(/([yMdhmsqS])+/g, (all, t) => {
             let fn = map[t];
