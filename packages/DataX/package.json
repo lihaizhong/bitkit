@@ -1,6 +1,6 @@
 {
   "name": "@lihzsky/data-x",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -21,6 +21,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@lihzsky/type-checker": "workspace:^0.0.1"
+    "@lihzsky/type-checker": "workspace:^0.0.2"
   }
 }

@@ -1,5 +1,15 @@
 # @lihzsky/data-x
 
+## 1.1.0
+### Minor Changes
+
+- 优化转换方法
+
+### Patch Changes
+
+- Updated dependencies
+  - @lihzsky/type-checker@0.0.2
+
 ## 1.0.0
 ### Major Changes
 
