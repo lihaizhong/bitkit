@@ -14,12 +14,7 @@ var YouNeedSuggestion = /** @class */ (function () {
             // 最小相似度
             minSimilarity: 0,
             // 计算算法
-            compare: (0, levenshtein_distance_1.compare)({
-                continuous: 0.3,
-                count: 0.2,
-                position: 0.1,
-                distance: 0.4
-            })
+            compare: (0, levenshtein_distance_1.compare)()
         };
         this.dataSource = dataSource;
         this.options = Object.assign(this.options, options);

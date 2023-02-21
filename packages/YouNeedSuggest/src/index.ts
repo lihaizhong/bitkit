@@ -1,6 +1,6 @@
 import { compare } from './compare/levenshtein-distance'
 
-export interface IYouNeedSuggestionOptions {
+export interface YouNeedSuggestionOptions {
   keyNameList: string | string[]
   filterEmptyValue: boolean
   caseSensitive: boolean
@@ -8,7 +8,7 @@ export interface IYouNeedSuggestionOptions {
   compare: (sourceStr: string, targetStr: string) => number
 }
 
-export interface IYouNeedSuggestResult<T> {
+export interface YouNeedSuggestResult<T> {
   data: T;
   similarity: number;
 }
@@ -16,7 +16,7 @@ export interface IYouNeedSuggestResult<T> {
 export class YouNeedSuggestion<T> {
   private keyNameList: string[]
   private dataSource: T[]
-  private options: IYouNeedSuggestionOptions = {
+  private options: YouNeedSuggestionOptions = {
     // 进行匹配的字段
     keyNameList: ['text'],
     // 是否过滤空值
@@ -26,15 +26,10 @@ export class YouNeedSuggestion<T> {
     // 最小相似度
     minSimilarity: 0,
     // 计算算法
-    compare: compare({
-      continuous: 0.3,
-      count: 0.2,
-      position: 0.1,
-      distance: 0.4
-    })
+    compare: compare()
   }
 
-  constructor(dataSource: T[], options: Partial<IYouNeedSuggestionOptions>) {
+  constructor(dataSource: T[], options: Partial<YouNeedSuggestionOptions>) {
     this.dataSource = dataSource
     this.options = Object.assign(this.options, options)
     this.keyNameList = this.parseKeyNameList(this.options.keyNameList)
@@ -80,8 +75,8 @@ export class YouNeedSuggestion<T> {
     }, -Infinity)
   }
 
-  get(value: string): IYouNeedSuggestResult<T>[] {
-    const result: IYouNeedSuggestResult<T>[] = []
+  get(value: string): YouNeedSuggestResult<T>[] {
+    const result: YouNeedSuggestResult<T>[] = []
     value = this.parseValue(value)
 
     for(let i = 0; i < this.dataSource.length; i++) {
@@ -92,6 +87,6 @@ export class YouNeedSuggestion<T> {
       }
     }
 
-    return result.sort((a: IYouNeedSuggestResult<T>, b: IYouNeedSuggestResult<T>) => b.similarity - a.similarity)
+    return result.sort((a: YouNeedSuggestResult<T>, b: YouNeedSuggestResult<T>) => b.similarity - a.similarity)
   }
 }

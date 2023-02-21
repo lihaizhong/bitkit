@@ -1,8 +1,22 @@
-export type TWeightOptions = {
+export interface DistanceWeightOptions {
     continuous: number;
     count: number;
     position: number;
     distance: number;
-};
-export type TDistanceOptions = TWeightOptions;
-export declare const compare: (weight: TWeightOptions) => (inputValue: string, comparedValue: string) => number;
+}
+export declare class DistanceCalculator {
+    private continuous;
+    private count;
+    private position;
+    private distance;
+    private options;
+    constructor(options?: DistanceWeightOptions);
+    private initialize;
+    private setContinuous;
+    private setCount;
+    private setPosition;
+    private setDistance;
+    private calc;
+    get(inputValue: string, comparedValue: string): number;
+}
+export declare const compare: (options?: DistanceWeightOptions) => (inputValue: string, comparedValue: string) => number;
