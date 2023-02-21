@@ -1,7 +1,10 @@
 {
   "name": "@lihzsky/type-checker",
   "version": "0.0.2",
-  "description": "",
+  "keywords": ["type-checker"],
+  "author": "sky",
+  "license": "ISC",
+  "description": "JS类型检查工具",
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
@@ -16,7 +19,7 @@
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
-  "keywords": [],
-  "author": "sky",
-  "license": "ISC"
+  "bugs": {
+    "url": "https://github.com/lihaizhong/toolkit/issues"
+  }
 }

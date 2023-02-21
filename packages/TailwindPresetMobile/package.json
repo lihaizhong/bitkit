@@ -2,16 +2,29 @@
   "name": "@lihzsky/tailwind-preset-mobile",
   "version": "1.0.0",
   "private": true,
-  "description": "tailwindcss 无线端支持",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [
     "tailwindcss",
     "preset",
     "mobile"
   ],
   "author": "sky",
-  "license": "ISC"
+  "license": "ISC",
+  "description": "tailwindcss 无线端支持",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "es/index.d.ts",
+  "files": [
+    "lib",
+    "es"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/lihaizhong/toolkit/issues"
+  }
 }

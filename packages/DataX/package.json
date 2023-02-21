@@ -1,7 +1,10 @@
 {
   "name": "@lihzsky/data-x",
   "version": "1.1.0",
-  "description": "",
+  "keywords": [],
+  "author": "sky",
+  "license": "ISC",
+  "description": "数据格式化工具",
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
@@ -13,14 +16,14 @@
   "scripts": {
     "build": "rm -rf ./lib ./types ./es && tsc --build tsconfig.json && tsc --build tsconfig.lib.json"
   },
-  "keywords": [],
-  "author": "sky",
-  "license": "ISC",
+  "dependencies": {
+    "@lihzsky/type-checker": "workspace:^0.0.2"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
-  "dependencies": {
-    "@lihzsky/type-checker": "workspace:^0.0.2"
+  "bugs": {
+    "url": "https://github.com/lihaizhong/toolkit/issues"
   }
 }

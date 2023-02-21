@@ -1,7 +1,10 @@
 {
   "name": "@lihzsky/you-need-suggest",
   "version": "0.0.2",
-  "description": "",
+  "keywords": ["suggest", "levenshtein"],
+  "author": "lihz",
+  "license": "ISC",
+  "description": "本地动态筛选功能",
   "main": "lib/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
@@ -9,10 +12,18 @@
     "lib",
     "es"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lihaizhong/toolkit.git"
+  },
   "scripts": {
     "build": "rm -rf ./lib ./es && tsc --build tsconfig.json && tsc --build tsconfig.lib.json"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/lihaizhong/toolkit/issues"
+  }
 }
