@@ -10,7 +10,7 @@
     "baseUrl": ".",
     "sourceMap": true,
     "esModuleInterop": true,
-    "lib": ["ESNext"]
+    "lib": ["ESNext", "DOM"]
   },
   "include": ["src/*"],
   "exclude": ["node_modules", "test", "lib", "**/*.spec.ts"]

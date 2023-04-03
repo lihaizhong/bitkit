@@ -1,0 +1,343 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+exports.__esModule = true;
+exports.CorePoint = void 0;
+var message_1 = require("./constants/message");
+var signals_1 = require("./constants/signals");
+var Journal_1 = require("./utils/Journal");
+var MessageBody_1 = require("./utils/MessageBody");
+var MessageQueue_1 = require("./utils/MessageQueue");
+var MessageSink_1 = require("./utils/MessageSink");
+var CorePoint = /** @class */ (function () {
+    function CorePoint() {
+        this.port = null;
+        this.body = new MessageBody_1.MessageBody();
+        this.queue = new MessageQueue_1.MessageQueue();
+        this.controllers = {};
+        this.subscriptions = {
+            success: {},
+            error: {}
+        };
+        this.isReady = false;
+    }
+    CorePoint.checkIdentification = function (id) {
+        return typeof id === 'string' && id !== '';
+    };
+    /**
+     * 获取协议类型
+     * @param data
+     * @returns
+     */
+    CorePoint.prototype.getProtocolType = function (data) {
+        if (MessageBody_1.MessageBody.checkProtocol(data)) {
+            return MessageBody_1.MessageBody.type;
+        }
+        if (typeof data === 'string' && signals_1.POINT_SIGNAL_REG.test(data)) {
+            return 'signal';
+        }
+        return '';
+    };
+    /**
+     * 处理json-rpc协议消息
+     * @param event
+     */
+    CorePoint.prototype.handleJsonRPCMessage = function (event) {
+        var _this = this;
+        var sink = new MessageSink_1.MessageSink(event.data);
+        // 处理通知消息
+        sink.onNotify(function (data) { return __awaiter(_this, void 0, void 0, function () {
+            var method, params, fn, ex_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        method = data.method, params = data.params;
+                        // 检查调用的方法是否存在
+                        if (!(typeof this.controllers[method] === 'function')) {
+                            throw new Error("method[".concat(method, "] does not declare!"));
+                        }
+                        fn = this.controllers[method];
+                        // 检查方法的参数个数是否一致
+                        if (fn.length !== params.length) {
+                            throw new Error("method[".concat(method, "] invalid method parameters"));
+                        }
+                        return [4 /*yield*/, fn.apply(void 0, params)];
+                    case 1:
+                        _a.sent();
+                        Journal_1.journal.success('notify success!', data);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        ex_1 = _a.sent();
+                        // 捕获未知的异常情况
+                        Journal_1.journal.error('notify fail!', data, ex_1);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); });
+        // 处理请求消息
+        sink.onRequest(function (data) { return __awaiter(_this, void 0, void 0, function () {
+            var method, params, fn, result, ex_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        method = data.method, params = data.params;
+                        // 检查id是否合法
+                        if (!CorePoint.checkIdentification(data.id)) {
+                            this.postErrorMessage(data.id, 'NotWellFormed');
+                            return [2 /*return*/];
+                        }
+                        // 检查调用的方法是否存在
+                        if (!(typeof this.controllers[method] === 'function')) {
+                            this.postErrorMessage(data.id, 'NotFound');
+                            return [2 /*return*/];
+                        }
+                        fn = this.controllers[method];
+                        // 检查方法的参数个数是否一致
+                        if (fn.length > params.length) {
+                            this.postErrorMessage(data.id, 'InvalidMethodParameters');
+                            return [2 /*return*/];
+                        }
+                        return [4 /*yield*/, fn.apply(void 0, params)];
+                    case 1:
+                        result = _a.sent();
+                        this.postSuccessMessage(data.id, result || null);
+                        Journal_1.journal.success('request success!', data, result);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        ex_2 = _a.sent();
+                        // 捕获未知的异常情况并发送错误消息
+                        this.postErrorMessage(data.id, 'InternalRPCError');
+                        Journal_1.journal.error('request fail!', data, ex_2);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); });
+        // 处理响应消息
+        sink.onResponse(function (data) { return __awaiter(_this, void 0, void 0, function () {
+            var success, ex_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        success = this.subscriptions.success;
+                        Journal_1.journal.success('response success!', data.result);
+                        if (!(typeof success[data.id] === 'function')) return [3 /*break*/, 4];
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        // 得到响应后执行订阅消息
+                        return [4 /*yield*/, success[data.id](data.result)];
+                    case 2:
+                        // 得到响应后执行订阅消息
+                        _a.sent();
+                        delete success[data.id];
+                        Journal_1.journal.success('success subscription success!', data.result);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        ex_3 = _a.sent();
+                        // 捕获未知的异常情况
+                        Journal_1.journal.error('success subscription fail!', data.result, ex_3);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); });
+        // 处理错误消息
+        sink.onError(function (data) { return __awaiter(_this, void 0, void 0, function () {
+            var error, ex_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!CorePoint.checkIdentification(data.id)) return [3 /*break*/, 4];
+                        error = this.subscriptions.error;
+                        if (!(typeof error[data.id] === 'function')) return [3 /*break*/, 4];
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        // 得到响应后执行订阅消息
+                        return [4 /*yield*/, error[data.id](data.error)];
+                    case 2:
+                        // 得到响应后执行订阅消息
+                        _a.sent();
+                        delete error[data.id];
+                        Journal_1.journal.success('error subscription success!', data.error);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        ex_4 = _a.sent();
+                        // 捕获未知的异常情况
+                        Journal_1.journal.error('error subscription fail!', data.error, ex_4);
+                        return [3 /*break*/, 4];
+                    case 4:
+                        Journal_1.journal.error(data.error);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        sink.bootstrap();
+    };
+    /**
+     * 处理信号消息
+     * @param event
+     */
+    CorePoint.prototype.handleSignalMessage = function (event) { };
+    /**
+     * 建立通信连接
+     * @param port
+     */
+    CorePoint.prototype.connect = function (port) {
+        var _this = this;
+        this.port = port;
+        port.onmessage = function (event) {
+            // 根据协议类型，处理通信消息
+            switch (_this.getProtocolType(event.data)) {
+                case MessageBody_1.MessageBody.type:
+                    _this.handleJsonRPCMessage(event);
+                    break;
+                case 'signal':
+                    _this.handleSignalMessage(event);
+                    break;
+                default:
+                    _this.postErrorMessage('UNKNOWN', 'InvalidRPC');
+            }
+        };
+    };
+    /**
+     * 连接成功后，统一处理等待的消息
+     */
+    CorePoint.prototype.ready = function () {
+        var _a;
+        var data;
+        while (data = this.queue.pop()) {
+            (_a = this.port) === null || _a === void 0 ? void 0 : _a.postMessage(data.body);
+        }
+    };
+    /**
+     * 标准的消息处理
+     * @param type
+     * @param data
+     */
+    CorePoint.prototype.postNormalizeMessage = function (type, data) {
+        var _a;
+        if (this.isReady) {
+            (_a = this.port) === null || _a === void 0 ? void 0 : _a.postMessage(data);
+        }
+        else {
+            this.queue.push({ type: type, body: data });
+        }
+    };
+    /**
+     * 处理标准的成功消息
+     * @param id
+     * @param result
+     */
+    CorePoint.prototype.postSuccessMessage = function (id, result) {
+        var payload = this.body.response(id, result);
+        this.postNormalizeMessage(message_1.MessageTypeEnum.RESPONSE, payload);
+    };
+    /**
+     * 处理标准的失败消息
+     * @param id
+     * @param type
+     */
+    CorePoint.prototype.postErrorMessage = function (id, type) {
+        var errorInfo = message_1.MessageStatus[type];
+        var payload = this.body.error(id, errorInfo.code, errorInfo.message);
+        this.postNormalizeMessage(message_1.MessageTypeEnum.ERROR, payload);
+    };
+    /**
+     * 声明远程调用的函数
+     * @param method
+     * @param fn
+     */
+    CorePoint.prototype.declare = function (method, fn) {
+        this.controllers[method] = fn;
+    };
+    /**
+     * 发送通知消息
+     * @param method
+     * @param params
+     */
+    CorePoint.prototype.notify = function (method) {
+        var params = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            params[_i - 1] = arguments[_i];
+        }
+        var payload = this.body.notify(method, params);
+        this.postNormalizeMessage(message_1.MessageTypeEnum.NOTIFY, payload);
+    };
+    /**
+     * 调用远程函数
+     * @param method
+     * @param params
+     * @returns
+     */
+    CorePoint.prototype.invoke = function (method) {
+        var params = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            params[_i - 1] = arguments[_i];
+        }
+        var payload = this.body.request(method, params);
+        this.postNormalizeMessage(message_1.MessageTypeEnum.REQUEST, payload);
+        return payload.id;
+    };
+    /**
+     * 订阅返回成功的消息，仅invoke有效
+     * @param id
+     * @param fn
+     */
+    CorePoint.prototype.subscribe = function (id, fn) {
+        if (CorePoint.checkIdentification(id)) {
+            this.subscriptions.success[id] = fn;
+        }
+    };
+    /**
+     * 订阅返回失败的消息，仅invoke有效
+     * @param id
+     * @param fn
+     */
+    CorePoint.prototype.error = function (id, fn) {
+        if (CorePoint.checkIdentification(id)) {
+            this.subscriptions.error[id] = fn;
+        }
+    };
+    return CorePoint;
+}());
+exports.CorePoint = CorePoint;
+//# sourceMappingURL=CorePoint.js.map
