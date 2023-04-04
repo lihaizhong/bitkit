@@ -49,10 +49,7 @@ var CorePoint = /** @class */ (function () {
         this.body = new MessageBody_1.MessageBody();
         this.queue = new MessageQueue_1.MessageQueue();
         this.controllers = {};
-        this.subscriptions = {
-            success: {},
-            error: {}
-        };
+        this.subscriptions = {};
         this.isReady = false;
     }
     /**
@@ -157,62 +154,30 @@ var CorePoint = /** @class */ (function () {
         }); });
         // 处理响应消息
         sink.onResponse(function (data) { return __awaiter(_this, void 0, void 0, function () {
-            var success, ex_3;
+            var success;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        Journal_1.journal.success('response invoked!', data);
-                        if (!CorePoint.checkIdentification(data.id)) return [3 /*break*/, 4];
-                        success = this.subscriptions.success;
-                        if (!(typeof success[data.id] === 'function')) return [3 /*break*/, 4];
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        // 得到响应后执行订阅消息
-                        return [4 /*yield*/, success[data.id](data.result)];
-                    case 2:
-                        // 得到响应后执行订阅消息
-                        _a.sent();
-                        delete success[data.id];
-                        Journal_1.journal.success('success subscription success!', data);
-                        return [3 /*break*/, 4];
-                    case 3:
-                        ex_3 = _a.sent();
-                        // 捕获未知的异常情况
-                        Journal_1.journal.error('success subscription fail!', data, ex_3);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                Journal_1.journal.success('response invoked!', data);
+                if (CorePoint.checkIdentification(data.id)) {
+                    success = (this.subscriptions[data.id] || {}).success;
+                    if (typeof success === 'function') {
+                        success(data.result);
+                    }
                 }
+                return [2 /*return*/];
             });
         }); });
         // 处理错误消息
         sink.onError(function (data) { return __awaiter(_this, void 0, void 0, function () {
-            var error, ex_4;
+            var error;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        Journal_1.journal.error('error invoked!', data);
-                        if (!CorePoint.checkIdentification(data.id)) return [3 /*break*/, 4];
-                        error = this.subscriptions.error;
-                        if (!(typeof error[data.id] === 'function')) return [3 /*break*/, 4];
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        // 得到响应后执行订阅消息
-                        return [4 /*yield*/, error[data.id](data.error)];
-                    case 2:
-                        // 得到响应后执行订阅消息
-                        _a.sent();
-                        delete error[data.id];
-                        Journal_1.journal.success('error subscription success!', data);
-                        return [3 /*break*/, 4];
-                    case 3:
-                        ex_4 = _a.sent();
-                        // 捕获未知的异常情况
-                        Journal_1.journal.error('error subscription fail!', data, ex_4);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                Journal_1.journal.error('error invoked!', data);
+                if (CorePoint.checkIdentification(data.id)) {
+                    error = (this.subscriptions[data.id] || {}).error;
+                    if (typeof error === 'function') {
+                        error(data.error);
+                    }
                 }
+                return [2 /*return*/];
             });
         }); });
         sink.bootstrap();
@@ -319,33 +284,19 @@ var CorePoint = /** @class */ (function () {
      * @returns
      */
     CorePoint.prototype.invoke = function (method) {
+        var _this = this;
         var params = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             params[_i - 1] = arguments[_i];
         }
         var payload = this.body.request(method, params);
         this.postNormalizeMessage(message_1.MessageTypeEnum.REQUEST, payload);
-        return payload.id;
-    };
-    /**
-     * 订阅返回成功的消息，仅invoke有效
-     * @param id
-     * @param fn
-     */
-    CorePoint.prototype.subscribe = function (id, fn) {
-        if (CorePoint.checkIdentification(id)) {
-            this.subscriptions.success[id] = fn;
-        }
-    };
-    /**
-     * 订阅返回失败的消息，仅invoke有效
-     * @param id
-     * @param fn
-     */
-    CorePoint.prototype.error = function (id, fn) {
-        if (CorePoint.checkIdentification(id)) {
-            this.subscriptions.error[id] = fn;
-        }
+        return new Promise(function (resolve, reject) {
+            _this.subscriptions[payload.id] = {
+                success: resolve,
+                error: reject
+            };
+        });
     };
     return CorePoint;
 }());

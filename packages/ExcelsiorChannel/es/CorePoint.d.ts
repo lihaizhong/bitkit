@@ -1,9 +1,4 @@
 export type PointController = (...params: any[]) => any;
-export type PointSubscriptionCallback = (data: any) => void;
-export interface PointSubscription {
-    success: Record<string, PointSubscriptionCallback>;
-    error: Record<string, PointSubscriptionCallback>;
-}
 export declare class CorePoint {
     private port;
     private body;
@@ -78,17 +73,5 @@ export declare class CorePoint {
      * @param params
      * @returns
      */
-    invoke(method: string, ...params: any[]): string;
-    /**
-     * 订阅返回成功的消息，仅invoke有效
-     * @param id
-     * @param fn
-     */
-    subscribe(id: string, fn: PointSubscriptionCallback): void;
-    /**
-     * 订阅返回失败的消息，仅invoke有效
-     * @param id
-     * @param fn
-     */
-    error(id: string, fn: PointSubscriptionCallback): void;
+    invoke(method: string, ...params: any[]): Promise<any>;
 }
