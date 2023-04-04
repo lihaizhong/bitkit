@@ -7,13 +7,6 @@ import { MessageSink } from "./utils/MessageSink";
 
 export type PointController = (...params: any[]) => any;
 
-export type PointSubscriptionCallback = (data: any) => void;
-
-export interface PointSubscription {
-  success: Record<string, PointSubscriptionCallback>;
-  error: Record<string, PointSubscriptionCallback>;
-}
-
 export class CorePoint {
   private port: MessagePort | null = null;
 
@@ -23,10 +16,7 @@ export class CorePoint {
 
   private controllers: Record<string, PointController> = {};
 
-  private subscriptions: PointSubscription = {
-    success: {},
-    error: {}
-  };
+  private subscriptions: Record<string, { success: (value: any) => void, error: (error: any) => void }> = {};
 
   protected isReady: boolean = false;
 
@@ -129,18 +119,10 @@ export class CorePoint {
       journal.success('response invoked!', data);
 
       if (CorePoint.checkIdentification(data.id)) {
-        const { success } = this.subscriptions;
+        const { success } = this.subscriptions[data.id] || {};
 
-        if (typeof success[data.id] === 'function') {
-          try {
-            // 得到响应后执行订阅消息
-            await success[data.id](data.result);
-            delete success[data.id];
-            journal.success('success subscription success!', data);
-          } catch (ex) {
-            // 捕获未知的异常情况
-            journal.error('success subscription fail!', data, ex);
-          }
+        if (typeof success === 'function') {
+          success(data.result);
         }
       }
     });
@@ -150,18 +132,10 @@ export class CorePoint {
       journal.error('error invoked!', data);
 
       if (CorePoint.checkIdentification(data.id)) {
-        const { error } = this.subscriptions;
+        const { error } = this.subscriptions[data.id] || {};
 
-        if (typeof error[data.id] === 'function') {
-          try {
-            // 得到响应后执行订阅消息
-            await error[data.id](data.error);
-            delete error[data.id];
-            journal.success('error subscription success!', data);
-          } catch (ex) {
-            // 捕获未知的异常情况
-            journal.error('error subscription fail!', data, ex);
-          }
+        if (typeof error === 'function') {
+          error(data.error);
         }
       }
     });
@@ -274,33 +248,16 @@ export class CorePoint {
    * @param params
    * @returns
    */
-  invoke(method: string, ...params: any[]): string {
+  invoke(method: string, ...params: any[]): Promise<any> {
     const payload = this.body.request(method, params);
 
     this.postNormalizeMessage(MessageTypeEnum.REQUEST, payload);
 
-    return payload.id;
-  }
-
-  /**
-   * 订阅返回成功的消息，仅invoke有效
-   * @param id
-   * @param fn
-   */
-  subscribe(id: string, fn: PointSubscriptionCallback): void {
-    if (CorePoint.checkIdentification(id)) {
-      this.subscriptions.success[id] = fn;
-    }
-  }
-
-  /**
-   * 订阅返回失败的消息，仅invoke有效
-   * @param id
-   * @param fn
-   */
-  error(id: string, fn: PointSubscriptionCallback): void {
-    if (CorePoint.checkIdentification(id)) {
-      this.subscriptions.error[id] = fn;
-    }
+    return new Promise((resolve, reject) => {
+      this.subscriptions[payload.id] = {
+        success: resolve,
+        error: reject
+      };
+    });
   }
 }
