@@ -1,15 +1,16 @@
 var MessageSink = /** @class */ (function () {
     function MessageSink(payload) {
-        this.payload = payload;
         this.handlers = {
             notify: [],
             request: [],
             response: [],
             error: []
         };
+        this.payload = payload;
     }
     MessageSink.prototype.bootstrap = function () {
         var _this = this;
+        // 根据数据规范判断响应类型
         if ('method' in this.payload && 'params' in this.payload) {
             if ('id' in this.payload) {
                 this.handlers.request.forEach(function (handler) { return handler(_this.payload); });
@@ -18,7 +19,7 @@ var MessageSink = /** @class */ (function () {
                 this.handlers.notify.forEach(function (handler) { return handler(_this.payload); });
             }
         }
-        else if ('result' in this.payload) {
+        else if ('id' in this.payload && 'result' in this.payload) {
             this.handlers.response.forEach(function (handler) { return handler(_this.payload); });
         }
         else {
@@ -26,12 +27,10 @@ var MessageSink = /** @class */ (function () {
         }
     };
     MessageSink.prototype.clean = function () {
-        this.handlers = {
-            notify: [],
-            request: [],
-            response: [],
-            error: []
-        };
+        var _this = this;
+        Object.keys(this.handlers).forEach(function (key) {
+            _this.handlers[key] = [];
+        });
     };
     MessageSink.prototype.onNotify = function (fn) {
         this.handlers.notify.push(fn);

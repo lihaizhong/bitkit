@@ -30,6 +30,11 @@ export class CorePoint {
 
   protected isReady: boolean = false;
 
+  /**
+   * 检查唯一标识是否合法
+   * @param id
+   * @returns
+   */
   static checkIdentification(id: string): boolean {
     return typeof id === 'string' && id !== '';
   }
@@ -121,7 +126,7 @@ export class CorePoint {
 
     // 处理响应消息
     sink.onResponse(async (data: MessageResponse<any>) => {
-      journal.success('response invoke!', data);
+      journal.success('response invoked!', data);
 
       if (CorePoint.checkIdentification(data.id)) {
         const { success } = this.subscriptions;
@@ -142,7 +147,7 @@ export class CorePoint {
 
     // 处理错误消息
     sink.onError(async (data: MessageResponse<any>) => {
-      journal.error('error invoke!', data);
+      journal.error('error invoked!', data);
 
       if (CorePoint.checkIdentification(data.id)) {
         const { error } = this.subscriptions;
@@ -200,6 +205,7 @@ export class CorePoint {
     let data: MessageReadyBody | undefined;
 
     this.isReady = true;
+    // 循环调用等待队列，直到所有消息发送完成
     while (data = this.queue.pop()) {
       this.port?.postMessage(data.body);
     }
@@ -211,6 +217,7 @@ export class CorePoint {
    * @param data
    */
   private postNormalizeMessage(type: number, data: any): void {
+    // 检查连接是否建立，若未建立，则将消息推入等待队列。
     if (this.isReady) {
       this.port?.postMessage(data);
     } else {
@@ -251,7 +258,7 @@ export class CorePoint {
   }
 
   /**
-   * 发送通知消息
+   * 发送通知消息（只关心消息发送）
    * @param method
    * @param params
    */
@@ -262,7 +269,7 @@ export class CorePoint {
   }
 
   /**
-   * 调用远程函数
+   * 调用远程函数（消息发送完成后，可以通过订阅的方式获取返回值）
    * @param method
    * @param params
    * @returns

@@ -11,6 +11,11 @@ export declare class CorePoint {
     private controllers;
     private subscriptions;
     protected isReady: boolean;
+    /**
+     * 检查唯一标识是否合法
+     * @param id
+     * @returns
+     */
     static checkIdentification(id: string): boolean;
     /**
      * 获取协议类型
@@ -62,13 +67,13 @@ export declare class CorePoint {
      */
     declare(method: string, fn: PointController): void;
     /**
-     * 发送通知消息
+     * 发送通知消息（只关心消息发送）
      * @param method
      * @param params
      */
     notify(method: string, ...params: any[]): void;
     /**
-     * 调用远程函数
+     * 调用远程函数（消息发送完成后，可以通过订阅的方式获取返回值）
      * @param method
      * @param params
      * @returns

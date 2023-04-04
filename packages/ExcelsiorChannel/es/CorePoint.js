@@ -52,6 +52,11 @@ var CorePoint = /** @class */ (function () {
         };
         this.isReady = false;
     }
+    /**
+     * 检查唯一标识是否合法
+     * @param id
+     * @returns
+     */
     CorePoint.checkIdentification = function (id) {
         return typeof id === 'string' && id !== '';
     };
@@ -153,7 +158,7 @@ var CorePoint = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        journal.success('response invoke!', data);
+                        journal.success('response invoked!', data);
                         if (!CorePoint.checkIdentification(data.id)) return [3 /*break*/, 4];
                         success = this.subscriptions.success;
                         if (!(typeof success[data.id] === 'function')) return [3 /*break*/, 4];
@@ -183,7 +188,7 @@ var CorePoint = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        journal.error('error invoke!', data);
+                        journal.error('error invoked!', data);
                         if (!CorePoint.checkIdentification(data.id)) return [3 /*break*/, 4];
                         error = this.subscriptions.error;
                         if (!(typeof error[data.id] === 'function')) return [3 /*break*/, 4];
@@ -244,6 +249,7 @@ var CorePoint = /** @class */ (function () {
         var _a;
         var data;
         this.isReady = true;
+        // 循环调用等待队列，直到所有消息发送完成
         while (data = this.queue.pop()) {
             (_a = this.port) === null || _a === void 0 ? void 0 : _a.postMessage(data.body);
         }
@@ -255,6 +261,7 @@ var CorePoint = /** @class */ (function () {
      */
     CorePoint.prototype.postNormalizeMessage = function (type, data) {
         var _a;
+        // 检查连接是否建立，若未建立，则将消息推入等待队列。
         if (this.isReady) {
             (_a = this.port) === null || _a === void 0 ? void 0 : _a.postMessage(data);
         }
@@ -290,7 +297,7 @@ var CorePoint = /** @class */ (function () {
         this.controllers[method] = fn;
     };
     /**
-     * 发送通知消息
+     * 发送通知消息（只关心消息发送）
      * @param method
      * @param params
      */
@@ -303,7 +310,7 @@ var CorePoint = /** @class */ (function () {
         this.postNormalizeMessage(MessageTypeEnum.NOTIFY, payload);
     };
     /**
-     * 调用远程函数
+     * 调用远程函数（消息发送完成后，可以通过订阅的方式获取返回值）
      * @param method
      * @param params
      * @returns

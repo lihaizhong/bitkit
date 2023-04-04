@@ -9,7 +9,7 @@ export class NodePoint extends CorePoint {
     window.addEventListener('message', (event: MessageEvent) => {
       // 请求建立连接
       if (event.data === POINT_SIGNALS.CONNECT) {
-        const [port] = event.ports
+        const [port] = event.ports;
 
         this.connect(port);
         journal.debug('连接成功！');

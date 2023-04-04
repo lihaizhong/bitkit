@@ -32,54 +32,54 @@ export class MessageBody<T extends any> {
     if (Array.isArray(data)) {
       return data.every((item: any) => {
         if (Array.isArray(item)) {
-          return false
+          return false;
         }
 
-        return MessageBody.checkProtocol(item)
+        return MessageBody.checkProtocol(item);
       })
     }
 
     if (typeof data === 'object' && data !== null) {
-      return data.jsonrpc === '2.0'
+      return data.jsonrpc === '2.0';
     }
 
-    return false
+    return false;
   }
 
   notify(method: string, params: T): MessageNotification<T> {
-    const { jsonrpc } = this
+    const { jsonrpc } = this;
 
     return {
       jsonrpc,
       method,
       params
-    }
+    };
   }
 
   request(method: string, params: T): MessageRequest<T> {
-    const { jsonrpc } = this
-    const uid = new UniqueIdentity()
+    const { jsonrpc } = this;
+    const uid = new UniqueIdentity();
 
     return {
       jsonrpc,
       id: uid.generateRandom(),
       method,
       params
-    }
+    };
   }
 
   response(id: string, result: T): MessageResponse<T> {
-    const { jsonrpc } = this
+    const { jsonrpc } = this;
 
     return {
       jsonrpc,
       id,
       result
-    }
+    };
   }
 
   error(id: string, code: number, message: string, data?: any): MessageResponse<null> {
-    const { jsonrpc } = this
+    const { jsonrpc } = this;
 
     return {
       jsonrpc,
@@ -89,6 +89,6 @@ export class MessageBody<T extends any> {
         message,
         data
       }
-    }
+    };
   }
 }

@@ -1,4 +1,10 @@
 export type MessageSinkCallback = (data: any) => void | Promise<void>;
+export interface MessageSinkHandler {
+    notify: MessageSinkCallback[];
+    request: MessageSinkCallback[];
+    response: MessageSinkCallback[];
+    error: MessageSinkCallback[];
+}
 export declare class MessageSink {
     private payload;
     private handlers;
