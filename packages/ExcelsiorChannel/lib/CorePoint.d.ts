@@ -22,7 +22,7 @@ export declare class CorePoint {
      * @param data
      * @returns
      */
-    private getProtocolType;
+    static getProtocolType(data: any): string;
     /**
      * 处理json-rpc协议消息
      * @param event

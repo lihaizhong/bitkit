@@ -44,7 +44,7 @@ export class CorePoint {
    * @param data
    * @returns
    */
-  private getProtocolType(data: any): string {
+  static getProtocolType(data: any): string {
     if (MessageBody.checkProtocol(data)) {
       return MessageBody.type;
     }
@@ -185,7 +185,7 @@ export class CorePoint {
     // 消息监听
     port.onmessage = (event: MessageEvent) => {
       // 根据协议类型，处理通信消息
-      switch (this.getProtocolType(event.data)) {
+      switch (CorePoint.getProtocolType(event.data)) {
         case MessageBody.type:
           this.handleJsonRPCMessage(event);
           break

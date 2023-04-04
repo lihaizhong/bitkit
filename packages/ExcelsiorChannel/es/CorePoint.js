@@ -65,7 +65,7 @@ var CorePoint = /** @class */ (function () {
      * @param data
      * @returns
      */
-    CorePoint.prototype.getProtocolType = function (data) {
+    CorePoint.getProtocolType = function (data) {
         if (MessageBody.checkProtocol(data)) {
             return MessageBody.type;
         }
@@ -230,7 +230,7 @@ var CorePoint = /** @class */ (function () {
         // 消息监听
         port.onmessage = function (event) {
             // 根据协议类型，处理通信消息
-            switch (_this.getProtocolType(event.data)) {
+            switch (CorePoint.getProtocolType(event.data)) {
                 case MessageBody.type:
                     _this.handleJsonRPCMessage(event);
                     break;
