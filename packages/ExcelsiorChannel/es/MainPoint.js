@@ -24,6 +24,7 @@ var MainPoint = /** @class */ (function (_super) {
         _this.connect(channel.port1);
         frame.addEventListener('load', function () {
             var _a;
+            // 发起连接请求
             (_a = frame.contentWindow) === null || _a === void 0 ? void 0 : _a.postMessage(POINT_SIGNALS.CONNECT, '*', [channel.port2]);
             journal.debug('发起连接请求...');
         });
@@ -31,7 +32,6 @@ var MainPoint = /** @class */ (function (_super) {
     }
     MainPoint.prototype.handleSignalMessage = function (event) {
         if (event.data === POINT_SIGNALS.OK) {
-            this.isReady = true;
             journal.debug('连接成功！');
             this.ready();
         }

@@ -1,5 +1,10 @@
 # @lihzsky/excelsior-channel
 
+## 1.0.3
+### Patch Changes
+
+- 优化错误输出规范
+
 ## 1.0.2
 ### Patch Changes
 

@@ -153,8 +153,9 @@ var CorePoint = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        journal.success('response invoke!', data);
+                        if (!CorePoint.checkIdentification(data.id)) return [3 /*break*/, 4];
                         success = this.subscriptions.success;
-                        journal.success('response success!', data.result);
                         if (!(typeof success[data.id] === 'function')) return [3 /*break*/, 4];
                         _a.label = 1;
                     case 1:
@@ -165,12 +166,12 @@ var CorePoint = /** @class */ (function () {
                         // 得到响应后执行订阅消息
                         _a.sent();
                         delete success[data.id];
-                        journal.success('success subscription success!', data.result);
+                        journal.success('success subscription success!', data);
                         return [3 /*break*/, 4];
                     case 3:
                         ex_3 = _a.sent();
                         // 捕获未知的异常情况
-                        journal.error('success subscription fail!', data.result, ex_3);
+                        journal.error('success subscription fail!', data, ex_3);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
                 }
@@ -182,6 +183,7 @@ var CorePoint = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        journal.error('error invoke!', data);
                         if (!CorePoint.checkIdentification(data.id)) return [3 /*break*/, 4];
                         error = this.subscriptions.error;
                         if (!(typeof error[data.id] === 'function')) return [3 /*break*/, 4];
@@ -194,16 +196,14 @@ var CorePoint = /** @class */ (function () {
                         // 得到响应后执行订阅消息
                         _a.sent();
                         delete error[data.id];
-                        journal.success('error subscription success!', data.error);
+                        journal.success('error subscription success!', data);
                         return [3 /*break*/, 4];
                     case 3:
                         ex_4 = _a.sent();
                         // 捕获未知的异常情况
-                        journal.error('error subscription fail!', data.error, ex_4);
+                        journal.error('error subscription fail!', data, ex_4);
                         return [3 /*break*/, 4];
-                    case 4:
-                        journal.error(data.error);
-                        return [2 /*return*/];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); });
@@ -220,7 +220,9 @@ var CorePoint = /** @class */ (function () {
      */
     CorePoint.prototype.connect = function (port) {
         var _this = this;
+        // 端口绑定
         this.port = port;
+        // 消息监听
         port.onmessage = function (event) {
             // 根据协议类型，处理通信消息
             switch (_this.getProtocolType(event.data)) {
@@ -241,6 +243,7 @@ var CorePoint = /** @class */ (function () {
     CorePoint.prototype.ready = function () {
         var _a;
         var data;
+        this.isReady = true;
         while (data = this.queue.pop()) {
             (_a = this.port) === null || _a === void 0 ? void 0 : _a.postMessage(data.body);
         }
@@ -271,11 +274,11 @@ var CorePoint = /** @class */ (function () {
     /**
      * 处理标准的失败消息
      * @param id
-     * @param type
+     * @param statusText
      */
-    CorePoint.prototype.postErrorMessage = function (id, type) {
-        var errorInfo = MessageStatus[type];
-        var payload = this.body.error(id, errorInfo.code, errorInfo.message);
+    CorePoint.prototype.postErrorMessage = function (id, statusText) {
+        var _a = MessageStatus[statusText], code = _a.code, type = _a.type, message = _a.message;
+        var payload = this.body.error(id, code, message, type);
         this.postNormalizeMessage(MessageTypeEnum.ERROR, payload);
     };
     /**

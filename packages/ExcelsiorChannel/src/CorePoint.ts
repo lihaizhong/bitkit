@@ -121,25 +121,29 @@ export class CorePoint {
 
     // 处理响应消息
     sink.onResponse(async (data: MessageResponse<any>) => {
-      const { success } = this.subscriptions;
+      journal.success('response invoke!', data);
 
-      journal.success('response success!', data.result);
+      if (CorePoint.checkIdentification(data.id)) {
+        const { success } = this.subscriptions;
 
-      if (typeof success[data.id] === 'function') {
-        try {
-          // 得到响应后执行订阅消息
-          await success[data.id](data.result);
-          delete success[data.id];
-          journal.success('success subscription success!', data.result);
-        } catch (ex) {
-          // 捕获未知的异常情况
-          journal.error('success subscription fail!', data.result, ex);
+        if (typeof success[data.id] === 'function') {
+          try {
+            // 得到响应后执行订阅消息
+            await success[data.id](data.result);
+            delete success[data.id];
+            journal.success('success subscription success!', data);
+          } catch (ex) {
+            // 捕获未知的异常情况
+            journal.error('success subscription fail!', data, ex);
+          }
         }
       }
     });
 
     // 处理错误消息
     sink.onError(async (data: MessageResponse<any>) => {
+      journal.error('error invoke!', data);
+
       if (CorePoint.checkIdentification(data.id)) {
         const { error } = this.subscriptions;
 
@@ -148,15 +152,13 @@ export class CorePoint {
             // 得到响应后执行订阅消息
             await error[data.id](data.error);
             delete error[data.id];
-            journal.success('error subscription success!', data.error);
+            journal.success('error subscription success!', data);
           } catch (ex) {
             // 捕获未知的异常情况
-            journal.error('error subscription fail!', data.error, ex);
+            journal.error('error subscription fail!', data, ex);
           }
         }
       }
-
-      journal.error(data.error);
     });
 
     sink.bootstrap();
@@ -173,8 +175,9 @@ export class CorePoint {
    * @param port
    */
   protected connect(port: MessagePort) {
+    // 端口绑定
     this.port = port;
-
+    // 消息监听
     port.onmessage = (event: MessageEvent) => {
       // 根据协议类型，处理通信消息
       switch (this.getProtocolType(event.data)) {
@@ -196,6 +199,7 @@ export class CorePoint {
   protected ready() {
     let data: MessageReadyBody | undefined;
 
+    this.isReady = true;
     while (data = this.queue.pop()) {
       this.port?.postMessage(data.body);
     }
@@ -228,11 +232,11 @@ export class CorePoint {
   /**
    * 处理标准的失败消息
    * @param id
-   * @param type
+   * @param statusText
    */
-  protected postErrorMessage(id: string, type: string): void {
-    const errorInfo: any = MessageStatus[type];
-    const payload = this.body.error(id, errorInfo.code, errorInfo.message);
+  protected postErrorMessage(id: string, statusText: string): void {
+    const { code, type, message } = MessageStatus[statusText];
+    const payload = this.body.error(id, code, message, type);
 
     this.postNormalizeMessage(MessageTypeEnum.ERROR, payload);
   }

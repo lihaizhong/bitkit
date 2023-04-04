@@ -10,6 +10,7 @@ export class MainPoint extends CorePoint {
 
     this.connect(channel.port1);
     frame.addEventListener('load', () => {
+      // 发起连接请求
       frame.contentWindow?.postMessage(POINT_SIGNALS.CONNECT, '*', [channel.port2]);
       journal.debug('发起连接请求...');
     });
@@ -17,7 +18,6 @@ export class MainPoint extends CorePoint {
 
   protected handleSignalMessage(event: MessageEvent<any>): void {
       if (event.data === POINT_SIGNALS.OK) {
-        this.isReady = true;
         journal.debug('连接成功！');
         this.ready();
       }

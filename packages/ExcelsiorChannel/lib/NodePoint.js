@@ -24,9 +24,9 @@ var NodePoint = /** @class */ (function (_super) {
     function NodePoint() {
         var _this = _super.call(this) || this;
         window.addEventListener('message', function (event) {
+            // 请求建立连接
             if (event.data === signals_1.POINT_SIGNALS.CONNECT) {
                 var port = event.ports[0];
-                _this.isReady = true;
                 _this.connect(port);
                 Journal_1.journal.debug('连接成功！');
                 port.postMessage(signals_1.POINT_SIGNALS.OK);

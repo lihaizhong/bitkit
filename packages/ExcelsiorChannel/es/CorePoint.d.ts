@@ -52,9 +52,9 @@ export declare class CorePoint {
     /**
      * 处理标准的失败消息
      * @param id
-     * @param type
+     * @param statusText
      */
-    protected postErrorMessage(id: string, type: string): void;
+    protected postErrorMessage(id: string, statusText: string): void;
     /**
      * 声明远程调用的函数
      * @param method
