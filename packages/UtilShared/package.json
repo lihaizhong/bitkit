@@ -32,6 +32,6 @@
   },
   "gitHead": "170aefd64cb2f4c7bcfd0b3257d01fc69f3ce4c7",
   "dependencies": {
-    "@lihzsky/type-checker": "workspace:^0.0.2"
+    "@lihzsky/type-checker": "workspace:^"
   }
 }

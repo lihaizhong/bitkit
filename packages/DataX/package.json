@@ -17,7 +17,7 @@
     "build": "rm -rf ./lib ./types ./es && tsc --build tsconfig.json && tsc --build tsconfig.lib.json"
   },
   "dependencies": {
-    "@lihzsky/type-checker": "workspace:^0.0.2"
+    "@lihzsky/type-checker": "workspace:^"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",

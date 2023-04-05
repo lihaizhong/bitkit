@@ -32,7 +32,7 @@ var MainPoint = /** @class */ (function (_super) {
     }
     MainPoint.prototype.handleSignalMessage = function (event) {
         if (event.data === POINT_SIGNALS.OK) {
-            journal.debug('连接成功！');
+            journal.debug('握手完成！');
             this.ready();
         }
     };

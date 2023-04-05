@@ -139,14 +139,13 @@ var CorePoint = /** @class */ (function () {
                         return [4 /*yield*/, fn.apply(void 0, params)];
                     case 1:
                         result = _a.sent();
+                        // 获取执行结果，并发送成功消息
                         this.postSuccessMessage(data.id, result || null);
-                        Journal_1.journal.success('request success!', data, result);
                         return [3 /*break*/, 3];
                     case 2:
                         ex_2 = _a.sent();
                         // 捕获未知的异常情况并发送错误消息
                         this.postErrorMessage(data.id, 'InternalRPCError');
-                        Journal_1.journal.error('request fail!', data, ex_2);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }

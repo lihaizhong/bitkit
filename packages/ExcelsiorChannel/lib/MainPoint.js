@@ -35,7 +35,7 @@ var MainPoint = /** @class */ (function (_super) {
     }
     MainPoint.prototype.handleSignalMessage = function (event) {
         if (event.data === signals_1.POINT_SIGNALS.OK) {
-            Journal_1.journal.debug('连接成功！');
+            Journal_1.journal.debug('握手完成！');
             this.ready();
         }
     };
