@@ -101,12 +101,12 @@ var CorePoint = /** @class */ (function () {
                         return [4 /*yield*/, fn.apply(void 0, params)];
                     case 1:
                         _a.sent();
-                        Journal_1.journal.success('notify success!', data);
+                        Journal_1.journal.success('notify success!', '---- 请求体 ----', data);
                         return [3 /*break*/, 3];
                     case 2:
                         ex_1 = _a.sent();
                         // 捕获未知的异常情况
-                        Journal_1.journal.error('notify fail!', data, ex_1);
+                        Journal_1.journal.error('notify fail!', '---- 请求体 ----', data, '---- 错误信息 ----', ex_1);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -122,30 +122,29 @@ var CorePoint = /** @class */ (function () {
                         method = data.method, params = data.params;
                         // 检查id是否合法
                         if (!CorePoint.checkIdentification(data.id)) {
-                            this.postErrorMessage(data.id, 'NotWellFormed');
-                            return [2 /*return*/];
+                            throw new Error('NotWellFormed');
                         }
                         // 检查调用的方法是否存在
                         if (!(typeof this.controllers[method] === 'function')) {
-                            this.postErrorMessage(data.id, 'NotFound');
-                            return [2 /*return*/];
+                            throw new Error('NotFound');
                         }
                         fn = this.controllers[method];
                         // 检查方法的参数个数是否一致
                         if (fn.length > params.length) {
-                            this.postErrorMessage(data.id, 'InvalidMethodParameters');
-                            return [2 /*return*/];
+                            throw new Error('InvalidMethodParameters');
                         }
                         return [4 /*yield*/, fn.apply(void 0, params)];
                     case 1:
                         result = _a.sent();
+                        Journal_1.journal.success('request success!', '---- 请求体 ----', data, '---- 响应体 ----', result);
                         // 获取执行结果，并发送成功消息
                         this.postSuccessMessage(data.id, result || null);
                         return [3 /*break*/, 3];
                     case 2:
                         ex_2 = _a.sent();
+                        Journal_1.journal.error('request fail!', '---- 请求体 ----', data, '---- 错误信息 ----', ex_2);
                         // 捕获未知的异常情况并发送错误消息
-                        this.postErrorMessage(data.id, 'InternalRPCError');
+                        this.postErrorMessage(data.id, ex_2.message);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -205,7 +204,8 @@ var CorePoint = /** @class */ (function () {
                     _this.handleSignalMessage(event);
                     break;
                 default:
-                    _this.postErrorMessage('UNKNOWN', 'InvalidRPC');
+                    Journal_1.journal.error('invalid json-rpc. not conforming to spec.');
+                    _this.postErrorMessage('unknown error', 'InvalidRPC');
             }
         };
     };
@@ -251,7 +251,7 @@ var CorePoint = /** @class */ (function () {
      * @param statusText
      */
     CorePoint.prototype.postErrorMessage = function (id, statusText) {
-        var _a = message_1.MessageStatus[statusText], code = _a.code, type = _a.type, message = _a.message;
+        var _a = message_1.MessageStatus[statusText] || message_1.MessageStatus['InternalRPCError'], code = _a.code, type = _a.type, message = _a.message;
         var payload = this.body.error(id, code, message, type);
         this.postNormalizeMessage(message_1.MessageTypeEnum.ERROR, payload);
     };

@@ -1,5 +1,10 @@
 # @lihzsky/excelsior-channel
 
+## 0.0.6
+### Patch Changes
+
+- 优化控制台信息展示
+
 ## 0.0.5
 ### Patch Changes
 

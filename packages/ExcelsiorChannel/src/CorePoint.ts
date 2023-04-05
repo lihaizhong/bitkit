@@ -71,10 +71,10 @@ export class CorePoint {
         }
 
         await fn(...params)
-        journal.success('notify success!', data);
+        journal.success('notify success!', '---- 请求体 ----', data);
       } catch (ex) {
         // 捕获未知的异常情况
-        journal.error('notify fail!', data, ex);
+        journal.error('notify fail!', '---- 请求体 ----', data, '---- 错误信息 ----', ex);
       }
     });
 
@@ -85,31 +85,30 @@ export class CorePoint {
 
         // 检查id是否合法
         if (!CorePoint.checkIdentification(data.id)) {
-          this.postErrorMessage(data.id, 'NotWellFormed');
-          return;
+          throw new Error('NotWellFormed');
         }
 
         // 检查调用的方法是否存在
         if (!(typeof this.controllers[method] === 'function')) {
-          this.postErrorMessage(data.id, 'NotFound');
-          return;
+          throw new Error('NotFound');
         }
 
         const fn = this.controllers[method];
 
         // 检查方法的参数个数是否一致
         if (fn.length > params.length) {
-          this.postErrorMessage(data.id, 'InvalidMethodParameters');
-          return;
+          throw new Error('InvalidMethodParameters');
         }
 
         const result = await fn(...params);
 
+        journal.success('request success!', '---- 请求体 ----', data, '---- 响应体 ----', result);
         // 获取执行结果，并发送成功消息
         this.postSuccessMessage(data.id, result || null);
       } catch (ex) {
+        journal.error('request fail!', '---- 请求体 ----', data, '---- 错误信息 ----', ex);
         // 捕获未知的异常情况并发送错误消息
-        this.postErrorMessage(data.id, 'InternalRPCError');
+        this.postErrorMessage(data.id, ex.message);
       }
     })
 
@@ -166,7 +165,8 @@ export class CorePoint {
           this.handleSignalMessage(event);
           break
         default:
-          this.postErrorMessage('UNKNOWN', 'InvalidRPC');
+          journal.error('invalid json-rpc. not conforming to spec.');
+          this.postErrorMessage('unknown error', 'InvalidRPC');
       }
     }
   }
@@ -215,7 +215,7 @@ export class CorePoint {
    * @param statusText
    */
   protected postErrorMessage(id: string, statusText: string): void {
-    const { code, type, message } = MessageStatus[statusText];
+    const { code, type, message } = MessageStatus[statusText] || MessageStatus['InternalRPCError'];
     const payload = this.body.error(id, code, message, type);
 
     this.postNormalizeMessage(MessageTypeEnum.ERROR, payload);
