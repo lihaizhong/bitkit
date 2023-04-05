@@ -1,5 +1,10 @@
 # @lihzsky/excelsior-channel
 
+## 0.0.7
+### Patch Changes
+
+- a069d35: 优化控制台消息
+
 ## 0.0.6
 ### Patch Changes
 

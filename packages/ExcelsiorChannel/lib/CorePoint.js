@@ -101,12 +101,14 @@ var CorePoint = /** @class */ (function () {
                         return [4 /*yield*/, fn.apply(void 0, params)];
                     case 1:
                         _a.sent();
-                        Journal_1.journal.success('notify success!', '---- 请求体 ----', data);
+                        Journal_1.journal.group('notify success');
+                        Journal_1.journal.success('---- 请求体 ----', data);
                         return [3 /*break*/, 3];
                     case 2:
                         ex_1 = _a.sent();
                         // 捕获未知的异常情况
-                        Journal_1.journal.error('notify fail!', '---- 请求体 ----', data, '---- 错误信息 ----', ex_1);
+                        Journal_1.journal.group('notify fail');
+                        Journal_1.journal.error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex_1);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -136,15 +138,24 @@ var CorePoint = /** @class */ (function () {
                         return [4 /*yield*/, fn.apply(void 0, params)];
                     case 1:
                         result = _a.sent();
-                        Journal_1.journal.success('request success!', '---- 请求体 ----', data, '---- 响应体 ----', result);
+                        Journal_1.journal.group('request success');
+                        Journal_1.journal.success('---- 请求体 ----', data);
                         // 获取执行结果，并发送成功消息
                         this.postSuccessMessage(data.id, result || null);
                         return [3 /*break*/, 3];
                     case 2:
                         ex_2 = _a.sent();
-                        Journal_1.journal.error('request fail!', '---- 请求体 ----', data, '---- 错误信息 ----', ex_2);
-                        // 捕获未知的异常情况并发送错误消息
-                        this.postErrorMessage(data.id, ex_2.message);
+                        if (Object.keys(message_1.MessageStatus).includes(ex_2.message)) {
+                            Journal_1.journal.group('request fail');
+                            Journal_1.journal.error('---- 请求体 ----', data);
+                            // 捕获未知的异常情况并发送错误消息
+                            this.postErrorMessage(data.id, ex_2.message);
+                        }
+                        else {
+                            Journal_1.journal.group('request fail');
+                            Journal_1.journal.error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex_2);
+                            this.postErrorMessage(data.id, 'InternalRPCError');
+                        }
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -154,7 +165,8 @@ var CorePoint = /** @class */ (function () {
         sink.onResponse(function (data) { return __awaiter(_this, void 0, void 0, function () {
             var success;
             return __generator(this, function (_a) {
-                Journal_1.journal.success('response invoked!', data);
+                Journal_1.journal.group('response success');
+                Journal_1.journal.success('---- 响应体 ----', data);
                 if (CorePoint.checkIdentification(data.id)) {
                     success = (this.subscriptions[data.id] || {}).success;
                     if (typeof success === 'function') {
@@ -168,7 +180,8 @@ var CorePoint = /** @class */ (function () {
         sink.onError(function (data) { return __awaiter(_this, void 0, void 0, function () {
             var error;
             return __generator(this, function (_a) {
-                Journal_1.journal.error('error invoked!', data);
+                Journal_1.journal.group('error success');
+                Journal_1.journal.error('---- 错误信息 ----', data);
                 if (CorePoint.checkIdentification(data.id)) {
                     error = (this.subscriptions[data.id] || {}).error;
                     if (typeof error === 'function') {
@@ -204,8 +217,7 @@ var CorePoint = /** @class */ (function () {
                     _this.handleSignalMessage(event);
                     break;
                 default:
-                    Journal_1.journal.error('invalid json-rpc. not conforming to spec.');
-                    _this.postErrorMessage('unknown error', 'InvalidRPC');
+                    _this.postErrorMessage('unknown message type', 'InvalidRPC');
             }
         };
     };
@@ -251,7 +263,7 @@ var CorePoint = /** @class */ (function () {
      * @param statusText
      */
     CorePoint.prototype.postErrorMessage = function (id, statusText) {
-        var _a = message_1.MessageStatus[statusText] || message_1.MessageStatus['InternalRPCError'], code = _a.code, type = _a.type, message = _a.message;
+        var _a = message_1.MessageStatus[statusText], code = _a.code, type = _a.type, message = _a.message;
         var payload = this.body.error(id, code, message, type);
         this.postNormalizeMessage(message_1.MessageTypeEnum.ERROR, payload);
     };

@@ -4,6 +4,7 @@ exports.journal = exports.Journal = void 0;
 var Journal = /** @class */ (function () {
     function Journal(inst) {
         if (inst === void 0) { inst = console; }
+        this.label = null;
         this.inst = inst;
     }
     Journal.style = function (background, color) {
@@ -15,10 +16,13 @@ var Journal = /** @class */ (function () {
             messages.forEach(cb);
         }
         else {
-            this.inst.group(label);
+            this.inst.group(this.label || label);
             messages.forEach(cb);
             this.inst.groupEnd();
         }
+    };
+    Journal.prototype.group = function (label) {
+        this.label = label.toLocaleUpperCase();
     };
     Journal.prototype.log = function () {
         var _a;
@@ -37,6 +41,7 @@ var Journal = /** @class */ (function () {
         this.printf('SUCCESS', args, function (message) {
             _this.inst.log('%csuccess', Journal.style('#68B984'), message);
         });
+        this.label = null;
     };
     Journal.prototype.info = function () {
         var _this = this;
@@ -47,6 +52,7 @@ var Journal = /** @class */ (function () {
         this.printf('INFO', args, function (message) {
             _this.inst.info('%cinfo', Journal.style('#B2A4FF'), message);
         });
+        this.label = null;
     };
     Journal.prototype.debug = function () {
         var _this = this;
@@ -57,6 +63,7 @@ var Journal = /** @class */ (function () {
         this.printf('DEBUG', args, function (message) {
             _this.inst.debug('%cdebug', Journal.style('#3DB2FF'), message);
         });
+        this.label = null;
     };
     Journal.prototype.warn = function () {
         var _this = this;
@@ -67,6 +74,7 @@ var Journal = /** @class */ (function () {
         this.printf('WARNING', args, function (message) {
             _this.inst.warn('%cwarning', Journal.style('#FFB830'), message);
         });
+        this.label = null;
     };
     Journal.prototype.error = function () {
         var _this = this;
@@ -77,6 +85,7 @@ var Journal = /** @class */ (function () {
         this.printf('ERROR', args, function (message) {
             _this.inst.error('%cerror', Journal.style('#FF2442'), message);
         });
+        this.label = null;
     };
     return Journal;
 }());
