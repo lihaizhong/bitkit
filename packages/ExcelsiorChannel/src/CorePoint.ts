@@ -105,12 +105,11 @@ export class CorePoint {
 
         const result = await fn(...params);
 
+        // 获取执行结果，并发送成功消息
         this.postSuccessMessage(data.id, result || null);
-        journal.success('request success!', data, result);
       } catch (ex) {
         // 捕获未知的异常情况并发送错误消息
         this.postErrorMessage(data.id, 'InternalRPCError');
-        journal.error('request fail!', data, ex);
       }
     })
 

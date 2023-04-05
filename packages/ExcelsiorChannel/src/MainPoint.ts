@@ -18,7 +18,7 @@ export class MainPoint extends CorePoint {
 
   protected handleSignalMessage(event: MessageEvent<any>): void {
       if (event.data === POINT_SIGNALS.OK) {
-        journal.debug('连接成功！');
+        journal.debug('握手完成！');
         this.ready();
       }
   }
