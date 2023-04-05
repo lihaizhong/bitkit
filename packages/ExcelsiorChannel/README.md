@@ -1,6 +1,6 @@
 # ExcelsiorChannel
 
-基于JSON-RPC 2.0协议的通信工具。用于浏览器主进程与iframe进程之间的通信。
+基于JSON-RPC 2.0协议的通信工具。用于浏览器多窗口之间的通信。
 
 - 支持消息延迟通信（在连接建立之前，所有的消息发送都会被缓存，直到连接创建成功）。
 - 支持通知的形式调用远程函数。
@@ -12,7 +12,7 @@
 // main window
 import { MainPoint, journal } from '@lihzsky/excelsior-channel';
 
-const frame = document.body.getElementByTagName('iframe');
+const frame = document.body.getElementsByTagName('iframe')[0];
 const pointer = new MainPoint(frame);
 
 // 定义远程调用的函数
@@ -30,7 +30,7 @@ pointer.declare('delete', () => {
 // 通知update操作
 pointer.notify('update')
 
-// iframe
+// iframe/other window
 import { NodePoint, journal } from "@lihzsky/excelsior-channel";
 
 const pointer = new NodePoint();

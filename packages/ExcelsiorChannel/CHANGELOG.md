@@ -1,5 +1,10 @@
 # @lihzsky/excelsior-channel
 
+## 0.0.8
+### Patch Changes
+
+- 支持多窗口通信
+
 ## 0.0.7
 ### Patch Changes
 

@@ -21,18 +21,23 @@ var signals_1 = require("./constants/signals");
 var Journal_1 = require("./utils/Journal");
 var MainPoint = /** @class */ (function (_super) {
     __extends(MainPoint, _super);
-    function MainPoint(frame) {
+    function MainPoint(target) {
         var _this = _super.call(this) || this;
         var channel = new MessageChannel();
         _this.connect(channel.port1);
-        frame.addEventListener('load', function () {
-            var _a;
-            // 发起连接请求
-            (_a = frame.contentWindow) === null || _a === void 0 ? void 0 : _a.postMessage(signals_1.POINT_SIGNALS.CONNECT, '*', [channel.port2]);
-            Journal_1.journal.debug('发起连接请求...');
-        });
+        if (target instanceof HTMLIFrameElement) {
+            target.addEventListener('load', function () { return _this.start(target.contentWindow, channel.port2); });
+        }
+        else {
+            target.addEventListener('load', function () { return _this.start(target, channel.port2); });
+        }
         return _this;
     }
+    MainPoint.prototype.start = function (target, port) {
+        // 发起连接请求
+        target.postMessage(signals_1.POINT_SIGNALS.CONNECT, '*', [port]);
+        Journal_1.journal.debug('发起连接请求...');
+    };
     MainPoint.prototype.handleSignalMessage = function (event) {
         if (event.data === signals_1.POINT_SIGNALS.OK) {
             Journal_1.journal.debug('握手完成！');

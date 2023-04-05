@@ -1,6 +1,6 @@
 {
   "name": "@lihzsky/excelsior-channel",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "keywords": [
     "iframe",
     "channel"
@@ -16,7 +16,8 @@
     "es"
   ],
   "scripts": {
-    "build": "rm -rf ./lib ./types ./es && tsc --build tsconfig.json && tsc --build tsconfig.lib.json"
+    "build": "rm -rf ./lib ./types ./es && tsc --build tsconfig.json && tsc --build tsconfig.lib.json",
+    "test": "jest"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",

@@ -264,10 +264,7 @@ export class CorePoint {
     this.postNormalizeMessage(MessageTypeEnum.REQUEST, payload);
 
     return new Promise((resolve, reject) => {
-      this.subscriptions[payload.id] = {
-        success: resolve,
-        error: reject
-      };
+      this.subscriptions[payload.id] = { success: resolve, error: reject };
     });
   }
 }

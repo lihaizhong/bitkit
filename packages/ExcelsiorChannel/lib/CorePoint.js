@@ -303,10 +303,7 @@ var CorePoint = /** @class */ (function () {
         var payload = this.body.request(method, params);
         this.postNormalizeMessage(message_1.MessageTypeEnum.REQUEST, payload);
         return new Promise(function (resolve, reject) {
-            _this.subscriptions[payload.id] = {
-                success: resolve,
-                error: reject
-            };
+            _this.subscriptions[payload.id] = { success: resolve, error: reject };
         });
     };
     return CorePoint;
