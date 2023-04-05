@@ -71,10 +71,12 @@ export class CorePoint {
         }
 
         await fn(...params)
-        journal.success('notify success!', '---- 请求体 ----', data);
+        journal.group('notify success');
+        journal.success('---- 请求体 ----', data);
       } catch (ex) {
         // 捕获未知的异常情况
-        journal.error('notify fail!', '---- 请求体 ----', data, '---- 错误信息 ----', ex);
+        journal.group('notify fail');
+        journal.error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex);
       }
     });
 
@@ -102,19 +104,28 @@ export class CorePoint {
 
         const result = await fn(...params);
 
-        journal.success('request success!', '---- 请求体 ----', data, '---- 响应体 ----', result);
+        journal.group('request success');
+        journal.success('---- 请求体 ----', data);
         // 获取执行结果，并发送成功消息
         this.postSuccessMessage(data.id, result || null);
       } catch (ex) {
-        journal.error('request fail!', '---- 请求体 ----', data, '---- 错误信息 ----', ex);
-        // 捕获未知的异常情况并发送错误消息
-        this.postErrorMessage(data.id, ex.message);
+        if (Object.keys(MessageStatus).includes(ex.message)) {
+          journal.group('request fail');
+          journal.error('---- 请求体 ----', data);
+          // 捕获未知的异常情况并发送错误消息
+          this.postErrorMessage(data.id, ex.message);
+        } else {
+          journal.group('request fail');
+          journal.error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex);
+          this.postErrorMessage(data.id, 'InternalRPCError');
+        }
       }
     })
 
     // 处理响应消息
     sink.onResponse(async (data: MessageResponse<any>) => {
-      journal.success('response invoked!', data);
+      journal.group('response success')
+      journal.success('---- 响应体 ----', data);
 
       if (CorePoint.checkIdentification(data.id)) {
         const { success } = this.subscriptions[data.id] || {};
@@ -127,7 +138,8 @@ export class CorePoint {
 
     // 处理错误消息
     sink.onError(async (data: MessageResponse<any>) => {
-      journal.error('error invoked!', data);
+      journal.group('error success')
+      journal.error('---- 错误信息 ----', data);
 
       if (CorePoint.checkIdentification(data.id)) {
         const { error } = this.subscriptions[data.id] || {};
@@ -165,8 +177,7 @@ export class CorePoint {
           this.handleSignalMessage(event);
           break
         default:
-          journal.error('invalid json-rpc. not conforming to spec.');
-          this.postErrorMessage('unknown error', 'InvalidRPC');
+          this.postErrorMessage('unknown message type', 'InvalidRPC');
       }
     }
   }
@@ -215,7 +226,7 @@ export class CorePoint {
    * @param statusText
    */
   protected postErrorMessage(id: string, statusText: string): void {
-    const { code, type, message } = MessageStatus[statusText] || MessageStatus['InternalRPCError'];
+    const { code, type, message } = MessageStatus[statusText];
     const payload = this.body.error(id, code, message, type);
 
     this.postNormalizeMessage(MessageTypeEnum.ERROR, payload);
