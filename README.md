@@ -61,4 +61,5 @@ npx changeset publish
 
 - [为XHR对象所有方法和属性提供钩子 全局拦截AJAX](https://juejin.cn/post/6844903629497827341)
 - [TypeDoc 中文文档](https://typedoc.bootcss.com/)
+- [前端测试之Jest深入浅出](https://juejin.cn/post/6844904196244766728)
 
