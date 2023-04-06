@@ -147,7 +147,7 @@ var Checker = /** @class */ (function () {
         // 反向扩展类型校验集合
         this.not = {};
         // 扩展类型校验集合
-        this.extensions = {
+        this.ext = {
             isSameClass: isSameClass,
             isValidDate: isValidDate,
             isNull: isNull,
@@ -167,8 +167,8 @@ var Checker = /** @class */ (function () {
             isPromise: isPromise,
             isLikePromise: isLikePromise
         };
-        var keys = Object.keys(this.extensions).filter(function (key) { return (/^is.+/.test(key) &&
-            hasOwn(_this.extensions, key) &&
+        var keys = Object.keys(this.ext).filter(function (key) { return (/^is.+/.test(key) &&
+            hasOwn(_this.ext, key) &&
             !['isTruthy', 'isFalsy'].includes[key]); });
         this.reverse(keys);
     }
@@ -179,8 +179,8 @@ var Checker = /** @class */ (function () {
     Checker.prototype.injectReverseValidator = function (property) {
         var _this = this;
         this.not[property] = function (value, type) {
-            if (property in _this.extensions) {
-                return !_this.extensions[property](value, type);
+            if (property in _this.ext) {
+                return !_this.ext[property](value, type);
             }
         };
     };
@@ -190,10 +190,10 @@ var Checker = /** @class */ (function () {
      */
     Checker.prototype.reverse = function (properties) {
         var _this = this;
-        if (this.extensions.isString(properties)) {
+        if (this.ext.isString(properties)) {
             this.injectReverseValidator(properties);
         }
-        else if (this.extensions.isArray(properties)) {
+        else if (this.ext.isArray(properties)) {
             properties.forEach(function (property) {
                 return _this.injectReverseValidator(property);
             });
@@ -207,10 +207,10 @@ var Checker = /** @class */ (function () {
      */
     Checker.prototype.extend = function (name, validator, addonToNot) {
         if (addonToNot === void 0) { addonToNot = false; }
-        if (this.extensions[name]) {
+        if (this.ext[name]) {
             console.warn("\u6269\u5C55\u7C7B\u578B".concat(name, "\u5DF2\u5B58\u5728\uFF0C\u5EFA\u8BAE\u66F4\u6362\u4E00\u4E2A\u540D\u79F0\uFF01"));
         }
-        this.extensions[name] = validator;
+        this.ext[name] = validator;
         if (addonToNot) {
             this.reverse(name);
         }
@@ -221,8 +221,8 @@ export { Checker };
 var checker = new Checker();
 export default new Proxy(checker, {
     get: function (target, p) {
-        if (target.extensions[p]) {
-            return Reflect.get(target.extensions, p);
+        if (target.ext[p]) {
+            return Reflect.get(target.ext, p);
         }
         return Reflect.get(target, p);
     },

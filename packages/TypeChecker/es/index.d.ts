@@ -114,7 +114,7 @@ export declare function isTruthy(value: any): boolean;
 export declare function isFalsy(value: any): boolean;
 export declare class Checker {
     not: Partial<ITypes>;
-    extensions: ITypes;
+    ext: ITypes;
     constructor();
     /**
      * 注入反向扩展类型校验
@@ -134,5 +134,7 @@ export declare class Checker {
      */
     extend(name: string, validator: TValidator, addonToNot?: boolean): void;
 }
-declare const _default: Checker & ITypes;
+declare const _default: Checker & ITypes & {
+    not: Omit<ITypes, 'isTruthy' | 'isFalsy'>;
+};
 export default _default;
