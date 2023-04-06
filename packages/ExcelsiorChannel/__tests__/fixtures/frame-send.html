@@ -1,0 +1,12 @@
+<script type="module" lang="ts">
+  import { NodePoint } from "../../src";
+
+  const pointer = new NodePoint();
+
+  // 通知delete操作，删除指定内容
+  pointer.notify('delete', 1);
+
+  // 调用move操作，移动指定内容
+  // invoke的方式可以获取到返回的数据，用于下一步的操作
+  const data = await pointer.invoke('move', 1, 6);
+</script>

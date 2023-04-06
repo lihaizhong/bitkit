@@ -9,16 +9,16 @@
 ## 如何使用
 
 ```ts
-// main window
+// --- MAIN WINDOW ---
 import { MainPoint, journal } from '@lihzsky/excelsior-channel';
 
 const frame = document.body.getElementsByTagName('iframe')[0];
 const pointer = new MainPoint(frame);
 
 // 定义远程调用的函数
-pointer.declare('move', () => {
+pointer.declare('move', (targetIndex: number, relativeIndex: number) => {
   // move
-  journal.info('move success!');
+  journal.info('move success!', targetIndex, relativeIndex);
 })
 
 // 定义远程调用的函数
@@ -30,13 +30,20 @@ pointer.declare('delete', () => {
 // 通知update操作
 pointer.notify('update')
 
-// iframe/other window
+
+
+
+
+
+
+// --- IFRAME WINDOW/OTHER WINDOW ---
 import { NodePoint, journal } from "@lihzsky/excelsior-channel";
 
 const pointer = new NodePoint();
 
 // 定义远程调用的函数
 pointer.declare('update', () => {
+  // update
   journal.info('update success!');
 });
 
@@ -74,4 +81,5 @@ const data = await pointer.invoke('move', 1, 6);
 
 ## 另外
 
-journal是自定义的轻量级console工具。可用于打印更漂亮的日志。
+- journal是轻量级console实例。可用于打印更漂亮的控制台日志。
+- Journal是轻量级console类，可以自定义输出的环境，接入的环境API参考console。

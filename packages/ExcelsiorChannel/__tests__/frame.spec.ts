@@ -1,3 +1,5 @@
+import { MainPoint } from '../src'
+
 beforeAll(() => {
   console.info('global beforeAll invoked!')
 })
@@ -36,10 +38,32 @@ describe('TEST LIFECYCLE', () => {
   })
 })
 
-beforeAll(() => {
+describe('MAIN POINT TEST', () => {
+  let ifr: HTMLIFrameElement
+  let pointer: MainPoint
 
+  beforeEach(() => {
+    const fn = jest.fn()
+
+    ifr = document.createElement('iframe')
+    ifr.src = './fixtures/frame-receive.html'
+
+    pointer = new MainPoint(ifr)
+
+    document.body.appendChild(ifr)
+
+    return new Promise((resolve) => {
+      ifr.onload = resolve
+    })
+  })
+
+  afterEach(() => {
+    ifr.remove()
+  })
+
+  test('', async () => {
+
+  })
 })
 
-describe('NOTIFY TEST', () => {})
-
-describe('INVOKE TEST', () => {})
+describe('NODE POINT TEST', () => { })
