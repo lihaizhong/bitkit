@@ -200,7 +200,7 @@ export class Checker {
   not: Partial<ITypes> = {};
 
   // 扩展类型校验集合
-  extensions: ITypes = {
+  ext: ITypes = {
     isSameClass,
 
     isValidDate,
@@ -239,9 +239,9 @@ export class Checker {
   };
 
   constructor() {
-    const keys: string[] = Object.keys(this.extensions).filter((key) => (
+    const keys: string[] = Object.keys(this.ext).filter((key) => (
       /^is.+/.test(key) &&
-      hasOwn(this.extensions, key) &&
+      hasOwn(this.ext, key) &&
       !['isTruthy', 'isFalsy'].includes[key]
     ));
 
@@ -254,8 +254,8 @@ export class Checker {
    */
   private injectReverseValidator(property: string): void {
     this.not[property] = (value: any, type?: string) => {
-      if(property in this.extensions) {
-        return !this.extensions[property](value, type);
+      if(property in this.ext) {
+        return !this.ext[property](value, type);
       }
     }
   }
@@ -265,9 +265,9 @@ export class Checker {
    * @param properties
    */
   private reverse(properties: string | string[]): void {
-    if(this.extensions.isString(properties)) {
+    if(this.ext.isString(properties)) {
       this.injectReverseValidator(properties as string);
-    } else if(this.extensions.isArray(properties)) {
+    } else if(this.ext.isArray(properties)) {
       (properties as string[]).forEach(
         (property: string) =>
           this.injectReverseValidator(property)
@@ -282,11 +282,11 @@ export class Checker {
    * @param addonToNot 是否添加到not模块中
    */
   extend(name: string, validator: TValidator, addonToNot: boolean = false): void {
-    if(this.extensions[name]) {
+    if(this.ext[name]) {
       console.warn(`扩展类型${name}已存在，建议更换一个名称！`);
     }
 
-    this.extensions[name] = validator;
+    this.ext[name] = validator;
 
     if(addonToNot) {
       this.reverse(name);
@@ -298,8 +298,8 @@ const checker = new Checker();
 
 export default new Proxy(checker, {
   get(target: Checker, p: string) {
-    if(target.extensions[p]) {
-      return Reflect.get(target.extensions, p);
+    if(target.ext[p]) {
+      return Reflect.get(target.ext, p);
     }
 
     return Reflect.get(target, p);
@@ -307,4 +307,4 @@ export default new Proxy(checker, {
   set(_target: Checker, _value: any) {
     throw new Error('TypeChecker不支持直接扩展，请使用TypeChecker.extend方法代替！');
   }
-}) as Checker & ITypes;
+}) as Checker & ITypes & { not: Omit<ITypes, 'isTruthy' | 'isFalsy'> };
