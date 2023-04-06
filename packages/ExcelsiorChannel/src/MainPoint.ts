@@ -18,9 +18,11 @@ export class MainPoint extends CorePoint {
   }
 
   private start(target: Window, port: MessagePort): void {
-    // 发起连接请求
-    target.postMessage(POINT_SIGNALS.CONNECT, '*', [port]);
-    journal.debug('发起连接请求...');
+    if (target) {
+      // 发起连接请求
+      target.postMessage(POINT_SIGNALS.CONNECT, '*', [port]);
+      journal.debug('发起连接请求...');
+    }
   }
 
   protected handleSignalMessage(event: MessageEvent<any>): void {

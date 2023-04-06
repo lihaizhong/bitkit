@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "build": "rm -rf ./lib ./types ./es && tsc --build tsconfig.json && tsc --build tsconfig.lib.json",
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",

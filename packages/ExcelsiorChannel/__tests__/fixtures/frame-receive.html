@@ -1,15 +1,10 @@
 <script type="module" lang="ts">
-  import { NodePoint, journal } from "../../src";
+  import { NodePoint } from "../../src";
 
   const pointer = new NodePoint();
 
-  pointer.declare('add', () => {
-    return true
-  });
+  pointer.declare('add', () => true);
 
   // 定义远程调用的函数
-  pointer.declare('update', () => {
-    journal.info('update success!');
-    return true
-  });
+  pointer.declare('update', () => true);
 </script>

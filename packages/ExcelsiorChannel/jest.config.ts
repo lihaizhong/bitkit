@@ -139,10 +139,14 @@ export default {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  // testEnvironment: "jest-environment-jsdom",
+  testEnvironment: "jsdom",
 
   // Options that will be passed to the testEnvironment
-  // testEnvironmentOptions: {},
+  testEnvironmentOptions: {
+    beforeParse: (window) => {
+      window.MessageChannel = require('worker_threads').MessageChannel;
+    }
+  },
 
   // Adds a location field to test results
   // testLocationInResults: false,
@@ -175,7 +179,7 @@ export default {
 
   // A map from regular expressions to paths to transformers
   transform: {
-    '^.+\\.(ts|js)$': 'ts-jest'
+    '^.+\\.(ts|js)$': ['ts-jest', { tsconfig: "tsconfig.test.json" }]
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
