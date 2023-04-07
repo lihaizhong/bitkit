@@ -3,13 +3,14 @@
 基于JSON-RPC 2.0协议的通信工具。用于浏览器多窗口之间的通信。
 
 - 支持消息延迟通信（在连接建立之前，所有的消息发送都会被缓存，直到连接创建成功）。
-- 支持通知的形式调用远程函数。
-- 支持请求的形式调用远程函数，并返回Promise结果。
+- 支持与本地函数一致的调用方式。
+- 支持控制台打印请求过程。
 
 ## 如何使用
 
+### MAIN WINDOW
+
 ```ts
-// --- MAIN WINDOW ---
 import { MainPoint, journal } from '@lihzsky/excelsior-channel';
 
 const frame = document.body.getElementsByTagName('iframe')[0];
@@ -29,14 +30,11 @@ pointer.declare('delete', () => {
 
 // 通知update操作
 pointer.notify('update')
+```
 
+### IFRAME WINDOW/OTHER WINDOW
 
-
-
-
-
-
-// --- IFRAME WINDOW/OTHER WINDOW ---
+```ts
 import { NodePoint, journal } from "@lihzsky/excelsior-channel";
 
 const pointer = new NodePoint();
@@ -96,7 +94,7 @@ proxyPointer.delete = () => {
 proxyPointer.update();
 ```
 
-## 方法
+## 实例方法
 
 ### declare(method: string, fn: PointController): void
 
@@ -110,7 +108,7 @@ proxyPointer.update();
 
 请求执行远程函数并返回结果。用于请求另一个窗口执行对应的函数，函数会返回的结果发送会窗口。
 
-## 另外
+## 额外工具
 
 - journal是轻量级console实例。可用于打印更漂亮的控制台日志。
-- Journal是轻量级console类，可以自定义输出的环境，接入的环境API参考console。
+- Journal是轻量级console类。可以自定义输出的环境，接入的环境API参考console。
