@@ -257,7 +257,7 @@ CountDown.formatTime = function (time) {
     time = 0
   }
 
-  time = '0' + time
+  time = `0${time}`
 
   return time.substring(time.length - 2)
 }

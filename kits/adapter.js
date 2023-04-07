@@ -20,7 +20,7 @@
     // 获取设备的宽度
     const clientWidth = window.screen.width
     if (!clientWidth) return
-    docEl.style.fontSize = 100 * (clientWidth / maxWidth) + 'px'
+    docEl.style.fontSize = `${100 * (clientWidth / maxWidth)}px`
     // window.devicePixelRatio是设备上物理像素和设备独立像素(device-independent pixels (dips))的比例。
     // 公式就是: window.devicePixelRatio = 物理像素 / dips (非视网膜屏为1， 视网膜屏为2)
     docEl.setAttribute('dpr', window.devicePixelRatio || 1)
@@ -48,13 +48,13 @@
  * 方法二
  */
 ;(function flexible (window, document) {
-  var docEl = document.documentElement
-  var dpr = window.devicePixelRatio || 1
+  const docEl = document.documentElement
+  const dpr = window.devicePixelRatio || 1
 
   // adjust body font size
   function setBodyFontSize () {
     if (document.body) {
-      document.body.style.fontSize = (12 * dpr) + 'px'
+      document.body.style.fontSize = `${12 * dpr}px`
     } else {
       document.addEventListener('DOMContentLoaded', setBodyFontSize)
     }
@@ -64,8 +64,7 @@
 
   // set 1rem = viewWidth / 10
   function setRemUnit () {
-    var rem = docEl.clientWidth / 10
-    docEl.style.fontSize = rem + 'px'
+    docEl.style.fontSize = `${docEl.clientWidth / 10}px`
   }
 
   setRemUnit()
@@ -80,14 +79,17 @@
 
   // detect 0.5px supports
   if (dpr >= 2) {
-    var fakeBody = document.createElement('body')
-    var testElement = document.createElement('div')
+    const fakeBody = document.createElement('body')
+    const testElement = document.createElement('div')
+
     testElement.style.border = '.5px solid transparent'
     fakeBody.appendChild(testElement)
     docEl.appendChild(fakeBody)
+
     if (testElement.offsetHeight === 1) {
       docEl.classList.add('hairlines')
     }
+
     docEl.removeChild(fakeBody)
   }
 }(window, document))

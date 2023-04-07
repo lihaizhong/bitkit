@@ -1,5 +1,5 @@
 (function () {
-  var globalThisProxy = {}
+  const globalThisProxy = {}
 
   function proxyGlobalThis (target) {
     Object.defineProperty(target, 'globalThis', {

@@ -4,7 +4,7 @@
  * @param {array<any>} source
  * @param {function} equal
  */
-function removeDuplicates (target = [], source = [], equal) {
+function removeDuplicates (target = [], source = [], equal = () => true) {
   const targetLength = target.length
   const sourceLength = source.length
 

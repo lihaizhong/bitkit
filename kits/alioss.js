@@ -2,7 +2,7 @@ function reduceOptions (options, defaultValue) {
   return Object.keys(options).reduce((acc, key) => {
     const value = options[key]
     if (value) {
-      return acc + `,${key}_${value}`
+      return `${acc},${key}_${value}`
     }
 
     return acc
@@ -28,7 +28,7 @@ function reduceOptions (options, defaultValue) {
 export class OSSImageHandler {
   constructor (url, options = {}) {
     if (typeof url === 'string' && url !== '') {
-      this.url = url.replace(/\?.*/, '') + '?x-oss-process=image/format,webp'
+      this.url = `${url.replace(/\?.*/, '')}?x-oss-process=image/format,webp`
     } else {
       this.url = ''
     }
