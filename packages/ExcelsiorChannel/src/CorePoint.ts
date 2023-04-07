@@ -21,11 +21,33 @@ export class CorePoint {
   protected isReady: boolean = false;
 
   /**
+   * 包装端口封装
+   * @param endpoint
+   * @returns
+   */
+  static wrap(endpoint: CorePoint): any {
+    return new Proxy(endpoint, {
+      get(target: CorePoint, p: string | symbol): any {
+        return (...params: any[]) => Reflect.get(target, 'invoke')(String(p), ...params)
+      },
+
+      set(target: CorePoint, p: string | symbol, newValue: any): boolean {
+        if (typeof newValue !== 'function') {
+          throw new Error(`property ${String(p)} must be a function!`)
+        }
+
+        Reflect.get(target, 'declare')(String(p), newValue)
+        return true
+      }
+    })
+  }
+
+  /**
    * 检查唯一标识是否合法
    * @param id
    * @returns
    */
-  static checkIdentification(id: string): boolean {
+  protected checkIdentification(id: string): boolean {
     return typeof id === 'string' && id !== '';
   }
 
@@ -34,7 +56,7 @@ export class CorePoint {
    * @param data
    * @returns
    */
-  static getProtocolType(data: any): string {
+  protected getProtocolType(data: any): string {
     if (MessageBody.checkProtocol(data)) {
       return MessageBody.type;
     }
@@ -86,7 +108,7 @@ export class CorePoint {
         const { method, params } = data;
 
         // 检查id是否合法
-        if (!CorePoint.checkIdentification(data.id)) {
+        if (!this.checkIdentification(data.id)) {
           throw new Error('NotWellFormed');
         }
 
@@ -127,7 +149,7 @@ export class CorePoint {
       journal.group('response success')
       journal.success('---- 响应体 ----', data);
 
-      if (CorePoint.checkIdentification(data.id)) {
+      if (this.checkIdentification(data.id)) {
         const { success } = this.subscriptions[data.id] || {};
 
         if (typeof success === 'function') {
@@ -141,7 +163,7 @@ export class CorePoint {
       journal.group('error success')
       journal.error('---- 错误信息 ----', data);
 
-      if (CorePoint.checkIdentification(data.id)) {
+      if (this.checkIdentification(data.id)) {
         const { error } = this.subscriptions[data.id] || {};
 
         if (typeof error === 'function') {
@@ -169,7 +191,7 @@ export class CorePoint {
     // 消息监听
     port.onmessage = (event: MessageEvent) => {
       // 根据协议类型，处理通信消息
-      switch (CorePoint.getProtocolType(event.data)) {
+      switch (this.getProtocolType(event.data)) {
         case MessageBody.type:
           this.handleJsonRPCMessage(event);
           break

@@ -1,5 +1,10 @@
 # @lihzsky/excelsior-channel
 
+## 0.1.0
+### Minor Changes
+
+- 添加静态包裹封装,调用方式与本地方法一致
+
 ## 0.0.8
 ### Patch Changes
 

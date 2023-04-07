@@ -65,6 +65,37 @@ const data = await pointer.invoke('move', 1, 6);
 
 子窗口创建端口，用于远程通信。
 
+## 静态方法
+
+### wrap(endpoint: CorePoint): any
+
+包裹端口封装。使消息发送与本地调用方式一致。
+
+**注意**：包裹端口后，底层调用方式只支持invoke，不支持notify。
+
+```ts
+import { MainPoint, journal } from '@2dfire/excelsior-channel';
+
+const frame = document.body.getElementsByTagName('iframe')[0];
+const pointer = new MainPoint(frame);
+const proxyPointer = MainPoint.wrap(pointer);
+
+// 定义远程调用的函数
+proxyPointer.move = (targetIndex: number, relativeIndex: number) => {
+  // move
+  journal.info('move success!', targetIndex, relativeIndex);
+}
+
+// 定义远程调用的函数
+proxyPointer.delete = () => {
+  // delete
+  journal.info('delete success!');
+}
+
+// 通知update操作
+proxyPointer.update();
+```
+
 ## 方法
 
 ### declare(method: string, fn: PointController): void
