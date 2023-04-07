@@ -13,5 +13,5 @@
     "lib": ["ESNext", "DOM"]
   },
   "include": ["src/*"],
-  "exclude": ["node_modules", "test", "lib", "**/*.spec.ts"]
+  "exclude": ["node_modules", "__tests__", "lib", "**/*.spec.ts"]
 }

@@ -3,6 +3,7 @@
         "changesets",
         "commitlint",
         "Impls",
+        "importmap",
         "levenshein",
         "lihzsky",
         "Mdhmsq",

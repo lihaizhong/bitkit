@@ -23,6 +23,14 @@ export class Journal {
 
   group(label: string) {
     this.label = label.toLocaleUpperCase();
+
+    return {
+      success: this.success.bind(this),
+      info: this.info.bind(this),
+      debug: this.debug.bind(this),
+      warn: this.warn.bind(this),
+      error: this.error.bind(this)
+    }
   }
 
   log(...args: any[]) {
