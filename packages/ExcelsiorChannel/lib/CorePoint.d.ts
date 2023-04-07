@@ -7,17 +7,23 @@ export declare class CorePoint {
     private subscriptions;
     protected isReady: boolean;
     /**
+     * 包装端口封装
+     * @param endpoint
+     * @returns
+     */
+    static wrap(endpoint: CorePoint): any;
+    /**
      * 检查唯一标识是否合法
      * @param id
      * @returns
      */
-    static checkIdentification(id: string): boolean;
+    protected checkIdentification(id: string): boolean;
     /**
      * 获取协议类型
      * @param data
      * @returns
      */
-    static getProtocolType(data: any): string;
+    protected getProtocolType(data: any): string;
     /**
      * 处理json-rpc协议消息
      * @param event

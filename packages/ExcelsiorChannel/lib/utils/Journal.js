@@ -23,6 +23,13 @@ var Journal = /** @class */ (function () {
     };
     Journal.prototype.group = function (label) {
         this.label = label.toLocaleUpperCase();
+        return {
+            success: this.success.bind(this),
+            info: this.info.bind(this),
+            debug: this.debug.bind(this),
+            warn: this.warn.bind(this),
+            error: this.error.bind(this)
+        };
     };
     Journal.prototype.log = function () {
         var _a;

@@ -34,9 +34,11 @@ var MainPoint = /** @class */ (function (_super) {
         return _this;
     }
     MainPoint.prototype.start = function (target, port) {
-        // 发起连接请求
-        target.postMessage(signals_1.POINT_SIGNALS.CONNECT, '*', [port]);
-        Journal_1.journal.debug('发起连接请求...');
+        if (target) {
+            // 发起连接请求
+            target.postMessage(signals_1.POINT_SIGNALS.CONNECT, '*', [port]);
+            Journal_1.journal.debug('发起连接请求...');
+        }
     };
     MainPoint.prototype.handleSignalMessage = function (event) {
         if (event.data === signals_1.POINT_SIGNALS.OK) {

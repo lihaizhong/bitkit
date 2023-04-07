@@ -34,6 +34,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 import { MessageStatus, MessageTypeEnum } from "./constants/message";
 import { POINT_SIGNAL_REG } from "./constants/signals";
 import { journal } from "./utils/Journal";
@@ -50,11 +59,36 @@ var CorePoint = /** @class */ (function () {
         this.isReady = false;
     }
     /**
+     * 包装端口封装
+     * @param endpoint
+     * @returns
+     */
+    CorePoint.wrap = function (endpoint) {
+        return new Proxy(endpoint, {
+            get: function (target, p) {
+                return function () {
+                    var params = [];
+                    for (var _i = 0; _i < arguments.length; _i++) {
+                        params[_i] = arguments[_i];
+                    }
+                    return Reflect.get(target, 'invoke').apply(void 0, __spreadArray([String(p)], params, false));
+                };
+            },
+            set: function (target, p, newValue) {
+                if (typeof newValue !== 'function') {
+                    throw new Error("property ".concat(String(p), " must be a function!"));
+                }
+                Reflect.get(target, 'declare')(String(p), newValue);
+                return true;
+            }
+        });
+    };
+    /**
      * 检查唯一标识是否合法
      * @param id
      * @returns
      */
-    CorePoint.checkIdentification = function (id) {
+    CorePoint.prototype.checkIdentification = function (id) {
         return typeof id === 'string' && id !== '';
     };
     /**
@@ -62,7 +96,7 @@ var CorePoint = /** @class */ (function () {
      * @param data
      * @returns
      */
-    CorePoint.getProtocolType = function (data) {
+    CorePoint.prototype.getProtocolType = function (data) {
         if (MessageBody.checkProtocol(data)) {
             return MessageBody.type;
         }
@@ -98,14 +132,12 @@ var CorePoint = /** @class */ (function () {
                         return [4 /*yield*/, fn.apply(void 0, params)];
                     case 1:
                         _a.sent();
-                        journal.group('notify success');
-                        journal.success('---- 请求体 ----', data);
+                        journal.group('notify success').success('---- 请求体 ----', data);
                         return [3 /*break*/, 3];
                     case 2:
                         ex_1 = _a.sent();
                         // 捕获未知的异常情况
-                        journal.group('notify fail');
-                        journal.error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex_1);
+                        journal.group('notify fail').error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex_1);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -120,7 +152,7 @@ var CorePoint = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         method = data.method, params = data.params;
                         // 检查id是否合法
-                        if (!CorePoint.checkIdentification(data.id)) {
+                        if (!this.checkIdentification(data.id)) {
                             throw new Error('NotWellFormed');
                         }
                         // 检查调用的方法是否存在
@@ -135,22 +167,19 @@ var CorePoint = /** @class */ (function () {
                         return [4 /*yield*/, fn.apply(void 0, params)];
                     case 1:
                         result = _a.sent();
-                        journal.group('request success');
-                        journal.success('---- 请求体 ----', data);
+                        journal.group('request success').success('---- 请求体 ----', data);
                         // 获取执行结果，并发送成功消息
                         this.postSuccessMessage(data.id, result || null);
                         return [3 /*break*/, 3];
                     case 2:
                         ex_2 = _a.sent();
                         if (Object.keys(MessageStatus).includes(ex_2.message)) {
-                            journal.group('request fail');
-                            journal.error('---- 请求体 ----', data);
+                            journal.group('request fail').error('---- 请求体 ----', data);
                             // 捕获未知的异常情况并发送错误消息
                             this.postErrorMessage(data.id, ex_2.message);
                         }
                         else {
-                            journal.group('request fail');
-                            journal.error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex_2);
+                            journal.group('request fail').error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex_2);
                             this.postErrorMessage(data.id, 'InternalRPCError');
                         }
                         return [3 /*break*/, 3];
@@ -162,9 +191,8 @@ var CorePoint = /** @class */ (function () {
         sink.onResponse(function (data) { return __awaiter(_this, void 0, void 0, function () {
             var success;
             return __generator(this, function (_a) {
-                journal.group('response success');
-                journal.success('---- 响应体 ----', data);
-                if (CorePoint.checkIdentification(data.id)) {
+                journal.group('response success').success('---- 响应体 ----', data);
+                if (this.checkIdentification(data.id)) {
                     success = (this.subscriptions[data.id] || {}).success;
                     if (typeof success === 'function') {
                         success(data.result);
@@ -177,9 +205,8 @@ var CorePoint = /** @class */ (function () {
         sink.onError(function (data) { return __awaiter(_this, void 0, void 0, function () {
             var error;
             return __generator(this, function (_a) {
-                journal.group('error success');
-                journal.error('---- 错误信息 ----', data);
-                if (CorePoint.checkIdentification(data.id)) {
+                journal.group('error success').error('---- 错误信息 ----', data);
+                if (this.checkIdentification(data.id)) {
                     error = (this.subscriptions[data.id] || {}).error;
                     if (typeof error === 'function') {
                         error(data.error);
@@ -206,7 +233,7 @@ var CorePoint = /** @class */ (function () {
         // 消息监听
         port.onmessage = function (event) {
             // 根据协议类型，处理通信消息
-            switch (CorePoint.getProtocolType(event.data)) {
+            switch (_this.getProtocolType(event.data)) {
                 case MessageBody.type:
                     _this.handleJsonRPCMessage(event);
                     break;

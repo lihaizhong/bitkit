@@ -93,12 +93,10 @@ export class CorePoint {
         }
 
         await fn(...params)
-        journal.group('notify success');
-        journal.success('---- 请求体 ----', data);
+        journal.group('notify success').success('---- 请求体 ----', data);
       } catch (ex) {
         // 捕获未知的异常情况
-        journal.group('notify fail');
-        journal.error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex);
+        journal.group('notify fail').error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex);
       }
     });
 
@@ -126,19 +124,16 @@ export class CorePoint {
 
         const result = await fn(...params);
 
-        journal.group('request success');
-        journal.success('---- 请求体 ----', data);
+        journal.group('request success').success('---- 请求体 ----', data);
         // 获取执行结果，并发送成功消息
         this.postSuccessMessage(data.id, result || null);
       } catch (ex) {
         if (Object.keys(MessageStatus).includes(ex.message)) {
-          journal.group('request fail');
-          journal.error('---- 请求体 ----', data);
+          journal.group('request fail').error('---- 请求体 ----', data);
           // 捕获未知的异常情况并发送错误消息
           this.postErrorMessage(data.id, ex.message);
         } else {
-          journal.group('request fail');
-          journal.error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex);
+          journal.group('request fail').error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex);
           this.postErrorMessage(data.id, 'InternalRPCError');
         }
       }
@@ -146,8 +141,7 @@ export class CorePoint {
 
     // 处理响应消息
     sink.onResponse(async (data: MessageResponse<any>) => {
-      journal.group('response success')
-      journal.success('---- 响应体 ----', data);
+      journal.group('response success').success('---- 响应体 ----', data);
 
       if (this.checkIdentification(data.id)) {
         const { success } = this.subscriptions[data.id] || {};
@@ -160,8 +154,7 @@ export class CorePoint {
 
     // 处理错误消息
     sink.onError(async (data: MessageResponse<any>) => {
-      journal.group('error success')
-      journal.error('---- 错误信息 ----', data);
+      journal.group('error success').error('---- 错误信息 ----', data);
 
       if (this.checkIdentification(data.id)) {
         const { error } = this.subscriptions[data.id] || {};
