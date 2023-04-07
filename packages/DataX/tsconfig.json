@@ -14,7 +14,5 @@
     "paths": {
       "@/*": ["src/*"]
     }
-  },
-  "include": ["src/**/*", "typings.d.ts"],
-  "exclude": ["node_modules", "test", "lib", "**/*.spec.ts"]
+  }
 }

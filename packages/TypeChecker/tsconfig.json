@@ -11,7 +11,5 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "lib": ["ESNext"]
-  },
-  "include": ["src/*"],
-  "exclude": ["node_modules", "test", "lib", "**/*.spec.ts"]
+  }
 }

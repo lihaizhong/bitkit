@@ -1,0 +1,29 @@
+{
+  "name": "",
+  "version": "0.0.2",
+  "keywords": [],
+  "author": "lihz",
+  "license": "ISC",
+  "description": "",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "types": "es/index.d.ts",
+  "files": [
+    "lib",
+    "es"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lihaizhong/toolkit.git"
+  },
+  "scripts": {
+    "build": "rm -rf ./lib ./es && tsc --build tsconfig.json && tsc --build tsconfig.lib.json"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/lihaizhong/toolkit/issues"
+  }
+}
