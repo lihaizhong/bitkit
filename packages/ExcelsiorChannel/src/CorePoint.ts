@@ -28,7 +28,7 @@ export class CorePoint {
   static wrap(endpoint: CorePoint): any {
     return new Proxy(endpoint, {
       get(target: CorePoint, p: string | symbol): any {
-        return (...params: any[]) => Reflect.get(target, 'invoke')(String(p), ...params)
+        return (...params: any[]) => Reflect.get(target, 'invoke').call(target, String(p), ...params)
       },
 
       set(target: CorePoint, p: string | symbol, newValue: any): boolean {
@@ -36,7 +36,7 @@ export class CorePoint {
           throw new Error(`property ${String(p)} must be a function!`)
         }
 
-        Reflect.get(target, 'declare')(String(p), newValue)
+        Reflect.get(target, 'declare').call(target, String(p), newValue)
         return true
       }
     })

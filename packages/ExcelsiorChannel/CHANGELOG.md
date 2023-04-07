@@ -1,5 +1,10 @@
 # @lihzsky/excelsior-channel
 
+## 0.1.2
+### Patch Changes
+
+- 修复wrap执行找不到目标实例问题
+
 ## 0.1.1
 ### Patch Changes
 

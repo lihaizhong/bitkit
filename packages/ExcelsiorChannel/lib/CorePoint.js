@@ -70,18 +70,19 @@ var CorePoint = /** @class */ (function () {
         return new Proxy(endpoint, {
             get: function (target, p) {
                 return function () {
+                    var _a;
                     var params = [];
                     for (var _i = 0; _i < arguments.length; _i++) {
                         params[_i] = arguments[_i];
                     }
-                    return Reflect.get(target, 'invoke').apply(void 0, __spreadArray([String(p)], params, false));
+                    return (_a = Reflect.get(target, 'invoke')).call.apply(_a, __spreadArray([target, String(p)], params, false));
                 };
             },
             set: function (target, p, newValue) {
                 if (typeof newValue !== 'function') {
                     throw new Error("property ".concat(String(p), " must be a function!"));
                 }
-                Reflect.get(target, 'declare')(String(p), newValue);
+                Reflect.get(target, 'declare').call(target, String(p), newValue);
                 return true;
             }
         });
