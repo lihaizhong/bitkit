@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.journal = exports.Journal = void 0;
+exports.Journal = void 0;
 var Journal = /** @class */ (function () {
     function Journal(inst) {
         if (inst === void 0) { inst = console; }
@@ -97,5 +97,4 @@ var Journal = /** @class */ (function () {
     return Journal;
 }());
 exports.Journal = Journal;
-exports.journal = new Journal();
 //# sourceMappingURL=Journal.js.map

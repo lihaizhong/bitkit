@@ -1,11 +1,17 @@
+import { MessageBody } from "./utils/MessageBody";
+import { MessageQueue } from "./utils/MessageQueue";
 export type PointController = (...params: any[]) => any;
 export declare class CorePoint {
-    private port;
-    private body;
-    private queue;
-    private controllers;
-    private subscriptions;
+    protected port: MessagePort | null;
+    protected body: MessageBody<any>;
+    protected queue: MessageQueue;
+    protected controllers: Record<string, PointController>;
+    protected subscriptions: Record<string, {
+        success: (value: any) => void;
+        error: (error: any) => void;
+    }>;
     protected isReady: boolean;
+    protected logger: any;
     /**
      * 包装端口封装
      * @param endpoint

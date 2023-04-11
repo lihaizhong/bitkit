@@ -45,7 +45,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 import { MessageStatus, MessageTypeEnum } from "./constants/message";
 import { POINT_SIGNAL_REG } from "./constants/signals";
-import { journal } from "./utils/Journal";
+import { Journal } from "./utils/Journal";
 import { MessageBody } from "./utils/MessageBody";
 import { MessageQueue } from "./utils/MessageQueue";
 import { MessageSink } from "./utils/MessageSink";
@@ -57,6 +57,7 @@ var CorePoint = /** @class */ (function () {
         this.controllers = {};
         this.subscriptions = {};
         this.isReady = false;
+        this.logger = new Journal();
     }
     /**
      * 包装端口封装
@@ -133,12 +134,12 @@ var CorePoint = /** @class */ (function () {
                         return [4 /*yield*/, fn.apply(void 0, params)];
                     case 1:
                         _a.sent();
-                        journal.group('notify success').success('---- 请求体 ----', data);
+                        this.logger.group('notify success').success('---- 请求体 ----', data);
                         return [3 /*break*/, 3];
                     case 2:
                         ex_1 = _a.sent();
                         // 捕获未知的异常情况
-                        journal.group('notify fail').error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex_1);
+                        this.logger.group('notify fail').error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex_1);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -168,19 +169,19 @@ var CorePoint = /** @class */ (function () {
                         return [4 /*yield*/, fn.apply(void 0, params)];
                     case 1:
                         result = _a.sent();
-                        journal.group('request success').success('---- 请求体 ----', data);
+                        this.logger.group('request success').success('---- 请求体 ----', data);
                         // 获取执行结果，并发送成功消息
                         this.postSuccessMessage(data.id, result || null);
                         return [3 /*break*/, 3];
                     case 2:
                         ex_2 = _a.sent();
                         if (Object.keys(MessageStatus).includes(ex_2.message)) {
-                            journal.group('request fail').error('---- 请求体 ----', data);
+                            this.logger.group('request fail').error('---- 请求体 ----', data);
                             // 捕获未知的异常情况并发送错误消息
                             this.postErrorMessage(data.id, ex_2.message);
                         }
                         else {
-                            journal.group('request fail').error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex_2);
+                            this.logger.group('request fail').error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex_2);
                             this.postErrorMessage(data.id, 'InternalRPCError');
                         }
                         return [3 /*break*/, 3];
@@ -192,7 +193,7 @@ var CorePoint = /** @class */ (function () {
         sink.onResponse(function (data) { return __awaiter(_this, void 0, void 0, function () {
             var success;
             return __generator(this, function (_a) {
-                journal.group('response success').success('---- 响应体 ----', data);
+                this.logger.group('response success').success('---- 响应体 ----', data);
                 if (this.checkIdentification(data.id)) {
                     success = (this.subscriptions[data.id] || {}).success;
                     if (typeof success === 'function') {
@@ -206,7 +207,7 @@ var CorePoint = /** @class */ (function () {
         sink.onError(function (data) { return __awaiter(_this, void 0, void 0, function () {
             var error;
             return __generator(this, function (_a) {
-                journal.group('error success').error('---- 错误信息 ----', data);
+                this.logger.group('error success').error('---- 错误信息 ----', data);
                 if (this.checkIdentification(data.id)) {
                     error = (this.subscriptions[data.id] || {}).error;
                     if (typeof error === 'function') {

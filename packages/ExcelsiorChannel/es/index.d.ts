@@ -1,4 +1,4 @@
 export { CorePoint } from './CorePoint';
 export { MainPoint } from './MainPoint';
 export { NodePoint } from './NodePoint';
-export { Journal, journal } from './utils/Journal';
+export { Journal } from './utils/Journal';

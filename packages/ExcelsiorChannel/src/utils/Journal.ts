@@ -1,9 +1,19 @@
+export interface JournalConsole {
+  group(label: string): void;
+  groupEnd(): void;
+  log(...args: any[]): void;
+  info(...args: any[]): void;
+  debug(...args: any[]): void;
+  warn(...args: any[]): void;
+  error(...args: any[]): void;
+}
+
 export class Journal {
-  private inst: Console;
+  private inst: JournalConsole;
 
   private label: string | null = null;
 
-  constructor(inst: Console = console) {
+  constructor(inst: JournalConsole = console) {
     this.inst = inst;
   }
 
@@ -11,7 +21,7 @@ export class Journal {
     return `padding: 2px 4px; background: ${background}; color: ${color}; border-radius: 4px;`
   }
 
-  private printf(label: string, messages: any[], cb: (message: any) => void) {
+  protected printf(label: string, messages: any[], cb: (message: any) => void) {
     if (messages.length < 2) {
       messages.forEach(cb);
     } else {
@@ -72,5 +82,3 @@ export class Journal {
     this.label = null;
   }
 }
-
-export const journal = new Journal();

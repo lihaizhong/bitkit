@@ -1,6 +1,5 @@
 import { CorePoint } from "./CorePoint";
 import { POINT_SIGNALS } from "./constants/signals";
-import { journal } from "./utils/Journal";
 
 export class MainPoint extends CorePoint {
   constructor(target: HTMLIFrameElement | Window) {
@@ -21,13 +20,13 @@ export class MainPoint extends CorePoint {
     if (target) {
       // 发起连接请求
       target.postMessage(POINT_SIGNALS.CONNECT, '*', [port]);
-      journal.debug('发起连接请求...');
+      this.logger.debug('发起连接请求...');
     }
   }
 
   protected handleSignalMessage(event: MessageEvent<any>): void {
     if (event.data === POINT_SIGNALS.OK) {
-      journal.debug('握手完成！');
+      this.logger.debug('握手完成！');
       this.ready();
     }
   }

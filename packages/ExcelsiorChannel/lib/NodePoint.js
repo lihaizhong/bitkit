@@ -18,7 +18,6 @@ exports.__esModule = true;
 exports.NodePoint = void 0;
 var CorePoint_1 = require("./CorePoint");
 var signals_1 = require("./constants/signals");
-var Journal_1 = require("./utils/Journal");
 var NodePoint = /** @class */ (function (_super) {
     __extends(NodePoint, _super);
     function NodePoint() {
@@ -28,7 +27,7 @@ var NodePoint = /** @class */ (function (_super) {
             if (event.data === signals_1.POINT_SIGNALS.CONNECT) {
                 var port = event.ports[0];
                 _this.connect(port);
-                Journal_1.journal.debug('连接成功！');
+                _this.logger.debug('连接成功！');
                 port.postMessage(signals_1.POINT_SIGNALS.OK);
                 _this.ready();
             }

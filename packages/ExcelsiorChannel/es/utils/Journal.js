@@ -94,5 +94,4 @@ var Journal = /** @class */ (function () {
     return Journal;
 }());
 export { Journal };
-export var journal = new Journal();
 //# sourceMappingURL=Journal.js.map

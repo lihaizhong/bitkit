@@ -1,6 +1,6 @@
 import { MessageStatus, MessageTypeEnum } from "./constants/message";
 import { POINT_SIGNAL_REG } from "./constants/signals";
-import { journal } from "./utils/Journal";
+import { Journal } from "./utils/Journal";
 import { MessageBody, MessageNotification, MessageRequest, MessageResponse } from "./utils/MessageBody";
 import { MessageQueue, MessageReadyBody } from "./utils/MessageQueue";
 import { MessageSink } from "./utils/MessageSink";
@@ -8,17 +8,19 @@ import { MessageSink } from "./utils/MessageSink";
 export type PointController = (...params: any[]) => any;
 
 export class CorePoint {
-  private port: MessagePort | null = null;
+  protected port: MessagePort | null = null;
 
-  private body: MessageBody<any> = new MessageBody();
+  protected body: MessageBody<any> = new MessageBody();
 
-  private queue: MessageQueue = new MessageQueue();
+  protected queue: MessageQueue = new MessageQueue();
 
-  private controllers: Record<string, PointController> = {};
+  protected controllers: Record<string, PointController> = {};
 
-  private subscriptions: Record<string, { success: (value: any) => void, error: (error: any) => void }> = {};
+  protected subscriptions: Record<string, { success: (value: any) => void, error: (error: any) => void }> = {};
 
   protected isReady: boolean = false;
+
+  protected logger: any = new Journal();
 
   /**
    * 包装端口封装
@@ -93,10 +95,10 @@ export class CorePoint {
         }
 
         await fn(...params)
-        journal.group('notify success').success('---- 请求体 ----', data);
+        this.logger.group('notify success').success('---- 请求体 ----', data);
       } catch (ex) {
         // 捕获未知的异常情况
-        journal.group('notify fail').error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex);
+        this.logger.group('notify fail').error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex);
       }
     });
 
@@ -124,16 +126,16 @@ export class CorePoint {
 
         const result = await fn(...params);
 
-        journal.group('request success').success('---- 请求体 ----', data);
+        this.logger.group('request success').success('---- 请求体 ----', data);
         // 获取执行结果，并发送成功消息
         this.postSuccessMessage(data.id, result || null);
       } catch (ex) {
         if (Object.keys(MessageStatus).includes(ex.message)) {
-          journal.group('request fail').error('---- 请求体 ----', data);
+          this.logger.group('request fail').error('---- 请求体 ----', data);
           // 捕获未知的异常情况并发送错误消息
           this.postErrorMessage(data.id, ex.message);
         } else {
-          journal.group('request fail').error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex);
+          this.logger.group('request fail').error('---- 请求体 ----', data, '---- 内部错误信息 ----', ex);
           this.postErrorMessage(data.id, 'InternalRPCError');
         }
       }
@@ -141,7 +143,7 @@ export class CorePoint {
 
     // 处理响应消息
     sink.onResponse(async (data: MessageResponse<any>) => {
-      journal.group('response success').success('---- 响应体 ----', data);
+      this.logger.group('response success').success('---- 响应体 ----', data);
 
       if (this.checkIdentification(data.id)) {
         const { success } = this.subscriptions[data.id] || {};
@@ -154,7 +156,7 @@ export class CorePoint {
 
     // 处理错误消息
     sink.onError(async (data: MessageResponse<any>) => {
-      journal.group('error success').error('---- 错误信息 ----', data);
+      this.logger.group('error success').error('---- 错误信息 ----', data);
 
       if (this.checkIdentification(data.id)) {
         const { error } = this.subscriptions[data.id] || {};

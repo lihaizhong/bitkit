@@ -11,7 +11,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
-exports.journal = exports.Journal = exports.NodePoint = exports.MainPoint = exports.CorePoint = void 0;
+exports.Journal = exports.NodePoint = exports.MainPoint = exports.CorePoint = void 0;
 var CorePoint_1 = require("./CorePoint");
 __createBinding(exports, CorePoint_1, "CorePoint");
 var MainPoint_1 = require("./MainPoint");
@@ -20,5 +20,4 @@ var NodePoint_1 = require("./NodePoint");
 __createBinding(exports, NodePoint_1, "NodePoint");
 var Journal_1 = require("./utils/Journal");
 __createBinding(exports, Journal_1, "Journal");
-__createBinding(exports, Journal_1, "journal");
 //# sourceMappingURL=index.js.map

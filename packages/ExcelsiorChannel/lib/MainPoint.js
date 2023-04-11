@@ -18,7 +18,6 @@ exports.__esModule = true;
 exports.MainPoint = void 0;
 var CorePoint_1 = require("./CorePoint");
 var signals_1 = require("./constants/signals");
-var Journal_1 = require("./utils/Journal");
 var MainPoint = /** @class */ (function (_super) {
     __extends(MainPoint, _super);
     function MainPoint(target) {
@@ -37,12 +36,12 @@ var MainPoint = /** @class */ (function (_super) {
         if (target) {
             // 发起连接请求
             target.postMessage(signals_1.POINT_SIGNALS.CONNECT, '*', [port]);
-            Journal_1.journal.debug('发起连接请求...');
+            this.logger.debug('发起连接请求...');
         }
     };
     MainPoint.prototype.handleSignalMessage = function (event) {
         if (event.data === signals_1.POINT_SIGNALS.OK) {
-            Journal_1.journal.debug('握手完成！');
+            this.logger.debug('握手完成！');
             this.ready();
         }
     };

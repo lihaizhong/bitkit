@@ -15,7 +15,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 import { CorePoint } from "./CorePoint";
 import { POINT_SIGNALS } from "./constants/signals";
-import { journal } from "./utils/Journal";
 var NodePoint = /** @class */ (function (_super) {
     __extends(NodePoint, _super);
     function NodePoint() {
@@ -25,7 +24,7 @@ var NodePoint = /** @class */ (function (_super) {
             if (event.data === POINT_SIGNALS.CONNECT) {
                 var port = event.ports[0];
                 _this.connect(port);
-                journal.debug('连接成功！');
+                _this.logger.debug('连接成功！');
                 port.postMessage(POINT_SIGNALS.OK);
                 _this.ready();
             }

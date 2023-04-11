@@ -15,7 +15,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 import { CorePoint } from "./CorePoint";
 import { POINT_SIGNALS } from "./constants/signals";
-import { journal } from "./utils/Journal";
 var MainPoint = /** @class */ (function (_super) {
     __extends(MainPoint, _super);
     function MainPoint(target) {
@@ -34,12 +33,12 @@ var MainPoint = /** @class */ (function (_super) {
         if (target) {
             // 发起连接请求
             target.postMessage(POINT_SIGNALS.CONNECT, '*', [port]);
-            journal.debug('发起连接请求...');
+            this.logger.debug('发起连接请求...');
         }
     };
     MainPoint.prototype.handleSignalMessage = function (event) {
         if (event.data === POINT_SIGNALS.OK) {
-            journal.debug('握手完成！');
+            this.logger.debug('握手完成！');
             this.ready();
         }
     };

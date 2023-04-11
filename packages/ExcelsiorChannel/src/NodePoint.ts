@@ -1,6 +1,5 @@
 import { CorePoint } from "./CorePoint";
 import { POINT_SIGNALS } from "./constants/signals";
-import { journal } from "./utils/Journal";
 
 export class NodePoint extends CorePoint {
   constructor() {
@@ -12,7 +11,7 @@ export class NodePoint extends CorePoint {
         const [port] = event.ports;
 
         this.connect(port);
-        journal.debug('连接成功！');
+        this.logger.debug('连接成功！');
         port.postMessage(POINT_SIGNALS.OK);
         this.ready();
       }

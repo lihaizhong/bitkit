@@ -6,7 +6,7 @@
 - 支持与本地函数一致的调用方式。
 - 支持控制台打印请求过程。
 
-## 如何使用
+## Get Start
 
 ### MAIN WINDOW
 
@@ -53,23 +53,24 @@ pointer.notify('delete', 1);
 const data = await pointer.invoke('move', 1, 6);
 ```
 
-## 类
+## API
 
-### MainPoint
+### Class
 
-主窗口创建端口，用于远程通信。
+- MainPoint
 
-### NodePoint
+> 主窗口创建端口，用于远程通信。
 
-子窗口创建端口，用于远程通信。
+- NodePoint
 
-## 静态方法
+> 子窗口创建端口，用于远程通信。
 
-### wrap(endpoint: CorePoint): any
+### Static Method
 
-包裹端口封装。使消息发送与本地调用方式一致。
+- wrap(endpoint: CorePoint): any
 
-**注意**：包裹端口后，底层调用方式只支持invoke，不支持notify。
+> 包裹端口封装。使消息发送与本地调用方式一致。
+> **注意**：包裹端口后，底层调用方式只支持invoke，不支持notify。
 
 ```ts
 import { MainPoint, journal } from '@2dfire/excelsior-channel';
@@ -94,21 +95,20 @@ proxyPointer.delete = () => {
 proxyPointer.update();
 ```
 
-## 实例方法
+### Method
 
-### declare(method: string, fn: PointController): void
+- declare(method: string, fn: PointController): void
 
-声明远程函数。窗口发送通知或请求时，另一个窗口会找到对应的函数，并执行该函数。
+> 声明远程函数。窗口发送通知或请求时，另一个窗口会找到对应的函数，并执行该函数。
 
-### notify(method: string, ...params: any[]): void
+- notify(method: string, ...params: any[]): void
 
-通知执行远程函数。用于通知另一个窗口执行对应的函数。
+> 通知执行远程函数。用于通知另一个窗口执行对应的函数。
 
-### invoke(method: string, ...params: any[]): Promise\<any\>
+- invoke(method: string, ...params: any[]): Promise\<any\>
 
-请求执行远程函数并返回结果。用于请求另一个窗口执行对应的函数，函数会返回的结果发送会窗口。
+> 请求执行远程函数并返回结果。用于请求另一个窗口执行对应的函数，函数会返回的结果发送会窗口。
 
-## 额外工具
+## Extra
 
-- journal是轻量级console实例。可用于打印更漂亮的控制台日志。
 - Journal是轻量级console类。可以自定义输出的环境，接入的环境API参考console。
