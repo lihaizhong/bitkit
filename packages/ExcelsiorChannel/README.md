@@ -11,7 +11,7 @@
 ### MAIN WINDOW
 
 ```ts
-import { MainPoint, journal } from '@lihzsky/excelsior-channel';
+import { MainPoint } from '@lihzsky/excelsior-channel';
 
 const frame = document.body.getElementsByTagName('iframe')[0];
 const pointer = new MainPoint(frame);
@@ -19,13 +19,13 @@ const pointer = new MainPoint(frame);
 // 定义远程调用的函数
 pointer.declare('move', (targetIndex: number, relativeIndex: number) => {
   // move
-  journal.info('move success!', targetIndex, relativeIndex);
+  console.info('move success!', targetIndex, relativeIndex);
 })
 
 // 定义远程调用的函数
 pointer.declare('delete', () => {
   // delete
-  journal.info('delete success!');
+  console.info('delete success!');
 })
 
 // 通知update操作
@@ -35,14 +35,14 @@ pointer.notify('update')
 ### IFRAME WINDOW/OTHER WINDOW
 
 ```ts
-import { NodePoint, journal } from "@lihzsky/excelsior-channel";
+import { NodePoint } from "@lihzsky/excelsior-channel";
 
 const pointer = new NodePoint();
 
 // 定义远程调用的函数
 pointer.declare('update', () => {
   // update
-  journal.info('update success!');
+  console.info('update success!');
 });
 
 // 通知delete操作，删除指定内容
@@ -73,7 +73,7 @@ const data = await pointer.invoke('move', 1, 6);
 > **注意**：包裹端口后，底层调用方式只支持invoke，不支持notify。
 
 ```ts
-import { MainPoint, journal } from '@2dfire/excelsior-channel';
+import { MainPoint } from '@2dfire/excelsior-channel';
 
 const frame = document.body.getElementsByTagName('iframe')[0];
 const pointer = new MainPoint(frame);
@@ -82,13 +82,13 @@ const proxyPointer = MainPoint.wrap(pointer);
 // 定义远程调用的函数
 proxyPointer.move = (targetIndex: number, relativeIndex: number) => {
   // move
-  journal.info('move success!', targetIndex, relativeIndex);
+  console.info('move success!', targetIndex, relativeIndex);
 }
 
 // 定义远程调用的函数
 proxyPointer.delete = () => {
   // delete
-  journal.info('delete success!');
+  console.info('delete success!');
 }
 
 // 通知update操作
