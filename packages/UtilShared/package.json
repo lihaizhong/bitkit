@@ -7,7 +7,7 @@
     "dock"
   ],
   "author": "sky <854323752@qq.com>",
-  "homepage": "https://github.com/lihaizhong/toolkit#readme",
+  "homepage": "https://github.com/lihaizhong/bitkit#readme",
   "license": "ISC",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -18,7 +18,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lihaizhong/toolkit.git"
+    "url": "git+https://github.com/lihaizhong/bitkit.git"
   },
   "scripts": {
     "build": "rm -rf ./lib ./es && tsc --build tsconfig.json && tsc --build tsconfig.lib.json"
@@ -28,7 +28,7 @@
     "access": "public"
   },
   "bugs": {
-    "url": "https://github.com/lihaizhong/toolkit/issues"
+    "url": "https://github.com/lihaizhong/bitkit/issues"
   },
   "gitHead": "170aefd64cb2f4c7bcfd0b3257d01fc69f3ce4c7",
   "dependencies": {

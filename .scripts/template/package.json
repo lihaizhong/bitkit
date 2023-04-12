@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lihaizhong/toolkit.git"
+    "url": "git+https://github.com/lihaizhong/bitkit.git"
   },
   "scripts": {
     "build": "rm -rf ./lib ./es && tsc --build tsconfig.json && tsc --build tsconfig.lib.json"
@@ -24,6 +24,6 @@
     "access": "public"
   },
   "bugs": {
-    "url": "https://github.com/lihaizhong/toolkit/issues"
+    "url": "https://github.com/lihaizhong/bitkit/issues"
   }
 }
