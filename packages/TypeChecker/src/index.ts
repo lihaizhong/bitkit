@@ -212,14 +212,14 @@ export const TypeChecker = {
   export default new Proxy(TypeChecker, {
     get(target: any, p: string | symbol, receiver: any): any {
       if (p === 'not') {
-        return Object.create(target)
+        return Object.create(target);
       }
 
       if (hasOwn(target, p)) {
         return Reflect.get(target, p, receiver);
       }
 
-      return !Reflect.get(target, p, receiver)
+      return (value: any) => !Reflect.get(target, p, receiver)(value);
     },
 
     set(target: any, p: string | symbol, newValue: any, receiver: any): boolean {

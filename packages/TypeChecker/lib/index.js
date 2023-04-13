@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.Checker = exports.isFalsy = exports.isTruthy = exports.isLikePromise = exports.isPromise = exports.isError = exports.isRegExp = exports.isObject = exports.isArray = exports.isFunction = exports.isBoolean = exports.isNumber = exports.isString = exports.isPrimitive = exports.isVoid = exports.isUndefined = exports.isNull = exports.isValidDate = exports.isSameClass = exports.hasOwn = void 0;
+exports.TypeChecker = exports.isFalsy = exports.isTruthy = exports.isLikePromise = exports.isPromise = exports.isError = exports.isRegExp = exports.isObject = exports.isArray = exports.isFunction = exports.isBoolean = exports.isNumber = exports.isString = exports.isPrimitive = exports.isVoid = exports.isUndefined = exports.isNull = exports.isValidDate = exports.isSameClass = exports.hasOwn = void 0;
 var hasOwn = function (target, property) {
     if ('hasOwn' in Object) {
         return Object.hasOwn(target, property);
@@ -163,93 +163,45 @@ function isFalsy(value) {
     return value === false || value === 0;
 }
 exports.isFalsy = isFalsy;
-var Checker = /** @class */ (function () {
-    function Checker() {
-        var _this = this;
-        // 反向扩展类型校验集合
-        this.not = {};
-        // 扩展类型校验集合
-        this.ext = {
-            isSameClass: isSameClass,
-            isValidDate: isValidDate,
-            isNull: isNull,
-            isUndefined: isUndefined,
-            isVoid: isVoid,
-            isPrimitive: isPrimitive,
-            isString: isString,
-            isNumber: isNumber,
-            isBoolean: isBoolean,
-            isTruthy: isTruthy,
-            isFalsy: isFalsy,
-            isFunction: isFunction,
-            isArray: isArray,
-            isObject: isObject,
-            isRegExp: isRegExp,
-            isError: isError,
-            isPromise: isPromise,
-            isLikePromise: isLikePromise
-        };
-        var keys = Object.keys(this.ext).filter(function (key) { return (/^is.+/.test(key) &&
-            (0, exports.hasOwn)(_this.ext, key) &&
-            !['isTruthy', 'isFalsy'].includes[key]); });
-        this.reverse(keys);
-    }
-    /**
-     * 注入反向扩展类型校验
-     * @param property
-     */
-    Checker.prototype.injectReverseValidator = function (property) {
-        var _this = this;
-        this.not[property] = function (value, type) {
-            if (property in _this.ext) {
-                return !_this.ext[property](value, type);
-            }
-        };
-    };
-    /**
-     * 反向扩展类型校验
-     * @param properties
-     */
-    Checker.prototype.reverse = function (properties) {
-        var _this = this;
-        if (this.ext.isString(properties)) {
-            this.injectReverseValidator(properties);
+exports.TypeChecker = {
+    isSameClass: isSameClass,
+    isValidDate: isValidDate,
+    isNull: isNull,
+    isUndefined: isUndefined,
+    isVoid: isVoid,
+    isPrimitive: isPrimitive,
+    isString: isString,
+    isNumber: isNumber,
+    isBoolean: isBoolean,
+    isTruthy: isTruthy,
+    isFalsy: isFalsy,
+    isFunction: isFunction,
+    isArray: isArray,
+    isObject: isObject,
+    isRegExp: isRegExp,
+    isError: isError,
+    isPromise: isPromise,
+    isLikePromise: isLikePromise
+};
+exports["default"] = new Proxy(exports.TypeChecker, {
+    get: function (target, p, receiver) {
+        if (p === 'not') {
+            return Object.create(target);
         }
-        else if (this.ext.isArray(properties)) {
-            properties.forEach(function (property) {
-                return _this.injectReverseValidator(property);
-            });
+        if ((0, exports.hasOwn)(target, p)) {
+            return Reflect.get(target, p, receiver);
         }
-    };
-    /**
-     * 扩展类型判断
-     * @param name 名称
-     * @param validator 校验函数
-     * @param addonToNot 是否添加到not模块中
-     */
-    Checker.prototype.extend = function (name, validator, addonToNot) {
-        if (addonToNot === void 0) { addonToNot = false; }
-        if (this.ext[name]) {
-            console.warn("\u6269\u5C55\u7C7B\u578B".concat(name, "\u5DF2\u5B58\u5728\uFF0C\u5EFA\u8BAE\u66F4\u6362\u4E00\u4E2A\u540D\u79F0\uFF01"));
-        }
-        this.ext[name] = validator;
-        if (addonToNot) {
-            this.reverse(name);
-        }
-    };
-    return Checker;
-}());
-exports.Checker = Checker;
-var checker = new Checker();
-exports["default"] = new Proxy(checker, {
-    get: function (target, p) {
-        if (target.ext[p]) {
-            return Reflect.get(target.ext, p);
-        }
-        return Reflect.get(target, p);
+        return function (value) { return !Reflect.get(target, p, receiver)(value); };
     },
-    set: function (_target, _value) {
-        throw new Error('TypeChecker不支持直接扩展，请使用TypeChecker.extend方法代替！');
+    set: function (target, p, newValue, receiver) {
+        if (typeof newValue !== 'function') {
+            throw new Error("".concat(p.toString(), " must be a function!"));
+        }
+        if (newValue.length !== 1) {
+            throw new Error("".concat(p.toString(), " can only be one parameter!"));
+        }
+        Reflect.set(target, p, newValue, receiver);
+        return true;
     }
 });
 //# sourceMappingURL=index.js.map

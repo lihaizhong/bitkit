@@ -1,26 +1,4 @@
-export declare const hasOwn: (target: any, property: string) => any;
-export type TValidator = (value: any, type?: any) => boolean;
-export interface ITypes {
-    isSameClass: TValidator;
-    isValidDate: TValidator;
-    isNull: TValidator;
-    isUndefined: TValidator;
-    isVoid: TValidator;
-    isPrimitive: TValidator;
-    isString: TValidator;
-    isNumber: TValidator;
-    isBoolean: TValidator;
-    isTruthy: TValidator;
-    isFalsy: TValidator;
-    isFunction: TValidator;
-    isArray: TValidator;
-    isObject: TValidator;
-    isRegExp: TValidator;
-    isError: TValidator;
-    isPromise: TValidator;
-    isLikePromise: TValidator;
-    [key: string]: TValidator;
-}
+export declare const hasOwn: (target: any, property: string | symbol) => any;
 /**
  * 判断是否是某种具体类型
  * @param value
@@ -112,29 +90,25 @@ export declare function isTruthy(value: any): boolean;
  * @param value
  */
 export declare function isFalsy(value: any): boolean;
-export declare class Checker {
-    not: Partial<ITypes>;
-    ext: ITypes;
-    constructor();
-    /**
-     * 注入反向扩展类型校验
-     * @param property
-     */
-    private injectReverseValidator;
-    /**
-     * 反向扩展类型校验
-     * @param properties
-     */
-    private reverse;
-    /**
-     * 扩展类型判断
-     * @param name 名称
-     * @param validator 校验函数
-     * @param addonToNot 是否添加到not模块中
-     */
-    extend(name: string, validator: TValidator, addonToNot?: boolean): void;
-}
-declare const _default: Checker & ITypes & {
-    not: Omit<ITypes, 'isTruthy' | 'isFalsy'>;
+export declare const TypeChecker: {
+    isSameClass: typeof isSameClass;
+    isValidDate: typeof isValidDate;
+    isNull: typeof isNull;
+    isUndefined: typeof isUndefined;
+    isVoid: typeof isVoid;
+    isPrimitive: typeof isPrimitive;
+    isString: typeof isString;
+    isNumber: typeof isNumber;
+    isBoolean: typeof isBoolean;
+    isTruthy: typeof isTruthy;
+    isFalsy: typeof isFalsy;
+    isFunction: typeof isFunction;
+    isArray: typeof isArray;
+    isObject: typeof isObject;
+    isRegExp: typeof isRegExp;
+    isError: typeof isError;
+    isPromise: typeof isPromise;
+    isLikePromise: typeof isLikePromise;
 };
+declare const _default: any;
 export default _default;
