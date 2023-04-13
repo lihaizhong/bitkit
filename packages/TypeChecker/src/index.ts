@@ -1,4 +1,4 @@
-export const hasOwn = (target: any, property: string) => {
+export const hasOwn = (target: any, property: string | symbol) => {
   if('hasOwn' in Object) {
     return Object.hasOwn(target, property);
   }
@@ -6,30 +6,6 @@ export const hasOwn = (target: any, property: string) => {
   const hasOwn = (Object as ObjectConstructor).prototype.hasOwnProperty
 
   return hasOwn.call(target, property);
-}
-
-export type TValidator = (value: any, type?: any) => boolean;
-
-export interface ITypes {
-  isSameClass: TValidator;
-  isValidDate: TValidator;
-  isNull: TValidator;
-  isUndefined: TValidator;
-  isVoid: TValidator;
-  isPrimitive: TValidator;
-  isString: TValidator;
-  isNumber: TValidator;
-  isBoolean: TValidator;
-  isTruthy: TValidator;
-  isFalsy: TValidator;
-  isFunction: TValidator;
-  isArray: TValidator;
-  isObject: TValidator;
-  isRegExp: TValidator;
-  isError: TValidator;
-  isPromise: TValidator;
-  isLikePromise: TValidator;
-  [key: string]: TValidator;
 }
 
 /**
@@ -195,12 +171,7 @@ export function isFalsy(value: any): boolean {
   return value === false || value === 0;
 }
 
-export class Checker {
-  // 反向扩展类型校验集合
-  not: Partial<ITypes> = {};
-
-  // 扩展类型校验集合
-  ext: ITypes = {
+export const TypeChecker = {
     isSameClass,
 
     isValidDate,
@@ -235,76 +206,33 @@ export class Checker {
 
     isPromise,
 
-    isLikePromise,
+    isLikePromise
   };
 
-  constructor() {
-    const keys: string[] = Object.keys(this.ext).filter((key) => (
-      /^is.+/.test(key) &&
-      hasOwn(this.ext, key) &&
-      !['isTruthy', 'isFalsy'].includes[key]
-    ));
-
-    this.reverse(keys);
-  }
-
-  /**
-   * 注入反向扩展类型校验
-   * @param property
-   */
-  private injectReverseValidator(property: string): void {
-    this.not[property] = (value: any, type?: string) => {
-      if(property in this.ext) {
-        return !this.ext[property](value, type);
+  export default new Proxy(TypeChecker, {
+    get(target: any, p: string | symbol, receiver: any): any {
+      if (p === 'not') {
+        return Object.create(target)
       }
+
+      if (hasOwn(target, p)) {
+        return Reflect.get(target, p, receiver);
+      }
+
+      return !Reflect.get(target, p, receiver)
+    },
+
+    set(target: any, p: string | symbol, newValue: any, receiver: any): boolean {
+      if (typeof newValue !== 'function') {
+        throw new Error(`${p.toString()} must be a function!`);
+      }
+
+      if (newValue.length !== 1) {
+        throw new Error(`${p.toString()} can only be one parameter!`);
+      }
+
+      Reflect.set(target, p, newValue, receiver);
+
+      return true;
     }
-  }
-
-  /**
-   * 反向扩展类型校验
-   * @param properties
-   */
-  private reverse(properties: string | string[]): void {
-    if(this.ext.isString(properties)) {
-      this.injectReverseValidator(properties as string);
-    } else if(this.ext.isArray(properties)) {
-      (properties as string[]).forEach(
-        (property: string) =>
-          this.injectReverseValidator(property)
-      );
-    }
-  }
-
-  /**
-   * 扩展类型判断
-   * @param name 名称
-   * @param validator 校验函数
-   * @param addonToNot 是否添加到not模块中
-   */
-  extend(name: string, validator: TValidator, addonToNot: boolean = false): void {
-    if(this.ext[name]) {
-      console.warn(`扩展类型${name}已存在，建议更换一个名称！`);
-    }
-
-    this.ext[name] = validator;
-
-    if(addonToNot) {
-      this.reverse(name);
-    }
-  }
-}
-
-const checker = new Checker();
-
-export default new Proxy(checker, {
-  get(target: Checker, p: string) {
-    if(target.ext[p]) {
-      return Reflect.get(target.ext, p);
-    }
-
-    return Reflect.get(target, p);
-  },
-  set(_target: Checker, _value: any) {
-    throw new Error('TypeChecker不支持直接扩展，请使用TypeChecker.extend方法代替！');
-  }
-}) as Checker & ITypes & { not: Omit<ITypes, 'isTruthy' | 'isFalsy'> };
+  })
