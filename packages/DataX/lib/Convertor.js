@@ -16,6 +16,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 exports.Convertor = void 0;
 var checker_1 = __importDefault(require("./checker"));
+var type_checker_1 = require("@lihzsky/type-checker");
 var DataX_1 = require("./DataX");
 var log_1 = require("./log");
 var Types_1 = require("./Types");
@@ -34,7 +35,7 @@ var Convertor = /** @class */ (function () {
      * @returns {any}
      */
     Convertor.prototype.getDefaultValue = function (type, defaultValue, placeValue, options) {
-        if (options.loose || checker_1["default"].isSameClass(defaultValue, type) || checker_1["default"].isNull(defaultValue)) {
+        if (options.loose || (0, type_checker_1.checkOfStrict)(defaultValue, type) || checker_1["default"].isNull(defaultValue)) {
             return defaultValue;
         }
         return placeValue;

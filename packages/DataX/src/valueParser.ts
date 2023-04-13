@@ -1,6 +1,7 @@
+import { checkOfStrict } from "@lihzsky/type-checker"
 import { ITransformBean } from "../typings"
-import Checker from "./checker"
 import { Convertor } from "./Convertor"
+import TypeChecker from "./checker"
 import { warn } from "./log"
 
 export default {
@@ -12,15 +13,15 @@ export default {
    * @returns
    */
   typeOfString(fieldValue: string | number, defaultValue: any, key: string): string {
-    if (Checker.isSameClass(fieldValue, String)) {
+    if (checkOfStrict(fieldValue, String)) {
       return fieldValue as string
     }
 
-    if (Checker.isSameClass(fieldValue, Number)) {
+    if (checkOfStrict(fieldValue, Number)) {
       return fieldValue.toString()
     }
 
-    if (!Checker.isVoid(fieldValue)){
+    if (!TypeChecker.isVoid(fieldValue)) {
       warn('DataX.typeOfString', `${key} is not a string or number!`, fieldValue)
     }
 
@@ -35,18 +36,18 @@ export default {
    * @returns
    */
   typeOfNumber(fieldValue: string | number, defaultValue: any, key: string): number {
-    if (Checker.isSameClass(fieldValue, Number)) {
+    if (checkOfStrict(fieldValue, Number)) {
       return fieldValue as number
     }
 
     if (
-      Checker.isSameClass(fieldValue, String) &&
+      checkOfStrict(fieldValue, String) &&
       /^\d+$/.test(fieldValue as unknown as string)
     ) {
       return Number(fieldValue)
     }
 
-    if (!Checker.isVoid(fieldValue)) {
+    if (!TypeChecker.isVoid(fieldValue)) {
       warn('DataX.typeOfNumber', `${key} is not a number or numeric string`, fieldValue)
     }
 
@@ -61,11 +62,11 @@ export default {
    * @returns
    */
   typeOfBoolean(fieldValue: boolean, defaultValue: any, key: string): boolean {
-    if (Checker.isSameClass(fieldValue, Boolean)) {
+    if (checkOfStrict(fieldValue, Boolean)) {
       return fieldValue
     }
 
-    if (!Checker.isVoid(fieldValue)) {
+    if (!TypeChecker.isVoid(fieldValue)) {
       warn('DataX.typeOfBoolean', `${key} is not a boolean`, fieldValue)
     }
 
@@ -80,11 +81,11 @@ export default {
    * @returns
    */
   typeOfObject(fieldValue: object, defaultValue: any, key: string): Record<string, any> {
-    if (Checker.isSameClass(fieldValue, Object)) {
+    if (checkOfStrict(fieldValue, Object)) {
       return fieldValue
     }
 
-    if (!Checker.isVoid(fieldValue)) {
+    if (!TypeChecker.isVoid(fieldValue)) {
       console.warn('DataX.typeOfObject', `${key} is not a plain object`, fieldValue)
     }
 
@@ -108,10 +109,10 @@ export default {
     config: ITransformBean.GlobalOptions,
     parser: any
   ): any[] {
-    if (Checker.isArray(fieldValue)) {
+    if (TypeChecker.isArray(fieldValue)) {
       const { convert } = fieldConfig
 
-      if (Checker.isFunction(convert)) {
+      if (TypeChecker.isFunction(convert)) {
         return convert(Convertor, key, fieldConfig, config)
       }
 
@@ -122,7 +123,7 @@ export default {
       })
     }
 
-    if (!Checker.isVoid(fieldValue)) {
+    if (!TypeChecker.isVoid(fieldValue)) {
       warn('DataX.typeOfArray', `${key} is not a array!`, fieldValue)
     }
 
@@ -147,7 +148,7 @@ export default {
    * @returns
    */
   typeOfDefault(MiddlewareBean: any, data: any, key: string, config: any): any {
-    if (Checker.isVoid(MiddlewareBean)) {
+    if (TypeChecker.isVoid(MiddlewareBean)) {
       return data
     }
 

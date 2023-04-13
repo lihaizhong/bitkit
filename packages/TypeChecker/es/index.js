@@ -7,10 +7,11 @@ export var hasOwn = function (target, property) {
 };
 /**
  * 判断是否是某种具体类型
+ * * strong
  * @param value
  * @param type
  */
-export function isSameClass(value, type) {
+export function checkOfStrict(value, type) {
     if (value === null || value === undefined) {
         return value === type;
     }
@@ -18,15 +19,17 @@ export function isSameClass(value, type) {
 }
 /**
  * 时间格式校验
+ * * loose
  * @param value
  */
-export function isValidDate(value) {
+export function isDate(value) {
     return ((value instanceof Date ||
         isString(value) ||
         (isNumber(value) && value > 0)) && new Date(value).toString() !== 'Invalid Date');
 }
 /**
  * 是否是Null
+ * * strong
  * @param value
  */
 export function isNull(value) {
@@ -34,6 +37,7 @@ export function isNull(value) {
 }
 /**
  * 是否是Undefined
+ * * strong
  * @param value
  */
 export function isUndefined(value) {
@@ -41,21 +45,24 @@ export function isUndefined(value) {
 }
 /**
  * 判断是否是undefined、null或者空字符串
+ * * strong
  * @param value
  */
 export function isVoid(value) {
     return isUndefined(value) || isNull(value) || value === '';
 }
 /**
- * 基本类型校验(包含null、undefined、string、number、boolean)
+ * 基本类型校验(包含null、undefined、string、number、boolean、symbol)
+ * * strong
  * @param value
  */
 export function isPrimitive(value) {
     return (value === null ||
-        ['undefined', 'string', 'number', 'boolean'].includes(typeof value));
+        ['undefined', 'string', 'number', 'boolean', 'symbol'].includes(typeof value));
 }
 /**
  * 是否是字符串
+ * * strong
  * @param value
  */
 export function isString(value) {
@@ -63,6 +70,7 @@ export function isString(value) {
 }
 /**
  * 是否是有效数字
+ * * strong
  * @param value
  */
 export function isNumber(value) {
@@ -70,6 +78,7 @@ export function isNumber(value) {
 }
 /**
  * 是否是布尔类型
+ * * strong
  * @param value
  */
 export function isBoolean(value) {
@@ -77,6 +86,7 @@ export function isBoolean(value) {
 }
 /**
  * 是否是函数
+ * * strong
  * @param value
  */
 export function isFunction(value) {
@@ -84,6 +94,7 @@ export function isFunction(value) {
 }
 /**
  * 是否是数组
+ * * strong
  * @param value
  */
 export function isArray(value) {
@@ -91,20 +102,23 @@ export function isArray(value) {
 }
 /**
  * 是否是对象
+ * * strong
  * @param value
  */
 export function isObject(value) {
-    return Object.prototype.toString.call(value) === '[object Object]';
+    return checkOfStrict(value, Object);
 }
 /**
  * 是否是正则表达式
+ * * strong
  * @param value
  */
 export function isRegExp(value) {
-    return Object.prototype.toString.call(value) === '[object RegExp]';
+    return checkOfStrict(value, RegExp);
 }
 /**
  * 是否是Error对象
+ * * loose
  * @param value
  */
 export function isError(value) {
@@ -112,23 +126,15 @@ export function isError(value) {
 }
 /**
  * 是否是原生的Promise对象
+ * * loose
  * @param value
  */
 export function isPromise(value) {
     return value instanceof Promise;
 }
 /**
- * 是否是类Promise对象
- * @param value
- */
-export function isLikePromise(value) {
-    return (isVoid(value) &&
-        (typeof value === 'object' || isFunction(value)) &&
-        isFunction(value.then) &&
-        isFunction(value["catch"]));
-}
-/**
  * 是否为真值
+ * * loose
  * @param value
  */
 export function isTruthy(value) {
@@ -136,14 +142,14 @@ export function isTruthy(value) {
 }
 /**
  * 是否为假值
+ * * loose
  * @param value
  */
 export function isFalsy(value) {
     return value === false || value === 0;
 }
 export var TypeChecker = {
-    isSameClass: isSameClass,
-    isValidDate: isValidDate,
+    isDate: isDate,
     isNull: isNull,
     isUndefined: isUndefined,
     isVoid: isVoid,
@@ -158,18 +164,23 @@ export var TypeChecker = {
     isObject: isObject,
     isRegExp: isRegExp,
     isError: isError,
-    isPromise: isPromise,
-    isLikePromise: isLikePromise
+    isPromise: isPromise
 };
 export default new Proxy(TypeChecker, {
     get: function (target, p, receiver) {
         if (p === 'not') {
-            return Object.create(target);
+            return new Proxy(TypeChecker, {
+                get: function (t, p, receiver) {
+                    return function (value) { return !Reflect.get(t, p, receiver)(value); };
+                },
+                set: function () {
+                    throw new Error('don\'t extend method!');
+                }
+            });
         }
         if (hasOwn(target, p)) {
             return Reflect.get(target, p, receiver);
         }
-        return function (value) { return !Reflect.get(target, p, receiver)(value); };
     },
     set: function (target, p, newValue, receiver) {
         if (typeof newValue !== 'function') {

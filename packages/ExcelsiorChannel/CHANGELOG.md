@@ -1,5 +1,11 @@
 # @lihzsky/excelsior-channel
 
+## 0.1.5
+
+### Patch Changes
+
+- 依赖包更新
+
 ## 0.1.4
 
 ### Patch Changes

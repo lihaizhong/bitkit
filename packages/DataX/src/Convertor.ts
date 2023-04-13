@@ -1,5 +1,6 @@
 import { ITransformBean } from "../typings"
-import Checker from "./checker"
+import TypeChecker from "./checker"
+import { checkOfStrict } from "@lihzsky/type-checker"
 import { DataX } from "./DataX"
 import { debug } from "./log"
 import { Any } from "./Types"
@@ -29,7 +30,7 @@ export class Convertor {
     placeValue: any,
     options: ITransformBean.FieldOptions
   ): any {
-    if (options.loose || Checker.isSameClass(defaultValue, type) || Checker.isNull(defaultValue)) {
+    if (options.loose || checkOfStrict(defaultValue, type) || TypeChecker.isNull(defaultValue)) {
       return defaultValue
     }
 
@@ -49,7 +50,7 @@ export class Convertor {
 
     return fieldOptionKeys.reduce(
       (fieldOptions: Partial<ITransformBean.FieldOptions>, key: string) => {
-        if (!Checker.isVoid(fieldConfig[key])) {
+        if (!TypeChecker.isVoid(fieldConfig[key])) {
           fieldOptions[key] = fieldConfig[key]
         } else {
           const globalOptionKey = OPTION_MAPPING[key]
@@ -70,16 +71,16 @@ export class Convertor {
    * @param {string} defaultField
    */
   private parseFieldValue(target: any, field: any, defaultField: string): any {
-    if (Checker.isObject(target)) {
-      if (Checker.isString(field)) {
+    if (TypeChecker.isObject(target)) {
+      if (TypeChecker.isString(field)) {
         return target[field]
       }
 
-      if (Checker.isFunction(field)) {
+      if (TypeChecker.isFunction(field)) {
         return field(target)
       }
 
-      if (Checker.isString(defaultField) && defaultField !== "") {
+      if (TypeChecker.isString(defaultField) && defaultField !== "") {
         return target[defaultField]
       }
     }

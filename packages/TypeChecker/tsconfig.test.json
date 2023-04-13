@@ -3,7 +3,9 @@
   "compilerOptions": {
     "module": "commonjs",
     "lib": ["ES6", "ES2022.Object"],
-    "declarationDir": "./lib",
-    "outDir": "./lib"
-  }
+    "rootDir": ".",
+    "outDir": "./dist",
+    "declarationDir": "./dist"
+  },
+  "exclude": []
 }

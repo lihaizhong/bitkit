@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-var checker_1 = __importDefault(require("./checker"));
+var type_checker_1 = require("@lihzsky/type-checker");
 var Convertor_1 = require("./Convertor");
+var checker_1 = __importDefault(require("./checker"));
 var log_1 = require("./log");
 exports["default"] = {
     /**
@@ -15,10 +16,10 @@ exports["default"] = {
      * @returns
      */
     typeOfString: function (fieldValue, defaultValue, key) {
-        if (checker_1["default"].isSameClass(fieldValue, String)) {
+        if ((0, type_checker_1.checkOfStrict)(fieldValue, String)) {
             return fieldValue;
         }
-        if (checker_1["default"].isSameClass(fieldValue, Number)) {
+        if ((0, type_checker_1.checkOfStrict)(fieldValue, Number)) {
             return fieldValue.toString();
         }
         if (!checker_1["default"].isVoid(fieldValue)) {
@@ -34,10 +35,10 @@ exports["default"] = {
      * @returns
      */
     typeOfNumber: function (fieldValue, defaultValue, key) {
-        if (checker_1["default"].isSameClass(fieldValue, Number)) {
+        if ((0, type_checker_1.checkOfStrict)(fieldValue, Number)) {
             return fieldValue;
         }
-        if (checker_1["default"].isSameClass(fieldValue, String) &&
+        if ((0, type_checker_1.checkOfStrict)(fieldValue, String) &&
             /^\d+$/.test(fieldValue)) {
             return Number(fieldValue);
         }
@@ -54,7 +55,7 @@ exports["default"] = {
      * @returns
      */
     typeOfBoolean: function (fieldValue, defaultValue, key) {
-        if (checker_1["default"].isSameClass(fieldValue, Boolean)) {
+        if ((0, type_checker_1.checkOfStrict)(fieldValue, Boolean)) {
             return fieldValue;
         }
         if (!checker_1["default"].isVoid(fieldValue)) {
@@ -70,7 +71,7 @@ exports["default"] = {
      * @returns
      */
     typeOfObject: function (fieldValue, defaultValue, key) {
-        if (checker_1["default"].isSameClass(fieldValue, Object)) {
+        if ((0, type_checker_1.checkOfStrict)(fieldValue, Object)) {
             return fieldValue;
         }
         if (!checker_1["default"].isVoid(fieldValue)) {

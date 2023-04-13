@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.TypeChecker = exports.isFalsy = exports.isTruthy = exports.isLikePromise = exports.isPromise = exports.isError = exports.isRegExp = exports.isObject = exports.isArray = exports.isFunction = exports.isBoolean = exports.isNumber = exports.isString = exports.isPrimitive = exports.isVoid = exports.isUndefined = exports.isNull = exports.isValidDate = exports.isSameClass = exports.hasOwn = void 0;
+exports.TypeChecker = exports.isFalsy = exports.isTruthy = exports.isPromise = exports.isError = exports.isRegExp = exports.isObject = exports.isArray = exports.isFunction = exports.isBoolean = exports.isNumber = exports.isString = exports.isPrimitive = exports.isVoid = exports.isUndefined = exports.isNull = exports.isDate = exports.checkOfStrict = exports.hasOwn = void 0;
 var hasOwn = function (target, property) {
     if ('hasOwn' in Object) {
         return Object.hasOwn(target, property);
@@ -11,28 +11,31 @@ var hasOwn = function (target, property) {
 exports.hasOwn = hasOwn;
 /**
  * 判断是否是某种具体类型
+ * * strong
  * @param value
  * @param type
  */
-function isSameClass(value, type) {
+function checkOfStrict(value, type) {
     if (value === null || value === undefined) {
         return value === type;
     }
     return value.constructor.toString() === type.toString();
 }
-exports.isSameClass = isSameClass;
+exports.checkOfStrict = checkOfStrict;
 /**
  * 时间格式校验
+ * * loose
  * @param value
  */
-function isValidDate(value) {
+function isDate(value) {
     return ((value instanceof Date ||
         isString(value) ||
         (isNumber(value) && value > 0)) && new Date(value).toString() !== 'Invalid Date');
 }
-exports.isValidDate = isValidDate;
+exports.isDate = isDate;
 /**
  * 是否是Null
+ * * strong
  * @param value
  */
 function isNull(value) {
@@ -41,6 +44,7 @@ function isNull(value) {
 exports.isNull = isNull;
 /**
  * 是否是Undefined
+ * * strong
  * @param value
  */
 function isUndefined(value) {
@@ -49,6 +53,7 @@ function isUndefined(value) {
 exports.isUndefined = isUndefined;
 /**
  * 判断是否是undefined、null或者空字符串
+ * * strong
  * @param value
  */
 function isVoid(value) {
@@ -56,16 +61,18 @@ function isVoid(value) {
 }
 exports.isVoid = isVoid;
 /**
- * 基本类型校验(包含null、undefined、string、number、boolean)
+ * 基本类型校验(包含null、undefined、string、number、boolean、symbol)
+ * * strong
  * @param value
  */
 function isPrimitive(value) {
     return (value === null ||
-        ['undefined', 'string', 'number', 'boolean'].includes(typeof value));
+        ['undefined', 'string', 'number', 'boolean', 'symbol'].includes(typeof value));
 }
 exports.isPrimitive = isPrimitive;
 /**
  * 是否是字符串
+ * * strong
  * @param value
  */
 function isString(value) {
@@ -74,6 +81,7 @@ function isString(value) {
 exports.isString = isString;
 /**
  * 是否是有效数字
+ * * strong
  * @param value
  */
 function isNumber(value) {
@@ -82,6 +90,7 @@ function isNumber(value) {
 exports.isNumber = isNumber;
 /**
  * 是否是布尔类型
+ * * strong
  * @param value
  */
 function isBoolean(value) {
@@ -90,6 +99,7 @@ function isBoolean(value) {
 exports.isBoolean = isBoolean;
 /**
  * 是否是函数
+ * * strong
  * @param value
  */
 function isFunction(value) {
@@ -98,6 +108,7 @@ function isFunction(value) {
 exports.isFunction = isFunction;
 /**
  * 是否是数组
+ * * strong
  * @param value
  */
 function isArray(value) {
@@ -106,22 +117,25 @@ function isArray(value) {
 exports.isArray = isArray;
 /**
  * 是否是对象
+ * * strong
  * @param value
  */
 function isObject(value) {
-    return Object.prototype.toString.call(value) === '[object Object]';
+    return checkOfStrict(value, Object);
 }
 exports.isObject = isObject;
 /**
  * 是否是正则表达式
+ * * strong
  * @param value
  */
 function isRegExp(value) {
-    return Object.prototype.toString.call(value) === '[object RegExp]';
+    return checkOfStrict(value, RegExp);
 }
 exports.isRegExp = isRegExp;
 /**
  * 是否是Error对象
+ * * loose
  * @param value
  */
 function isError(value) {
@@ -130,6 +144,7 @@ function isError(value) {
 exports.isError = isError;
 /**
  * 是否是原生的Promise对象
+ * * loose
  * @param value
  */
 function isPromise(value) {
@@ -137,18 +152,8 @@ function isPromise(value) {
 }
 exports.isPromise = isPromise;
 /**
- * 是否是类Promise对象
- * @param value
- */
-function isLikePromise(value) {
-    return (isVoid(value) &&
-        (typeof value === 'object' || isFunction(value)) &&
-        isFunction(value.then) &&
-        isFunction(value["catch"]));
-}
-exports.isLikePromise = isLikePromise;
-/**
  * 是否为真值
+ * * loose
  * @param value
  */
 function isTruthy(value) {
@@ -157,6 +162,7 @@ function isTruthy(value) {
 exports.isTruthy = isTruthy;
 /**
  * 是否为假值
+ * * loose
  * @param value
  */
 function isFalsy(value) {
@@ -164,8 +170,7 @@ function isFalsy(value) {
 }
 exports.isFalsy = isFalsy;
 exports.TypeChecker = {
-    isSameClass: isSameClass,
-    isValidDate: isValidDate,
+    isDate: isDate,
     isNull: isNull,
     isUndefined: isUndefined,
     isVoid: isVoid,
@@ -180,18 +185,23 @@ exports.TypeChecker = {
     isObject: isObject,
     isRegExp: isRegExp,
     isError: isError,
-    isPromise: isPromise,
-    isLikePromise: isLikePromise
+    isPromise: isPromise
 };
 exports["default"] = new Proxy(exports.TypeChecker, {
     get: function (target, p, receiver) {
         if (p === 'not') {
-            return Object.create(target);
+            return new Proxy(exports.TypeChecker, {
+                get: function (t, p, receiver) {
+                    return function (value) { return !Reflect.get(t, p, receiver)(value); };
+                },
+                set: function () {
+                    throw new Error('don\'t extend method!');
+                }
+            });
         }
         if ((0, exports.hasOwn)(target, p)) {
             return Reflect.get(target, p, receiver);
         }
-        return function (value) { return !Reflect.get(target, p, receiver)(value); };
     },
     set: function (target, p, newValue, receiver) {
         if (typeof newValue !== 'function') {

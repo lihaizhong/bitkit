@@ -1,5 +1,6 @@
-import Checker from "./checker";
+import { checkOfStrict } from "@lihzsky/type-checker";
 import { Convertor } from "./Convertor";
+import TypeChecker from "./checker";
 import { warn } from "./log";
 export default {
     /**
@@ -10,13 +11,13 @@ export default {
      * @returns
      */
     typeOfString: function (fieldValue, defaultValue, key) {
-        if (Checker.isSameClass(fieldValue, String)) {
+        if (checkOfStrict(fieldValue, String)) {
             return fieldValue;
         }
-        if (Checker.isSameClass(fieldValue, Number)) {
+        if (checkOfStrict(fieldValue, Number)) {
             return fieldValue.toString();
         }
-        if (!Checker.isVoid(fieldValue)) {
+        if (!TypeChecker.isVoid(fieldValue)) {
             warn('DataX.typeOfString', "".concat(key, " is not a string or number!"), fieldValue);
         }
         return defaultValue;
@@ -29,14 +30,14 @@ export default {
      * @returns
      */
     typeOfNumber: function (fieldValue, defaultValue, key) {
-        if (Checker.isSameClass(fieldValue, Number)) {
+        if (checkOfStrict(fieldValue, Number)) {
             return fieldValue;
         }
-        if (Checker.isSameClass(fieldValue, String) &&
+        if (checkOfStrict(fieldValue, String) &&
             /^\d+$/.test(fieldValue)) {
             return Number(fieldValue);
         }
-        if (!Checker.isVoid(fieldValue)) {
+        if (!TypeChecker.isVoid(fieldValue)) {
             warn('DataX.typeOfNumber', "".concat(key, " is not a number or numeric string"), fieldValue);
         }
         return defaultValue;
@@ -49,10 +50,10 @@ export default {
      * @returns
      */
     typeOfBoolean: function (fieldValue, defaultValue, key) {
-        if (Checker.isSameClass(fieldValue, Boolean)) {
+        if (checkOfStrict(fieldValue, Boolean)) {
             return fieldValue;
         }
-        if (!Checker.isVoid(fieldValue)) {
+        if (!TypeChecker.isVoid(fieldValue)) {
             warn('DataX.typeOfBoolean', "".concat(key, " is not a boolean"), fieldValue);
         }
         return defaultValue;
@@ -65,10 +66,10 @@ export default {
      * @returns
      */
     typeOfObject: function (fieldValue, defaultValue, key) {
-        if (Checker.isSameClass(fieldValue, Object)) {
+        if (checkOfStrict(fieldValue, Object)) {
             return fieldValue;
         }
-        if (!Checker.isVoid(fieldValue)) {
+        if (!TypeChecker.isVoid(fieldValue)) {
             console.warn('DataX.typeOfObject', "".concat(key, " is not a plain object"), fieldValue);
         }
         return defaultValue;
@@ -83,9 +84,9 @@ export default {
      * @returns
      */
     typeOfArray: function (fieldValue, defaultValue, key, fieldConfig, config, parser) {
-        if (Checker.isArray(fieldValue)) {
+        if (TypeChecker.isArray(fieldValue)) {
             var convert = fieldConfig.convert;
-            if (Checker.isFunction(convert)) {
+            if (TypeChecker.isFunction(convert)) {
                 return convert(Convertor, key, fieldConfig, config);
             }
             return fieldValue.map(function (value, index) {
@@ -93,7 +94,7 @@ export default {
                 return convertor.convert(fieldConfig, value, parser);
             });
         }
-        if (!Checker.isVoid(fieldValue)) {
+        if (!TypeChecker.isVoid(fieldValue)) {
             warn('DataX.typeOfArray', "".concat(key, " is not a array!"), fieldValue);
         }
         return defaultValue;
@@ -115,7 +116,7 @@ export default {
      * @returns
      */
     typeOfDefault: function (MiddlewareBean, data, key, config) {
-        if (Checker.isVoid(MiddlewareBean)) {
+        if (TypeChecker.isVoid(MiddlewareBean)) {
             return data;
         }
         try {

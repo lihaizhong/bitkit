@@ -1,5 +1,5 @@
 export const hasOwn = (target: any, property: string | symbol) => {
-  if('hasOwn' in Object) {
+  if ('hasOwn' in Object) {
     return Object.hasOwn(target, property);
   }
 
@@ -10,11 +10,12 @@ export const hasOwn = (target: any, property: string | symbol) => {
 
 /**
  * 判断是否是某种具体类型
+ * * strong
  * @param value
  * @param type
  */
-export function isSameClass(value: any, type: any): boolean {
-  if(value === null || value === undefined) {
+export function checkOfStrict(value: any, type: any): boolean {
+  if (value === null || value === undefined) {
     return value === type;
   }
 
@@ -23,9 +24,10 @@ export function isSameClass(value: any, type: any): boolean {
 
 /**
  * 时间格式校验
+ * * loose
  * @param value
  */
-export function isValidDate(value: any): boolean {
+export function isDate(value: any): boolean {
   return (
     (
       value instanceof Date ||
@@ -37,6 +39,7 @@ export function isValidDate(value: any): boolean {
 
 /**
  * 是否是Null
+ * * strong
  * @param value
  */
 export function isNull(value: any): boolean {
@@ -45,6 +48,7 @@ export function isNull(value: any): boolean {
 
 /**
  * 是否是Undefined
+ * * strong
  * @param value
  */
 export function isUndefined(value: any): boolean {
@@ -53,6 +57,7 @@ export function isUndefined(value: any): boolean {
 
 /**
  * 判断是否是undefined、null或者空字符串
+ * * strong
  * @param value
  */
 export function isVoid(value: any): boolean {
@@ -60,18 +65,20 @@ export function isVoid(value: any): boolean {
 }
 
 /**
- * 基本类型校验(包含null、undefined、string、number、boolean)
+ * 基本类型校验(包含null、undefined、string、number、boolean、symbol)
+ * * strong
  * @param value
  */
 export function isPrimitive(value: any): boolean {
   return (
     value === null ||
-    ['undefined', 'string', 'number', 'boolean'].includes(typeof value)
+    ['undefined', 'string', 'number', 'boolean', 'symbol'].includes(typeof value)
   );
 }
 
 /**
  * 是否是字符串
+ * * strong
  * @param value
  */
 export function isString(value: any): boolean {
@@ -80,6 +87,7 @@ export function isString(value: any): boolean {
 
 /**
  * 是否是有效数字
+ * * strong
  * @param value
  */
 export function isNumber(value: any): boolean {
@@ -88,6 +96,7 @@ export function isNumber(value: any): boolean {
 
 /**
  * 是否是布尔类型
+ * * strong
  * @param value
  */
 export function isBoolean(value: any): boolean {
@@ -96,6 +105,7 @@ export function isBoolean(value: any): boolean {
 
 /**
  * 是否是函数
+ * * strong
  * @param value
  */
 export function isFunction(value: any): boolean {
@@ -104,6 +114,7 @@ export function isFunction(value: any): boolean {
 
 /**
  * 是否是数组
+ * * strong
  * @param value
  */
 export function isArray(value: any): boolean {
@@ -112,22 +123,25 @@ export function isArray(value: any): boolean {
 
 /**
  * 是否是对象
+ * * strong
  * @param value
  */
 export function isObject(value: any): boolean {
-  return Object.prototype.toString.call(value) === '[object Object]';
+  return checkOfStrict(value, Object);
 }
 
 /**
  * 是否是正则表达式
+ * * strong
  * @param value
  */
 export function isRegExp(value: any): boolean {
-  return Object.prototype.toString.call(value) === '[object RegExp]';
+  return checkOfStrict(value, RegExp);
 }
 
 /**
  * 是否是Error对象
+ * * loose
  * @param value
  */
 export function isError(value: any): boolean {
@@ -136,6 +150,7 @@ export function isError(value: any): boolean {
 
 /**
  * 是否是原生的Promise对象
+ * * loose
  * @param value
  */
 export function isPromise(value: any): boolean {
@@ -143,20 +158,8 @@ export function isPromise(value: any): boolean {
 }
 
 /**
- * 是否是类Promise对象
- * @param value
- */
-export function isLikePromise(value: any): boolean {
-  return (
-    isVoid(value) &&
-    (typeof value === 'object' || isFunction(value)) &&
-    isFunction(value.then) &&
-    isFunction(value.catch)
-  );
-}
-
-/**
  * 是否为真值
+ * * loose
  * @param value
  */
 export function isTruthy(value: any): boolean {
@@ -165,6 +168,7 @@ export function isTruthy(value: any): boolean {
 
 /**
  * 是否为假值
+ * * loose
  * @param value
  */
 export function isFalsy(value: any): boolean {
@@ -172,67 +176,107 @@ export function isFalsy(value: any): boolean {
 }
 
 export const TypeChecker = {
-    isSameClass,
+  isDate,
 
-    isValidDate,
+  isNull,
 
-    isNull,
+  isUndefined,
 
-    isUndefined,
+  isVoid,
 
-    isVoid,
+  isPrimitive,
 
-    isPrimitive,
+  isString,
 
-    isString,
+  isNumber,
 
-    isNumber,
+  isBoolean,
 
-    isBoolean,
+  isTruthy,
 
-    isTruthy,
+  isFalsy,
 
-    isFalsy,
+  isFunction,
 
-    isFunction,
+  isArray,
 
-    isArray,
+  isObject,
 
-    isObject,
+  isRegExp,
 
-    isRegExp,
+  isError,
 
-    isError,
+  isPromise
+};
 
-    isPromise,
+export type TypeCheckerFn = (value: any) => boolean
 
-    isLikePromise
-  };
+export interface TypeCheckerIntr {
+  isDate: TypeCheckerFn;
 
-  export default new Proxy(TypeChecker, {
-    get(target: any, p: string | symbol, receiver: any): any {
-      if (p === 'not') {
-        return Object.create(target);
-      }
+  isNull: TypeCheckerFn;
 
-      if (hasOwn(target, p)) {
-        return Reflect.get(target, p, receiver);
-      }
+  isUndefined: TypeCheckerFn;
 
-      return (value: any) => !Reflect.get(target, p, receiver)(value);
-    },
+  isVoid: TypeCheckerFn;
 
-    set(target: any, p: string | symbol, newValue: any, receiver: any): boolean {
-      if (typeof newValue !== 'function') {
-        throw new Error(`${p.toString()} must be a function!`);
-      }
+  isPrimitive: TypeCheckerFn;
 
-      if (newValue.length !== 1) {
-        throw new Error(`${p.toString()} can only be one parameter!`);
-      }
+  isString: TypeCheckerFn;
 
-      Reflect.set(target, p, newValue, receiver);
+  isNumber: TypeCheckerFn;
 
-      return true;
+  isBoolean: TypeCheckerFn;
+
+  isTruthy: TypeCheckerFn;
+
+  isFalsy: TypeCheckerFn;
+
+  isFunction: TypeCheckerFn;
+
+  isArray: TypeCheckerFn;
+
+  isObject: TypeCheckerFn;
+
+  isRegExp: TypeCheckerFn;
+
+  isError: TypeCheckerFn;
+
+  isPromise: TypeCheckerFn;
+
+  [key: string]: TypeCheckerFn;
+}
+
+export default new Proxy<TypeCheckerIntr>(TypeChecker, {
+  get(target: TypeCheckerIntr, p: string | symbol, receiver: any): any {
+    if (p === 'not') {
+      return new Proxy(TypeChecker, {
+        get(t: TypeCheckerIntr, p: string | symbol, receiver: any): any {
+          return (value: any) => !Reflect.get(t, p, receiver)(value)
+        },
+
+        set(): never {
+          throw new Error('don\'t extend method!')
+        }
+      });
     }
-  })
+
+    if (hasOwn(target, p)) {
+      return Reflect.get(target, p, receiver);
+    }
+  },
+
+  set(target: TypeCheckerIntr, p: string | symbol, newValue: any, receiver: any): boolean {
+    if (typeof newValue !== 'function') {
+      throw new Error(`${p.toString()} must be a function!`);
+    }
+
+    if (newValue.length !== 1) {
+      throw new Error(`${p.toString()} can only be one parameter!`);
+    }
+
+    Reflect.set(target, p, newValue, receiver);
+
+    return true;
+  }
+}) as TypeCheckerIntr & { not: TypeCheckerIntr }

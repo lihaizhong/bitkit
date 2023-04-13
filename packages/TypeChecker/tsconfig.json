@@ -11,5 +11,6 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "lib": ["ESNext"]
-  }
+  },
+  "exclude": ["__tests__/*", "jest.config.ts", "es/*", "lib/*"]
 }

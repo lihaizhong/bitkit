@@ -9,7 +9,8 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import Checker from "./checker";
+import TypeChecker from "./checker";
+import { checkOfStrict } from "@lihzsky/type-checker";
 import { DataX } from "./DataX";
 import { debug } from "./log";
 import { Any } from "./Types";
@@ -28,7 +29,7 @@ var Convertor = /** @class */ (function () {
      * @returns {any}
      */
     Convertor.prototype.getDefaultValue = function (type, defaultValue, placeValue, options) {
-        if (options.loose || Checker.isSameClass(defaultValue, type) || Checker.isNull(defaultValue)) {
+        if (options.loose || checkOfStrict(defaultValue, type) || TypeChecker.isNull(defaultValue)) {
             return defaultValue;
         }
         return placeValue;
@@ -45,7 +46,7 @@ var Convertor = /** @class */ (function () {
             loose: 'looseFields'
         };
         return fieldOptionKeys.reduce(function (fieldOptions, key) {
-            if (!Checker.isVoid(fieldConfig[key])) {
+            if (!TypeChecker.isVoid(fieldConfig[key])) {
                 fieldOptions[key] = fieldConfig[key];
             }
             else {
@@ -62,14 +63,14 @@ var Convertor = /** @class */ (function () {
      * @param {string} defaultField
      */
     Convertor.prototype.parseFieldValue = function (target, field, defaultField) {
-        if (Checker.isObject(target)) {
-            if (Checker.isString(field)) {
+        if (TypeChecker.isObject(target)) {
+            if (TypeChecker.isString(field)) {
                 return target[field];
             }
-            if (Checker.isFunction(field)) {
+            if (TypeChecker.isFunction(field)) {
                 return field(target);
             }
-            if (Checker.isString(defaultField) && defaultField !== "") {
+            if (TypeChecker.isString(defaultField) && defaultField !== "") {
                 return target[defaultField];
             }
         }
