@@ -1,11 +1,10 @@
 # toolkit
 
-这是我的个人工具包的仓库。
+工具包仓库
 
 ## 目录结构
 
 ``` text
-|-- Algorithms 算法学习
 |-- kits 个人未整理工具
 |-- NativeImpls 原生实现
 |-- packages 一部分npm仓库中的包
@@ -16,8 +15,9 @@
 - `pnpm add <npm_package> -w` 全局安装依赖包
 - `pnpm add <npm_package> -r` 所有本地包安装依赖包
 - `pnpm add <npm_package> -r --filter <local_package>` 指定本地包安装依赖包
+- `pnpm run --stream -r [command]` 执行所有本地包
 
-相比于lerna，pnpm的操作更加简便高效。由于pnpm软链接方式的优势，pnpm在体验上更符合平时的使用，且不会增加额外的磁盘空间负担。
+相比lerna，pnpm的操作更加简便高效。pnpm软链接的方式，不会增加额外的磁盘空间负担；简单的操作命令，使它在体验上更符合我们的使用习惯。
 
 ## 发布流程
 
@@ -40,7 +40,7 @@ pnpm changeset pre exit
 | ----- | ---------------------------------------------------------------------------------------- |
 | alpha | 内部测试版，一般不向外部发布，会有很多Bug，一般只有测试人员使用                          |
 | beta  | 测试版，这个阶段的版本会一直加入新的功能。在Alpha版之后推出                              |
-| rc    | Release　Candidate) 系统平台上就是发行候选版本。RC版不会再加入新的功能了，主要着重于除错 |
+| rc    | Release　Candidate系统平台上就是发行候选版本。RC版不会再加入新的功能了，主要着重于除错 |
 
 ### 发布npm包
 
