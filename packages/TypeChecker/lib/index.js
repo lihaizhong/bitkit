@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.TypeChecker = exports.isFalsy = exports.isTruthy = exports.isPromise = exports.isError = exports.isRegExp = exports.isObject = exports.isArray = exports.isFunction = exports.isBoolean = exports.isNumber = exports.isString = exports.isPrimitive = exports.isVoid = exports.isUndefined = exports.isNull = exports.isDate = exports.checkOfStrict = exports.hasOwn = void 0;
 var hasOwn = function (target, property) {
     if ('hasOwn' in Object) {
@@ -187,7 +187,7 @@ exports.TypeChecker = {
     isError: isError,
     isPromise: isPromise
 };
-exports["default"] = new Proxy(exports.TypeChecker, {
+exports.default = new Proxy(exports.TypeChecker, {
     get: function (target, p, receiver) {
         if (p === 'not') {
             return new Proxy(exports.TypeChecker, {

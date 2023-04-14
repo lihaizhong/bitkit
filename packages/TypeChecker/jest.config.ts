@@ -181,7 +181,7 @@ export default {
     "^.+\\.(ts|tsx)$": [
       "ts-jest",
       {
-        "tsconfig": "tsconfig.test.json"
+        "tsconfig": "tsconfig.json"
       }
     ],
   },

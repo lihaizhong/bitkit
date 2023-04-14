@@ -8,7 +8,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.throwError = exports.debug = exports.error = exports.warn = exports.info = void 0;
 var DataX_1 = require("./DataX");
 var info = function (namespace, message) {

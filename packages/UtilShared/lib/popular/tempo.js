@@ -111,7 +111,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
             return 0;
         }
     }
-    exports.Tempo = Tempo;
     Tempo.ST = {
         ONE_DAY: 86400000,
         ONE_HOUR: 3600000,
@@ -119,5 +118,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
         ONE_SECOND: 1000
     };
     Tempo.remainTime = 0;
+    exports.Tempo = Tempo;
     exports.default = new Tempo();
 });

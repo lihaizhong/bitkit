@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.YouNeedSuggestion = void 0;
 var levenshtein_distance_1 = require("./compare/levenshtein-distance");
 var YouNeedSuggestion = /** @class */ (function () {

@@ -44,7 +44,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.CorePoint = void 0;
 var message_1 = require("./constants/message");
 var signals_1 = require("./constants/signals");

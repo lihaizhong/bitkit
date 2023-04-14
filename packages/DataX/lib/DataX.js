@@ -13,7 +13,7 @@ var __assign = (this && this.__assign) || function () {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.DataX = void 0;
 var checker_1 = __importDefault(require("./checker"));
 var Convertor_1 = require("./Convertor");
@@ -32,11 +32,11 @@ var Types_1 = require("./Types");
  *  * field {string|function} 选填，表示后台对应的字段，如果不指定，就是当前的key。field可以是一个方法，参数为data，主要用于自定义数据
  *  // reverse {function} 选填，表示前端对应字段由多个字段组成时，如何进行拆分。参数为data，主要用于自定义数据
  */
-var DataX = /** @class */ (function () {
+var DataX = exports.DataX = /** @class */ (function () {
     function DataX(config) {
         this.__bean_target__ = null;
         this.__bean_config__ = {};
-        if (checker_1["default"].isObject(config)) {
+        if (checker_1.default.isObject(config)) {
             Object.assign(this.__bean_config__, DataX.globals.config, config);
         }
     }
@@ -45,7 +45,7 @@ var DataX = /** @class */ (function () {
         if (fieldConfig instanceof DataX) {
             return convertor.convert({ type: fieldConfig }, data, DataX.globals.config.parser);
         }
-        if (checker_1["default"].isObject(fieldConfig) && fieldConfig.type instanceof DataX) {
+        if (checker_1.default.isObject(fieldConfig) && fieldConfig.type instanceof DataX) {
             return convertor.convert(fieldConfig, data, DataX.globals.config.parser);
         }
         throw new Error('【DataX.transformArray】second param must be a type of DataX!');
@@ -57,7 +57,7 @@ var DataX = /** @class */ (function () {
         var target = {};
         // 获取所有的用户定义字段
         var keys = Object.keys(this).filter(function (key) {
-            return checker_1["default"].isReservedProperty(key);
+            return checker_1.default.isReservedProperty(key);
         });
         // 获取数据包含的字段
         var rawKeys = Object.keys(rawData);
@@ -78,7 +78,7 @@ var DataX = /** @class */ (function () {
                 // 调用核心的转换函数
                 var value = convertor.convert(config, rawData, DataX.globals.config.parser);
                 // 判断是否丢弃undefined的数据
-                if (this.__bean_config__.abandonUndefinedValue && checker_1["default"].isUndefined(value)) {
+                if (this.__bean_config__.abandonUndefinedValue && checker_1.default.isUndefined(value)) {
                     continue;
                 }
                 target[key] = value;
@@ -95,7 +95,7 @@ var DataX = /** @class */ (function () {
                 var convertor = new Convertor_1.Convertor(key, this.__bean_config__);
                 var value = convertor.convert({ type: Types_1.Any }, rawData, DataX.globals.config.parser);
                 // 判断是否丢弃undefined的数据
-                if (this.__bean_config__.abandonUndefinedValue && checker_1["default"].isUndefined(value)) {
+                if (this.__bean_config__.abandonUndefinedValue && checker_1.default.isUndefined(value)) {
                     continue;
                 }
                 target[key] = value;
@@ -130,5 +130,4 @@ var DataX = /** @class */ (function () {
     };
     return DataX;
 }());
-exports.DataX = DataX;
 //# sourceMappingURL=DataX.js.map

@@ -1,4 +1,4 @@
-export default class AsyncReady {
+class AsyncReady {
     static callReadyFunc(callback, ...args) {
         if (typeof callback === "function") {
             return callback(...args);
@@ -43,3 +43,4 @@ AsyncReady.ReadyStatus = {
     pending: 'PENDING',
     completed: 'COMPLETED'
 };
+export default AsyncReady;

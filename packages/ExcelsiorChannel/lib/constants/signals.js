@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.POINT_SIGNALS = exports.POINT_SIGNAL_REG = void 0;
 exports.POINT_SIGNAL_REG = /^sign:\d{3}$/;
 exports.POINT_SIGNALS = {

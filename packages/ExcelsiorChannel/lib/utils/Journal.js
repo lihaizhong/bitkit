@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Journal = void 0;
 var Journal = /** @class */ (function () {
     function Journal(inst) {

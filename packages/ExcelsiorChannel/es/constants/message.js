@@ -27,7 +27,7 @@ export var MessageStatus = {
         code: -32603,
         type: 'server error',
         message: 'server error. internal json-rpc error.'
-    }
+    },
 };
 export var MessageTypeEnum = {
     REQUEST: 1,

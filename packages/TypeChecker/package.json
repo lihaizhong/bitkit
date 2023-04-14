@@ -15,7 +15,7 @@
     "es"
   ],
   "scripts": {
-    "build": "rm -rf ./lib ./types ./es && tsc --build tsconfig.json && tsc --build tsconfig.lib.json",
+    "build": "rm -rf ./lib ./es && tsc --build tsconfig.build.json  && tsc --build tsconfig.lib.json",
     "test": "jest"
   },
   "publishConfig": {

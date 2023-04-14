@@ -2,12 +2,12 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var type_checker_1 = require("@lihzsky/type-checker");
 var Convertor_1 = require("./Convertor");
 var checker_1 = __importDefault(require("./checker"));
 var log_1 = require("./log");
-exports["default"] = {
+exports.default = {
     /**
      * 解析成字符串
      * @param fieldValue
@@ -22,7 +22,7 @@ exports["default"] = {
         if ((0, type_checker_1.checkOfStrict)(fieldValue, Number)) {
             return fieldValue.toString();
         }
-        if (!checker_1["default"].isVoid(fieldValue)) {
+        if (!checker_1.default.isVoid(fieldValue)) {
             (0, log_1.warn)('DataX.typeOfString', "".concat(key, " is not a string or number!"), fieldValue);
         }
         return defaultValue;
@@ -42,7 +42,7 @@ exports["default"] = {
             /^\d+$/.test(fieldValue)) {
             return Number(fieldValue);
         }
-        if (!checker_1["default"].isVoid(fieldValue)) {
+        if (!checker_1.default.isVoid(fieldValue)) {
             (0, log_1.warn)('DataX.typeOfNumber', "".concat(key, " is not a number or numeric string"), fieldValue);
         }
         return defaultValue;
@@ -58,7 +58,7 @@ exports["default"] = {
         if ((0, type_checker_1.checkOfStrict)(fieldValue, Boolean)) {
             return fieldValue;
         }
-        if (!checker_1["default"].isVoid(fieldValue)) {
+        if (!checker_1.default.isVoid(fieldValue)) {
             (0, log_1.warn)('DataX.typeOfBoolean', "".concat(key, " is not a boolean"), fieldValue);
         }
         return defaultValue;
@@ -74,7 +74,7 @@ exports["default"] = {
         if ((0, type_checker_1.checkOfStrict)(fieldValue, Object)) {
             return fieldValue;
         }
-        if (!checker_1["default"].isVoid(fieldValue)) {
+        if (!checker_1.default.isVoid(fieldValue)) {
             console.warn('DataX.typeOfObject', "".concat(key, " is not a plain object"), fieldValue);
         }
         return defaultValue;
@@ -89,9 +89,9 @@ exports["default"] = {
      * @returns
      */
     typeOfArray: function (fieldValue, defaultValue, key, fieldConfig, config, parser) {
-        if (checker_1["default"].isArray(fieldValue)) {
+        if (checker_1.default.isArray(fieldValue)) {
             var convert = fieldConfig.convert;
-            if (checker_1["default"].isFunction(convert)) {
+            if (checker_1.default.isFunction(convert)) {
                 return convert(Convertor_1.Convertor, key, fieldConfig, config);
             }
             return fieldValue.map(function (value, index) {
@@ -99,7 +99,7 @@ exports["default"] = {
                 return convertor.convert(fieldConfig, value, parser);
             });
         }
-        if (!checker_1["default"].isVoid(fieldValue)) {
+        if (!checker_1.default.isVoid(fieldValue)) {
             (0, log_1.warn)('DataX.typeOfArray', "".concat(key, " is not a array!"), fieldValue);
         }
         return defaultValue;
@@ -121,7 +121,7 @@ exports["default"] = {
      * @returns
      */
     typeOfDefault: function (MiddlewareBean, data, key, config) {
-        if (checker_1["default"].isVoid(MiddlewareBean)) {
+        if (checker_1.default.isVoid(MiddlewareBean)) {
             return data;
         }
         try {

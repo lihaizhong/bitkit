@@ -2,15 +2,12 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "node",
+    "lib": ["ESNext"],
     "noEmitOnError": true,
-    "declaration": true,
-    "declarationDir": "./es",
-    "rootDir": "./src",
-    "outDir": "./es",
-    "baseUrl": ".",
     "sourceMap": true,
     "esModuleInterop": true,
-    "lib": ["ESNext"]
-  },
-  "exclude": ["__tests__/*", "jest.config.ts", "es/*", "lib/*"]
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "./dist",
+  }
 }

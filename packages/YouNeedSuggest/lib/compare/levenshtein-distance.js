@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.compare = exports.DistanceCalculator = void 0;
 var DistanceCalculator = /** @class */ (function () {
     function DistanceCalculator(options) {

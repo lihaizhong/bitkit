@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MessageTypeEnum = exports.MessageStatus = void 0;
 /**
  * -32768至-32000为保留的预定义错误代码。在该范围内的错误代码不能被明确定义，保留下列以供将来使用。
@@ -30,7 +30,7 @@ exports.MessageStatus = {
         code: -32603,
         type: 'server error',
         message: 'server error. internal json-rpc error.'
-    }
+    },
 };
 exports.MessageTypeEnum = {
     REQUEST: 1,

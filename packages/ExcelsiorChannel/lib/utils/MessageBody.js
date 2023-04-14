@@ -1,8 +1,8 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MessageBody = void 0;
 var UniqueIdentity_1 = require("./UniqueIdentity");
-var MessageBody = /** @class */ (function () {
+var MessageBody = exports.MessageBody = /** @class */ (function () {
     function MessageBody() {
         this.jsonrpc = '2.0';
     }
@@ -61,5 +61,4 @@ var MessageBody = /** @class */ (function () {
     MessageBody.type = 'json-rpc';
     return MessageBody;
 }());
-exports.MessageBody = MessageBody;
 //# sourceMappingURL=MessageBody.js.map

@@ -1,5 +1,5 @@
 import { UniqueIdentity } from "./UniqueIdentity";
-var MessageBody = /** @class */ (function () {
+export var MessageBody = /** @class */ (function () {
     function MessageBody() {
         this.jsonrpc = '2.0';
     }
@@ -58,5 +58,4 @@ var MessageBody = /** @class */ (function () {
     MessageBody.type = 'json-rpc';
     return MessageBody;
 }());
-export { MessageBody };
 //# sourceMappingURL=MessageBody.js.map

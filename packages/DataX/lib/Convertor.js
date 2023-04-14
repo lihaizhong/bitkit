@@ -13,7 +13,7 @@ var __assign = (this && this.__assign) || function () {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Convertor = void 0;
 var checker_1 = __importDefault(require("./checker"));
 var type_checker_1 = require("@lihzsky/type-checker");
@@ -35,7 +35,7 @@ var Convertor = /** @class */ (function () {
      * @returns {any}
      */
     Convertor.prototype.getDefaultValue = function (type, defaultValue, placeValue, options) {
-        if (options.loose || (0, type_checker_1.checkOfStrict)(defaultValue, type) || checker_1["default"].isNull(defaultValue)) {
+        if (options.loose || (0, type_checker_1.checkOfStrict)(defaultValue, type) || checker_1.default.isNull(defaultValue)) {
             return defaultValue;
         }
         return placeValue;
@@ -52,7 +52,7 @@ var Convertor = /** @class */ (function () {
             loose: 'looseFields'
         };
         return fieldOptionKeys.reduce(function (fieldOptions, key) {
-            if (!checker_1["default"].isVoid(fieldConfig[key])) {
+            if (!checker_1.default.isVoid(fieldConfig[key])) {
                 fieldOptions[key] = fieldConfig[key];
             }
             else {
@@ -69,14 +69,14 @@ var Convertor = /** @class */ (function () {
      * @param {string} defaultField
      */
     Convertor.prototype.parseFieldValue = function (target, field, defaultField) {
-        if (checker_1["default"].isObject(target)) {
-            if (checker_1["default"].isString(field)) {
+        if (checker_1.default.isObject(target)) {
+            if (checker_1.default.isString(field)) {
                 return target[field];
             }
-            if (checker_1["default"].isFunction(field)) {
+            if (checker_1.default.isFunction(field)) {
                 return field(target);
             }
-            if (checker_1["default"].isString(defaultField) && defaultField !== "") {
+            if (checker_1.default.isString(defaultField) && defaultField !== "") {
                 return target[defaultField];
             }
         }
@@ -94,20 +94,20 @@ var Convertor = /** @class */ (function () {
         (0, log_1.debug)('DataX.convert', this.name, fieldConfig, options, data);
         switch (type) {
             case Types_1.Any:
-                return valueParser_1["default"].typeOfAny(fieldValue);
+                return valueParser_1.default.typeOfAny(fieldValue);
             case String:
-                return valueParser_1["default"].typeOfString(fieldValue, this.getDefaultValue(type, defaultValue, "", options), this.name);
+                return valueParser_1.default.typeOfString(fieldValue, this.getDefaultValue(type, defaultValue, "", options), this.name);
             case Number:
-                return valueParser_1["default"].typeOfNumber(fieldValue, this.getDefaultValue(type, defaultValue, null, options), this.name);
+                return valueParser_1.default.typeOfNumber(fieldValue, this.getDefaultValue(type, defaultValue, null, options), this.name);
             case Boolean:
-                return valueParser_1["default"].typeOfBoolean(fieldValue, this.getDefaultValue(type, defaultValue, null, options), this.name);
+                return valueParser_1.default.typeOfBoolean(fieldValue, this.getDefaultValue(type, defaultValue, null, options), this.name);
             case Array:
-                return valueParser_1["default"].typeOfArray(fieldValue, this.getDefaultValue(type, defaultValue, [], options), this.name, __assign(__assign({}, options), { type: itemType }), this.options, CustomValueParser);
+                return valueParser_1.default.typeOfArray(fieldValue, this.getDefaultValue(type, defaultValue, [], options), this.name, __assign(__assign({}, options), { type: itemType }), this.options, CustomValueParser);
             case Object:
-                return valueParser_1["default"].typeOfObject(fieldValue, this.getDefaultValue(type, defaultValue, {}, options), this.name);
+                return valueParser_1.default.typeOfObject(fieldValue, this.getDefaultValue(type, defaultValue, {}, options), this.name);
             default:
                 if (type instanceof DataX_1.DataX) {
-                    return valueParser_1["default"].typeOfDefault(type, fieldValue, this.name, this.options);
+                    return valueParser_1.default.typeOfDefault(type, fieldValue, this.name, this.options);
                 }
                 return CustomValueParser(this.name, fieldConfig, fieldValue, options);
         }

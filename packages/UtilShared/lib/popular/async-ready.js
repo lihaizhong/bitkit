@@ -49,10 +49,10 @@
             this.callbacks = [];
         }
     }
-    exports.default = AsyncReady;
     AsyncReady.ReadyStatus = {
         initialize: 'INITIALIZE',
         pending: 'PENDING',
         completed: 'COMPLETED'
     };
+    exports.default = AsyncReady;
 });

@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MessageSink = void 0;
 var MessageSink = /** @class */ (function () {
     function MessageSink(payload) {

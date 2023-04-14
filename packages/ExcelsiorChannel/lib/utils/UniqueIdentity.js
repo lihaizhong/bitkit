@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.UniqueIdentity = void 0;
 /**
  * 生成唯一标识工具

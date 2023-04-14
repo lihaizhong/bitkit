@@ -26,7 +26,7 @@ import { Any } from "./Types";
  *  * field {string|function} 选填，表示后台对应的字段，如果不指定，就是当前的key。field可以是一个方法，参数为data，主要用于自定义数据
  *  // reverse {function} 选填，表示前端对应字段由多个字段组成时，如何进行拆分。参数为data，主要用于自定义数据
  */
-var DataX = /** @class */ (function () {
+export var DataX = /** @class */ (function () {
     function DataX(config) {
         this.__bean_target__ = null;
         this.__bean_config__ = {};
@@ -124,5 +124,4 @@ var DataX = /** @class */ (function () {
     };
     return DataX;
 }());
-export { DataX };
 //# sourceMappingURL=DataX.js.map

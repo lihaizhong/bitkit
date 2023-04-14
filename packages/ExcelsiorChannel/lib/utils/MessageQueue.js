@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MessageQueue = void 0;
 var MessageQueue = /** @class */ (function () {
     function MessageQueue() {
