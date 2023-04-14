@@ -19,4 +19,4 @@ export declare class DistanceCalculator {
     private calc;
     get(inputValue: string, comparedValue: string): number;
 }
-export declare const compare: (options?: DistanceWeightOptions) => (inputValue: string, comparedValue: string) => number;
+export declare const compareAdaptor: (options?: DistanceWeightOptions) => (inputValue: string, comparedValue: string) => number;

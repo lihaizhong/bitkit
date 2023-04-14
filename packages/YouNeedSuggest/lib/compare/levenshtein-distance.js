@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.compare = exports.DistanceCalculator = void 0;
+exports.compareAdaptor = exports.DistanceCalculator = void 0;
 var DistanceCalculator = /** @class */ (function () {
     function DistanceCalculator(options) {
         // 权重计算配置项
@@ -126,10 +126,10 @@ var DistanceCalculator = /** @class */ (function () {
     return DistanceCalculator;
 }());
 exports.DistanceCalculator = DistanceCalculator;
-var compare = function (options) {
+var compareAdaptor = function (options) {
     return function (inputValue, comparedValue) {
         return new DistanceCalculator(options).get(inputValue, comparedValue);
     };
 };
-exports.compare = compare;
+exports.compareAdaptor = compareAdaptor;
 //# sourceMappingURL=levenshtein-distance.js.map

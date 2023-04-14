@@ -123,7 +123,7 @@ var DistanceCalculator = /** @class */ (function () {
     return DistanceCalculator;
 }());
 export { DistanceCalculator };
-export var compare = function (options) {
+export var compareAdaptor = function (options) {
     return function (inputValue, comparedValue) {
         return new DistanceCalculator(options).get(inputValue, comparedValue);
     };

@@ -26,8 +26,6 @@ export function IdCardValidator(code: string): boolean {
 
   // 保证算法正确
   if(code.length === 18) {
-    code = code.toUpperCase()
-
     const codeArr: string[] = code.split('')
     const factor: ReadonlyArray<number> = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
     const parity: ReadonlyArray<string | number> = [1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2]
@@ -41,7 +39,7 @@ export function IdCardValidator(code: string): boolean {
       sum += ai * wi
     }
 
-    if(parity[sum % 11] != code[17]) {
+    if(String(parity[sum % 11]).toUpperCase() !== code[17]) {
       return false
     }
   }

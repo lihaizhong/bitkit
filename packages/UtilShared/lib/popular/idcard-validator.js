@@ -35,7 +35,6 @@
         }
         // 保证算法正确
         if (code.length === 18) {
-            code = code.toUpperCase();
             const codeArr = code.split('');
             const factor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
             const parity = [1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2];
@@ -47,7 +46,7 @@
                 wi = factor[i];
                 sum += ai * wi;
             }
-            if (parity[sum % 11] != code[17]) {
+            if (String(parity[sum % 11]).toUpperCase() !== code[17]) {
                 return false;
             }
         }

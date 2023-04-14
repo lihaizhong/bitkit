@@ -1,4 +1,4 @@
-import { compare } from './compare/levenshtein-distance';
+import { compareAdaptor } from './compare/levenshtein-distance';
 var YouNeedSuggestion = /** @class */ (function () {
     function YouNeedSuggestion(dataSource, options) {
         this.options = {
@@ -11,7 +11,7 @@ var YouNeedSuggestion = /** @class */ (function () {
             // 最小相似度
             minSimilarity: 0,
             // 计算算法
-            compare: compare()
+            compare: compareAdaptor()
         };
         this.dataSource = dataSource;
         this.options = Object.assign(this.options, options);
