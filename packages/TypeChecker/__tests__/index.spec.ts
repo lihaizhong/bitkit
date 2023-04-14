@@ -175,14 +175,16 @@ describe('TypeChecker对象测试', () =>{
   })
 })
 
-describe('TypeChecker代理对象测试', () => {
+describe('TypeChecker代理对象扩展测试', () => {
   test('extension test', () => {
     expect(() => (ProxyChecker.isNotFunctionTest = {} as TypeCheckerFn)).toThrowError()
     expect(() => (ProxyChecker.isParameterErrorTest = (() => {}) as unknown as TypeCheckerFn)).toThrowError()
+
     expect(ProxyChecker.isSuccessTest = (value: any) => !!value).toBeTruthy()
+    expect(ProxyChecker.isSuccessTest('string')).toBe(true)
   })
 
-  test('invoke test', () => {
+  test('TypeChecker代理对象方法测试', () => {
     expect(ProxyChecker.isArray).toBe(isArray)
     expect(ProxyChecker.isBoolean).toBe(isBoolean)
     expect(ProxyChecker.isDate).toBe(isDate)
@@ -201,39 +203,54 @@ describe('TypeChecker代理对象测试', () => {
     expect(ProxyChecker.isVoid).toBe(isVoid)
   })
 
-  test('invoke not test', () => {
-    expect(() => (ProxyChecker.not.isSuccessTest = (value: any) => !!value)).toThrowError()
+  test('TypeChecker代理对象反转方法测试', () => {
+    expect(() => (ProxyChecker.not.isFailTest = (value: any) => !!value)).toThrowError()
 
     expect(ProxyChecker.not.isArray([])).toBe(false)
     expect(ProxyChecker.not.isArray({})).toBe(true)
+
     expect(ProxyChecker.not.isBoolean(true)).toBe(false)
     expect(ProxyChecker.not.isBoolean('string')).toBe(true)
+
     expect(ProxyChecker.not.isDate('2023-04-13T17:01:46')).toBe(false)
     expect(ProxyChecker.not.isDate('2023/04/13T17:01:46')).toBe(true)
+
     expect(ProxyChecker.not.isError(new Error('error test'))).toBe(false)
     expect(ProxyChecker.not.isError('string')).toBe(true)
+
     expect(ProxyChecker.not.isFalsy(false)).toBe(false)
     expect(ProxyChecker.not.isFalsy(true)).toBe(true)
+
     expect(ProxyChecker.not.isFunction(() => {})).toBe(false)
     expect(ProxyChecker.not.isFunction('string')).toBe(true)
+
     expect(ProxyChecker.not.isNull(null)).toBe(false)
     expect(ProxyChecker.not.isNull(undefined)).toBe(true)
+
     expect(ProxyChecker.not.isNumber(123)).toBe(false)
     expect(ProxyChecker.not.isNumber('string')).toBe(true)
+
     expect(ProxyChecker.not.isObject({})).toBe(false)
     expect(ProxyChecker.not.isObject([])).toBe(true)
+
     expect(ProxyChecker.not.isPrimitive('string')).toBe(false)
     expect(ProxyChecker.not.isPrimitive({})).toBe(true)
+
     expect(ProxyChecker.not.isPromise(Promise.resolve())).toBe(false)
     expect(ProxyChecker.not.isPromise({})).toBe(true)
+
     expect(ProxyChecker.not.isRegExp(/^test\d+$/)).toBe(false)
     expect(ProxyChecker.not.isRegExp({})).toBe(true)
+
     expect(ProxyChecker.not.isString('string')).toBe(false)
     expect(ProxyChecker.not.isString(123)).toBe(true)
+
     expect(ProxyChecker.not.isTruthy(true)).toBe(false)
     expect(ProxyChecker.not.isTruthy(false)).toBe(true)
+
     expect(ProxyChecker.not.isUndefined(undefined)).toBe(false)
     expect(ProxyChecker.not.isUndefined(null)).toBe(true)
+
     expect(ProxyChecker.not.isVoid(null)).toBe(false)
     expect(ProxyChecker.not.isVoid({})).toBe(true)
   })
