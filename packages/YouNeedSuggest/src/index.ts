@@ -1,4 +1,4 @@
-import { compare } from './compare/levenshtein-distance'
+import { compareAdaptor } from './compare/levenshtein-distance'
 
 export interface YouNeedSuggestionOptions {
   keyNameList: string | string[]
@@ -26,7 +26,7 @@ export class YouNeedSuggestion<T> {
     // 最小相似度
     minSimilarity: 0,
     // 计算算法
-    compare: compare()
+    compare: compareAdaptor()
   }
 
   constructor(dataSource: T[], options: Partial<YouNeedSuggestionOptions>) {
