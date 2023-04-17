@@ -6,6 +6,10 @@
 - 支持与本地函数一致的调用方式。
 - 支持控制台打印请求过程。
 
+## Browser Requirement
+
+![](./public/20230414203034.jpg)
+
 ## Get Start
 
 ### MAIN WINDOW
