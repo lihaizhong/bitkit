@@ -16,8 +16,7 @@
     "es"
   ],
   "scripts": {
-    "build": "rm -rf ./lib ./types ./es && tsc --build tsconfig.json && tsc --build tsconfig.lib.json",
-    "test": "jest"
+    "build": "rm -rf ./lib ./types ./es && tsc --build tsconfig.es.json && tsc --build tsconfig.lib.json"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -25,5 +24,10 @@
   },
   "bugs": {
     "url": "https://github.com/lihaizhong/bitkit/issues"
+  },
+  "devDependencies": {
+    "jest-environment-puppeteer": "^8.0.6",
+    "jest-puppeteer": "^8.0.6",
+    "puppeteer": "^19.9.1"
   }
 }

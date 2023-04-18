@@ -1,11 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "UMD",
     "moduleResolution": "node",
-    "lib": ["ES5", "ES2022.Object"],
-    "baseUrl": ".",
-    "declarationDir": "./lib",
+    "lib": ["ES5"],
     "outDir": "./lib"
   }
 }

@@ -14,7 +14,9 @@ describe('基础功能测试', () => {
   test('hasOwn', () => {
     expect(hasOwn(obj, 'str')).toBe(true)
     expect(hasOwn(obj, 'str1')).toBe(false)
+  })
 
+  test('[legacy] hasOwn', () => {
     // 模拟低版本javascript
     // rome-ignore lint/performance/noDelete: <explanation>
     delete Object.hasOwn

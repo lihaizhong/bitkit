@@ -4,10 +4,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "lib": ["ES6", "ES2022.Object"],
-    "declaration": true,
     "rootDir": "./src",
-    "outDir": "./lib",
-    "declarationDir": "./lib"
+    "outDir": "./lib"
   },
   "exclude": ["__tests__/*", "jest.config.ts", "es/*", "lib/*"]
 }
