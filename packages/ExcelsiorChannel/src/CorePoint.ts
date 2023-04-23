@@ -27,21 +27,21 @@ export class CorePoint {
    * @param endpoint
    * @returns
    */
-  static wrap(endpoint: CorePoint): any {
+  static wrap<T extends object>(endpoint: CorePoint): T {
     return new Proxy(endpoint, {
       get(target: CorePoint, p: string | symbol): any {
-        return (...params: any[]) => Reflect.get(target, 'invoke').call(target, String(p), ...params)
+        return (...params: any[]) => Reflect.get(target, 'invoke').call(target, p, ...params)
       },
 
       set(target: CorePoint, p: string | symbol, newValue: any): boolean {
         if (typeof newValue !== 'function') {
-          throw new Error(`property ${String(p)} must be a function!`)
+          throw new Error(`property ${p.toString()} must be a function!`)
         }
 
-        Reflect.get(target, 'declare').call(target, String(p), newValue)
+        Reflect.get(target, 'declare').call(target, p, newValue)
         return true
       }
-    })
+    }) as unknown as T
   }
 
   /**
