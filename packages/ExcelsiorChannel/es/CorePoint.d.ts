@@ -17,7 +17,7 @@ export declare class CorePoint {
      * @param endpoint
      * @returns
      */
-    static wrap(endpoint: CorePoint): any;
+    static wrap<T extends object>(endpoint: CorePoint): T;
     /**
      * 检查唯一标识是否合法
      * @param id

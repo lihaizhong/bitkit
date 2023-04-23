@@ -73,14 +73,14 @@ var CorePoint = /** @class */ (function () {
                     for (var _i = 0; _i < arguments.length; _i++) {
                         params[_i] = arguments[_i];
                     }
-                    return (_a = Reflect.get(target, 'invoke')).call.apply(_a, __spreadArray([target, String(p)], params, false));
+                    return (_a = Reflect.get(target, 'invoke')).call.apply(_a, __spreadArray([target, p], params, false));
                 };
             },
             set: function (target, p, newValue) {
                 if (typeof newValue !== 'function') {
-                    throw new Error("property ".concat(String(p), " must be a function!"));
+                    throw new Error("property ".concat(p.toString(), " must be a function!"));
                 }
-                Reflect.get(target, 'declare').call(target, String(p), newValue);
+                Reflect.get(target, 'declare').call(target, p, newValue);
                 return true;
             }
         });
