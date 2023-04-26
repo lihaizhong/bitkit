@@ -46,9 +46,9 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CorePoint = void 0;
-var ChannelError_1 = require("src/utils/ChannelError");
 var message_1 = require("./constants/message");
 var signals_1 = require("./constants/signals");
+var ChannelError_1 = require("./utils/ChannelError");
 var Journal_1 = require("./utils/Journal");
 var MessageBody_1 = require("./utils/MessageBody");
 var MessageQueue_1 = require("./utils/MessageQueue");

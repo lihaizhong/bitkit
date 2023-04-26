@@ -1,5 +1,11 @@
 # @lihzsky/excelsior-channel
 
+## 0.1.7
+
+### Patch Changes
+
+- 优化打包路径
+
 ## 0.1.6
 
 ### Patch Changes

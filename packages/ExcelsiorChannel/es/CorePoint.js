@@ -43,9 +43,9 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-import { ChannelError } from "src/utils/ChannelError";
 import { MessageStatus, MessageTypeEnum } from "./constants/message";
 import { POINT_SIGNAL_REG } from "./constants/signals";
+import { ChannelError } from "./utils/ChannelError";
 import { Journal } from "./utils/Journal";
 import { MessageBody } from "./utils/MessageBody";
 import { MessageQueue } from "./utils/MessageQueue";

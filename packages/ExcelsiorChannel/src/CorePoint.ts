@@ -1,6 +1,6 @@
-import { ChannelError } from "src/utils/ChannelError";
 import { MessageStatus, MessageTypeEnum } from "./constants/message";
 import { POINT_SIGNAL_REG } from "./constants/signals";
+import { ChannelError } from "./utils/ChannelError";
 import { Journal } from "./utils/Journal";
 import { MessageBody, MessageNotification, MessageRequest, MessageResponse } from "./utils/MessageBody";
 import { MessageQueue, MessageReadyBody } from "./utils/MessageQueue";
