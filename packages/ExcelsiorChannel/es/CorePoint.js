@@ -125,12 +125,12 @@ var CorePoint = /** @class */ (function () {
                         method = data.method, params = data.params;
                         // 检查调用的方法是否存在
                         if (!(typeof this.controllers[method] === 'function')) {
-                            throw new ChannelError("method[".concat(method, "] does not declare!"));
+                            throw new ChannelError("method<".concat(method, "> does not declare!"));
                         }
                         fn = this.controllers[method];
                         // 检查方法的参数个数是否一致
                         if (fn.length !== params.length) {
-                            throw new ChannelError("method[".concat(method, "] invalid method parameters"));
+                            throw new ChannelError("method<".concat(method, "> invalid method parameters"));
                         }
                         return [4 /*yield*/, fn.apply(void 0, params)];
                     case 1:

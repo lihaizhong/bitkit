@@ -85,14 +85,14 @@ export class CorePoint {
 
         // 检查调用的方法是否存在
         if (!(typeof this.controllers[method] === 'function')) {
-          throw new ChannelError(`method[${method}] does not declare!`);
+          throw new ChannelError(`method<${method}> does not declare!`);
         }
 
         const fn = this.controllers[method];
 
         // 检查方法的参数个数是否一致
         if (fn.length !== params.length) {
-          throw new ChannelError(`method[${method}] invalid method parameters`);
+          throw new ChannelError(`method<${method}> invalid method parameters`);
         }
 
         await fn(...params)

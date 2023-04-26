@@ -1,1 +1,1 @@
-{"version":3,"file":"ChannelError.js","sourceRoot":"","sources":["../../../src/utils/ChannelError.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAAA;IAAkC,gCAAK;IACrC,sBAAY,OAAgB;eAC1B,kBAAM,4BAAqB,OAAO,CAAE,CAAC;IACvC,CAAC;IACH,mBAAC;AAAD,CAAC,AAJD,CAAkC,KAAK,GAItC;AAJY,oCAAY"}
+{"version":3,"file":"ChannelError.js","sourceRoot":"","sources":["../../../src/utils/ChannelError.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAAA;IAAkC,gCAAK;IACrC,sBAAY,OAAgB;eAC1B,kBAAM,sCAAqB,OAAO,CAAE,CAAC;IACvC,CAAC;IACH,mBAAC;AAAD,CAAC,AAJD,CAAkC,KAAK,GAItC;AAJY,oCAAY"}

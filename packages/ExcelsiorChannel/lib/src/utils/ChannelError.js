@@ -19,7 +19,7 @@ exports.ChannelError = void 0;
 var ChannelError = /** @class */ (function (_super) {
     __extends(ChannelError, _super);
     function ChannelError(message) {
-        return _super.call(this, "[ExcelsiorChannel]".concat(message)) || this;
+        return _super.call(this, "\u3010ExcelsiorChannel\u3011".concat(message)) || this;
     }
     return ChannelError;
 }(Error));
