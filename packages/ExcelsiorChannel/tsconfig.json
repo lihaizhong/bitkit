@@ -8,6 +8,6 @@
     "baseUrl": ".",
     "sourceMap": true,
     "esModuleInterop": true,
-    "lib": ["ESNext", "DOM"]
+    "lib": ["ESNext", "DOM", "ES2022.Error"]
   }
 }

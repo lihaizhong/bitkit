@@ -1,5 +1,11 @@
 # @lihzsky/excelsior-channel
 
+## 0.1.6
+
+### Patch Changes
+
+- 优化错误处理
+
 ## 0.1.5
 
 ### Patch Changes

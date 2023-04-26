@@ -43,6 +43,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
+import { ChannelError } from "src/utils/ChannelError";
 import { MessageStatus, MessageTypeEnum } from "./constants/message";
 import { POINT_SIGNAL_REG } from "./constants/signals";
 import { Journal } from "./utils/Journal";
@@ -78,7 +79,7 @@ var CorePoint = /** @class */ (function () {
             },
             set: function (target, p, newValue) {
                 if (typeof newValue !== 'function') {
-                    throw new Error("property ".concat(p.toString(), " must be a function!"));
+                    throw new ChannelError("property ".concat(p.toString(), " must be a function!"));
                 }
                 Reflect.get(target, 'declare').call(target, p, newValue);
                 return true;
@@ -124,12 +125,12 @@ var CorePoint = /** @class */ (function () {
                         method = data.method, params = data.params;
                         // 检查调用的方法是否存在
                         if (!(typeof this.controllers[method] === 'function')) {
-                            throw new Error("method[".concat(method, "] does not declare!"));
+                            throw new ChannelError("method[".concat(method, "] does not declare!"));
                         }
                         fn = this.controllers[method];
                         // 检查方法的参数个数是否一致
                         if (fn.length !== params.length) {
-                            throw new Error("method[".concat(method, "] invalid method parameters"));
+                            throw new ChannelError("method[".concat(method, "] invalid method parameters"));
                         }
                         return [4 /*yield*/, fn.apply(void 0, params)];
                     case 1:
@@ -155,16 +156,16 @@ var CorePoint = /** @class */ (function () {
                         method = data.method, params = data.params;
                         // 检查id是否合法
                         if (!this.checkIdentification(data.id)) {
-                            throw new Error('NotWellFormed');
+                            throw new ChannelError('NotWellFormed');
                         }
                         // 检查调用的方法是否存在
                         if (!(typeof this.controllers[method] === 'function')) {
-                            throw new Error('NotFound');
+                            throw new ChannelError('NotFound');
                         }
                         fn = this.controllers[method];
                         // 检查方法的参数个数是否一致
                         if (fn.length > params.length) {
-                            throw new Error('InvalidMethodParameters');
+                            throw new ChannelError('InvalidMethodParameters');
                         }
                         return [4 /*yield*/, fn.apply(void 0, params)];
                     case 1:

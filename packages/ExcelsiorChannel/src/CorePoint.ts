@@ -1,3 +1,4 @@
+import { ChannelError } from "src/utils/ChannelError";
 import { MessageStatus, MessageTypeEnum } from "./constants/message";
 import { POINT_SIGNAL_REG } from "./constants/signals";
 import { Journal } from "./utils/Journal";
@@ -35,7 +36,7 @@ export class CorePoint {
 
       set(target: CorePoint, p: string | symbol, newValue: any): boolean {
         if (typeof newValue !== 'function') {
-          throw new Error(`property ${p.toString()} must be a function!`)
+          throw new ChannelError(`property ${p.toString()} must be a function!`)
         }
 
         Reflect.get(target, 'declare').call(target, p, newValue)
@@ -84,14 +85,14 @@ export class CorePoint {
 
         // 检查调用的方法是否存在
         if (!(typeof this.controllers[method] === 'function')) {
-          throw new Error(`method[${method}] does not declare!`);
+          throw new ChannelError(`method[${method}] does not declare!`);
         }
 
         const fn = this.controllers[method];
 
         // 检查方法的参数个数是否一致
         if (fn.length !== params.length) {
-          throw new Error(`method[${method}] invalid method parameters`);
+          throw new ChannelError(`method[${method}] invalid method parameters`);
         }
 
         await fn(...params)
@@ -109,19 +110,19 @@ export class CorePoint {
 
         // 检查id是否合法
         if (!this.checkIdentification(data.id)) {
-          throw new Error('NotWellFormed');
+          throw new ChannelError('NotWellFormed');
         }
 
         // 检查调用的方法是否存在
         if (!(typeof this.controllers[method] === 'function')) {
-          throw new Error('NotFound');
+          throw new ChannelError('NotFound');
         }
 
         const fn = this.controllers[method];
 
         // 检查方法的参数个数是否一致
         if (fn.length > params.length) {
-          throw new Error('InvalidMethodParameters');
+          throw new ChannelError('InvalidMethodParameters');
         }
 
         const result = await fn(...params);
