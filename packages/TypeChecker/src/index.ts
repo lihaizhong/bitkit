@@ -248,10 +248,10 @@ export interface TypeCheckerIntr {
 }
 
 export default new Proxy<TypeCheckerIntr>(TypeChecker, {
-  get(target: TypeCheckerIntr, p: string | symbol, receiver: any): any {
+  get(target: TypeCheckerIntr, p: string | symbol, receiver: any): TypeCheckerFn | TypeCheckerIntr {
     if (p === 'not') {
       return new Proxy(TypeChecker, {
-        get(t: TypeCheckerIntr, p: string | symbol, receiver: any): any {
+        get(t: TypeCheckerIntr, p: string | symbol, receiver: any): TypeCheckerFn {
           return (value: any) => !Reflect.get(t, p, receiver)(value)
         },
 
