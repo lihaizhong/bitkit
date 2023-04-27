@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Journal = void 0;
-var Journal = /** @class */ (function () {
+var Journal = exports.Journal = /** @class */ (function () {
     function Journal(inst) {
         if (inst === void 0) { inst = console; }
         this.label = null;
+        this.level = 'error';
         this.inst = inst;
     }
     Journal.style = function (background, color) {
@@ -19,7 +20,14 @@ var Journal = /** @class */ (function () {
             this.inst.group(this.label || label);
             messages.forEach(cb);
             this.inst.groupEnd();
+            this.label = null;
         }
+    };
+    Journal.prototype.compareLevel = function (level) {
+        return Journal.levels.indexOf(this.level) >= Journal.levels.indexOf(level);
+    };
+    Journal.prototype.setLevel = function (level) {
+        this.level = level;
     };
     Journal.prototype.group = function (label) {
         this.label = label.toLocaleUpperCase();
@@ -37,7 +45,7 @@ var Journal = /** @class */ (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        (_a = this.inst).log.apply(_a, args);
+        this.compareLevel('log') && (_a = this.inst).log.apply(_a, args);
     };
     Journal.prototype.success = function () {
         var _this = this;
@@ -45,10 +53,9 @@ var Journal = /** @class */ (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        this.printf('SUCCESS', args, function (message) {
+        this.compareLevel('info') && this.printf('SUCCESS', args, function (message) {
             _this.inst.log('%csuccess', Journal.style('#68B984'), message);
         });
-        this.label = null;
     };
     Journal.prototype.info = function () {
         var _this = this;
@@ -56,10 +63,9 @@ var Journal = /** @class */ (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        this.printf('INFO', args, function (message) {
+        this.compareLevel('info') && this.printf('INFO', args, function (message) {
             _this.inst.info('%cinfo', Journal.style('#B2A4FF'), message);
         });
-        this.label = null;
     };
     Journal.prototype.debug = function () {
         var _this = this;
@@ -67,10 +73,9 @@ var Journal = /** @class */ (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        this.printf('DEBUG', args, function (message) {
-            _this.inst.debug('%cdebug', Journal.style('#3DB2FF'), message);
+        this.compareLevel('info') && this.printf('DEBUG', args, function (message) {
+            _this.inst.log('%cdebug', Journal.style('#3DB2FF'), message);
         });
-        this.label = null;
     };
     Journal.prototype.warn = function () {
         var _this = this;
@@ -78,10 +83,9 @@ var Journal = /** @class */ (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        this.printf('WARNING', args, function (message) {
+        this.compareLevel('warn') && this.printf('WARNING', args, function (message) {
             _this.inst.warn('%cwarning', Journal.style('#FFB830'), message);
         });
-        this.label = null;
     };
     Journal.prototype.error = function () {
         var _this = this;
@@ -89,12 +93,11 @@ var Journal = /** @class */ (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        this.printf('ERROR', args, function (message) {
+        this.compareLevel('error') && this.printf('ERROR', args, function (message) {
             _this.inst.error('%cerror', Journal.style('#FF2442'), message);
         });
-        this.label = null;
     };
+    Journal.levels = ['error', 'warn', 'log', 'info'];
     return Journal;
 }());
-exports.Journal = Journal;
 //# sourceMappingURL=Journal.js.map
