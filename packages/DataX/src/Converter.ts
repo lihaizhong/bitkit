@@ -1,9 +1,5 @@
-import { ITransformBean } from "../typings"
-import TypeChecker from "./checker"
-import { checkOfStrict } from "@lihzsky/type-checker"
-import { DataX } from "./DataX"
+import { TypeChecker, checkOfStrict } from "@lihzsky/type-checker"
 import { debug } from "./log"
-import { Any } from "./Types"
 import ValueParser from "./valueParser"
 
 export class Convertor {

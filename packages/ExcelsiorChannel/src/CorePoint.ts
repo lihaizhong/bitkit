@@ -21,7 +21,7 @@ export class CorePoint {
 
   protected isReady: boolean = false;
 
-  protected logger: any = new Journal();
+  protected logger: Journal = new Journal();
 
   /**
    * 包装端口封装

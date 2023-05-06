@@ -1,7 +1,4 @@
-import { checkOfStrict } from "@lihzsky/type-checker"
-import { ITransformBean } from "../typings"
-import { Convertor } from "./Convertor"
-import TypeChecker from "./checker"
+import { TypeChecker, checkOfStrict } from "@lihzsky/type-checker"
 import { warn } from "./log"
 
 export default {
