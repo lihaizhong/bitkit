@@ -28,6 +28,6 @@
   "devDependencies": {
     "jest-environment-puppeteer": "^8.0.6",
     "jest-puppeteer": "^8.0.6",
-    "puppeteer": "^19.9.1"
+    "puppeteer": "^19.11.1"
   }
 }
