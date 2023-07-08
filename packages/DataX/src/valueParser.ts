@@ -1,164 +1,127 @@
-import { TypeChecker, checkOfStrict } from "@lihzsky/type-checker"
-import { warn } from "./log"
+import {
+  checkOfStrict,
+  isArray,
+  isObject,
+  isVoid
+} from "@lihzsky/type-checker";
 
-export default {
-  /**
-   * 解析成字符串
-   * @param fieldValue
-   * @param defaultValue
-   * @param key
-   * @returns
-   */
-  typeOfString(fieldValue: string | number, defaultValue: any, key: string): string {
-    if (checkOfStrict(fieldValue, String)) {
-      return fieldValue as string
-    }
+export class ValueParser {
+	/**
+	 * 解析成字符串
+	 */
+	toString(
+		fieldName: string,
+		fieldValue: string | number,
+		defaultValue: any,
+	): string {
+		if (checkOfStrict(fieldValue, String)) {
+			return fieldValue as string;
+		}
 
-    if (checkOfStrict(fieldValue, Number)) {
-      return fieldValue.toString()
-    }
+		if (checkOfStrict(fieldValue, Number)) {
+			return fieldValue.toString();
+		}
 
-    if (!TypeChecker.isVoid(fieldValue)) {
-      warn('DataX.typeOfString', `${key} is not a string or number!`, fieldValue)
-    }
+		if (!isVoid(fieldValue)) {
+			console.warn(
+				"DataX.toString",
+				`${fieldName} is not a string or number!`,
+				fieldValue,
+			);
+		}
 
-    return defaultValue
-  },
+		return defaultValue;
+	}
 
-  /**
-   * 解析成数字
-   * @param fieldValue
-   * @param defaultValue
-   * @param key
-   * @returns
-   */
-  typeOfNumber(fieldValue: string | number, defaultValue: any, key: string): number {
-    if (checkOfStrict(fieldValue, Number)) {
-      return fieldValue as number
-    }
+	/**
+	 * 解析成数字
+	 */
+	toNumber(
+		fieldName: string,
+		fieldValue: string | number,
+		defaultValue: any,
+	): number {
+		if (checkOfStrict(fieldValue, Number)) {
+			return fieldValue as number;
+		}
 
-    if (
-      checkOfStrict(fieldValue, String) &&
-      /^\d+$/.test(fieldValue as unknown as string)
-    ) {
-      return Number(fieldValue)
-    }
+		if (
+			checkOfStrict(fieldValue, String) &&
+			/^\d+$/.test(fieldValue as unknown as string)
+		) {
+			return Number(fieldValue);
+		}
 
-    if (!TypeChecker.isVoid(fieldValue)) {
-      warn('DataX.typeOfNumber', `${key} is not a number or numeric string`, fieldValue)
-    }
+		if (!isVoid(fieldValue)) {
+			console.warn(
+				"DataX.toNumber",
+				`${fieldName} is not a number or numeric string`,
+				fieldValue,
+			);
+		}
 
-    return defaultValue
-  },
+		return defaultValue;
+	}
 
-  /**
-   * 解析成布尔
-   * @param fieldValue
-   * @param defaultValue
-   * @param key
-   * @returns
-   */
-  typeOfBoolean(fieldValue: boolean, defaultValue: any, key: string): boolean {
-    if (checkOfStrict(fieldValue, Boolean)) {
-      return fieldValue
-    }
+	/**
+	 * 解析成布尔
+	 */
+	toBoolean(
+		fieldName: string,
+		fieldValue: boolean,
+		defaultValue: any,
+	): boolean {
+		if (checkOfStrict(fieldValue, Boolean)) {
+			return fieldValue;
+		}
 
-    if (!TypeChecker.isVoid(fieldValue)) {
-      warn('DataX.typeOfBoolean', `${key} is not a boolean`, fieldValue)
-    }
+		if (!isVoid(fieldValue)) {
+			console.warn(
+				"DataX.toBoolean",
+				`${fieldName} is not a boolean`,
+				fieldValue,
+			);
+		}
 
-    return defaultValue
-  },
+		return defaultValue;
+	}
 
-  /**
-   * 解析成对象
-   * @param fieldValue
-   * @param defaultValue
-   * @param key
-   * @returns
-   */
-  typeOfObject(fieldValue: object, defaultValue: any, key: string): Record<string, any> {
-    if (checkOfStrict(fieldValue, Object)) {
-      return fieldValue
-    }
+	/**
+	 * 解析成对象
+	 */
+	toObject(
+		fieldName: string,
+		fieldValue: object,
+		defaultValue: any,
+	): Record<string, any> {
+		if (isObject(fieldValue)) {
+			return fieldValue;
+		}
 
-    if (!TypeChecker.isVoid(fieldValue)) {
-      console.warn('DataX.typeOfObject', `${key} is not a plain object`, fieldValue)
-    }
+		if (!isVoid(fieldValue)) {
+			console.warn(
+				"DataX.toObject",
+				`${fieldName} is not a plain object`,
+				fieldValue,
+			);
+		}
 
-    return defaultValue
-  },
-
-  /**
-   * 解析成数组
-   * @param fieldValue
-   * @param defaultValue
-   * @param key
-   * @param fieldConfig
-   * @param config
-   * @returns
-   */
-  typeOfArray(
-    fieldValue: any[],
-    defaultValue: any,
-    key: string,
-    fieldConfig: ITransformBean.FieldConfig,
-    config: ITransformBean.GlobalOptions,
-    parser: any
-  ): any[] {
-    if (TypeChecker.isArray(fieldValue)) {
-      const { convert } = fieldConfig
-
-      if (TypeChecker.isFunction(convert)) {
-        return convert(Convertor, key, fieldConfig, config)
-      }
-
-      return fieldValue.map((value: any, index: number) => {
-        const convertor = new Convertor(`__DATA_X_ITEM__${key}_${index}__`, config)
-
-        return convertor.convert(fieldConfig, value, parser)
-      })
-    }
-
-    if (!TypeChecker.isVoid(fieldValue)) {
-      warn('DataX.typeOfArray', `${key} is not a array!`, fieldValue)
-    }
-
-    return defaultValue
-  },
+		return defaultValue;
+	}
 
   /**
-   * 不对任何值进行解析，直接输出
-   * @param fieldValue
-   * @returns
-   */
-  typeOfAny(fieldValue: any): any {
-    return fieldValue
-  },
+	 * 解析成数组
+	 */
+	toArray(
+		fieldName: string,
+		fieldValue: any[],
+		defaultValue: any,
+		callback: (subItem: any, subIndex: number) => any,
+	): any[] {
+		if (!isArray(fieldValue)) {
+			console.warn("DataX.toArray", `${fieldName} is not a array!`, fieldValue);
+		}
 
-  /**
-   * 解析继承自DataX的类型
-   * @param MiddlewareBean
-   * @param data
-   * @param key
-   * @param config
-   * @returns
-   */
-  typeOfDefault(MiddlewareBean: any, data: any, key: string, config: any): any {
-    if (TypeChecker.isVoid(MiddlewareBean)) {
-      return data
-    }
-
-    try {
-      const middlewareBean = new MiddlewareBean(config)
-
-      middlewareBean.transform(data)
-
-      return middlewareBean.valueOf()
-    } catch (ex) {
-      warn('DataX.typeOfDefault', `${key} is not a constructor`, MiddlewareBean, data)
-
-      return data
-    }
-  }
+		return (fieldValue || defaultValue).map(callback);
+	}
 }
