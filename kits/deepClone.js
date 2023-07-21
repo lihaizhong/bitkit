@@ -2,6 +2,7 @@ export function deepClone (target) {
   // 通过原型对象获取对象类型
   const type = Object.prototype.toString.call(target)
   let source
+
   if (type === '[object Array]') {
     // 数组
     source = []
@@ -22,5 +23,6 @@ export function deepClone (target) {
     // 基本类型和方法可以直接赋值
     source = target
   }
+
   return source
 }

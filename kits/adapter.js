@@ -12,6 +12,8 @@
 /**
  * 方法一
  */
+
+// rome-ignore lint/complexity/noExtraSemicolon: <explanation>
 ;(function (doc, win) {
   const docEl = doc.documentElement
   const maxWidth = docEl.dataset.mw || 750
