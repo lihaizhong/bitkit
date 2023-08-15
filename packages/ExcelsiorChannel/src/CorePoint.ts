@@ -19,7 +19,7 @@ export class CorePoint {
 
   protected subscriptions: Record<string, { success: (value: any) => void, error: (error: any) => void }> = {};
 
-  protected isReady: boolean = false;
+  protected isReady = false;
 
   protected logger: Journal = new Journal();
 
@@ -208,6 +208,7 @@ export class CorePoint {
 
     this.isReady = true;
     // 循环调用等待队列，直到所有消息发送完成
+    // rome-ignore lint/suspicious/noAssignInExpressions: <explanation>
     while (data = this.queue.pop()) {
       this.port?.postMessage(data.body);
     }

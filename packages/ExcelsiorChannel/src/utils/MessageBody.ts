@@ -23,10 +23,10 @@ export interface MessageResponseError {
   data?: any;
 }
 
-export class MessageBody<T extends any> {
-  private jsonrpc: string = '2.0';
+export class MessageBody<T> {
+  private jsonrpc = '2.0';
 
-  static type: string = 'json-rpc';
+  static type = 'json-rpc';
 
   static checkProtocol(data: any): boolean {
     if (Array.isArray(data)) {

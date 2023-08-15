@@ -25,13 +25,13 @@ export class Journal {
 
   private label: string | null = null;
 
-  private level: string = 'error';
+  private level = 'error';
 
   constructor(inst: JournalConsole = console) {
     this.inst = inst;
   }
 
-  static style(background: string, color: string = '#FFFFFF') {
+  static style(background: string, color = '#FFFFFF') {
     return `padding: 2px 4px; background: ${background}; color: ${color}; border-radius: 4px;`
   }
 
