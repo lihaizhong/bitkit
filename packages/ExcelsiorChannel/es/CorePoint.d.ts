@@ -1,3 +1,4 @@
+import { Journal } from "./utils/Journal";
 import { MessageBody } from "./utils/MessageBody";
 import { MessageQueue } from "./utils/MessageQueue";
 export type PointController = (...params: any[]) => any;
@@ -11,7 +12,7 @@ export declare class CorePoint {
         error: (error: any) => void;
     }>;
     protected isReady: boolean;
-    protected logger: any;
+    protected logger: Journal;
     /**
      * 包装端口封装
      * @param endpoint

@@ -1,5 +1,5 @@
 import TypeChecker from '@lihzsky/type-checker';
-class Tempo {
+export class Tempo {
     static getRemainByStandardTime(standardTime, gapStr) {
         if (Tempo.remainTime === 0) {
             return '';
@@ -103,5 +103,4 @@ Tempo.ST = {
     ONE_SECOND: 1000
 };
 Tempo.remainTime = 0;
-export { Tempo };
 export default new Tempo();

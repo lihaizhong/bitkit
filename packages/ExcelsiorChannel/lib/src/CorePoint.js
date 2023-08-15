@@ -259,6 +259,7 @@ var CorePoint = /** @class */ (function () {
         var data;
         this.isReady = true;
         // 循环调用等待队列，直到所有消息发送完成
+        // rome-ignore lint/suspicious/noAssignInExpressions: <explanation>
         while (data = this.queue.pop()) {
             (_a = this.port) === null || _a === void 0 ? void 0 : _a.postMessage(data.body);
         }

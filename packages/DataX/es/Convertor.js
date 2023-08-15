@@ -9,52 +9,24 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import TypeChecker from "./checker";
-import { checkOfStrict } from "@lihzsky/type-checker";
-import { DataX } from "./DataX";
-import { debug } from "./log";
-import { Any } from "./Types";
-import ValueParser from "./valueParser";
+import { TypeChecker } from "@lihzsky/type-checker";
+import { BasicPresets, PresetCollection } from "./PresetCollection";
+import { ValueParser } from "./valueParser";
 var Convertor = /** @class */ (function () {
-    function Convertor(name, options) {
-        this.name = name;
-        this.options = options;
+    function Convertor() {
     }
     /**
      * 设置默认值
      * @param {any} type 数据类型
      * @param {any} defaultValue 用户定义的默认数值
      * @param {any} placeholderValue 系统定义的默认数值
-     * @param {any} options 数据类型判断
      * @returns {any}
      */
-    Convertor.prototype.getDefaultValue = function (type, defaultValue, placeValue, options) {
-        if (options.loose || checkOfStrict(defaultValue, type) || TypeChecker.isNull(defaultValue)) {
+    Convertor.prototype.getDefaultValue = function (type, defaultValue, placeValue) {
+        if (PresetCollection.check(type, placeValue) || TypeChecker.isNull(defaultValue)) {
             return defaultValue;
         }
         return placeValue;
-    };
-    /**
-     * 生成字段配置信息
-     * @param {any} fieldConfig
-     * @returns {any}
-     */
-    Convertor.prototype.generateFieldOptions = function (fieldConfig) {
-        var _this = this;
-        var fieldOptionKeys = ['loose'];
-        var OPTION_MAPPING = {
-            loose: 'looseFields'
-        };
-        return fieldOptionKeys.reduce(function (fieldOptions, key) {
-            if (!TypeChecker.isVoid(fieldConfig[key])) {
-                fieldOptions[key] = fieldConfig[key];
-            }
-            else {
-                var globalOptionKey = OPTION_MAPPING[key];
-                fieldOptions[key] = _this.options[globalOptionKey];
-            }
-            return fieldOptions;
-        }, {});
     };
     /**
      * 解析field对应的值
@@ -70,41 +42,75 @@ var Convertor = /** @class */ (function () {
             if (TypeChecker.isFunction(field)) {
                 return field(target);
             }
-            if (TypeChecker.isString(defaultField) && defaultField !== "") {
+            if (TypeChecker.isString(defaultField) &&
+                /^[a-zA-Z_]+\w*$/.test(defaultField)) {
                 return target[defaultField];
             }
         }
         return target;
+    };
+    Convertor.prototype.parseFieldConfig = function (fieldConfig, data) {
+        var fieldName = fieldConfig.name, type = fieldConfig.type, itemType = fieldConfig.itemType, customFieldName = fieldConfig.field, defaultValue = fieldConfig.defaultValue;
+        var fieldValue = this.parseFieldValue(data, customFieldName, fieldName);
+        return {
+            type: type,
+            itemType: itemType,
+            fieldName: fieldName,
+            fieldValue: fieldValue,
+            defaultValue: defaultValue,
+        };
     };
     /**
      * 设置各种类型的值
      * @param {object} fieldConfig 字段配置信息
      * @param {any} data 数据
      */
-    Convertor.prototype.convert = function (fieldConfig, data, CustomValueParser) {
-        var type = fieldConfig.type, itemType = fieldConfig.itemType, field = fieldConfig.field, defaultValue = fieldConfig.defaultValue;
-        var fieldValue = this.parseFieldValue(data, field, this.name);
-        var options = this.generateFieldOptions(fieldConfig);
-        debug('DataX.convert', this.name, fieldConfig, options, data);
+    Convertor.prototype.convertDefinedField = function (fieldConfig, data) {
+        var _this = this;
+        var _a = this.parseFieldConfig(fieldConfig, data), type = _a.type, itemType = _a.itemType, fieldName = _a.fieldName, fieldValue = _a.fieldValue, defaultValue = _a.defaultValue;
+        var valueParser = new ValueParser();
         switch (type) {
-            case Any:
-                return ValueParser.typeOfAny(fieldValue);
-            case String:
-                return ValueParser.typeOfString(fieldValue, this.getDefaultValue(type, defaultValue, "", options), this.name);
-            case Number:
-                return ValueParser.typeOfNumber(fieldValue, this.getDefaultValue(type, defaultValue, null, options), this.name);
-            case Boolean:
-                return ValueParser.typeOfBoolean(fieldValue, this.getDefaultValue(type, defaultValue, null, options), this.name);
-            case Array:
-                return ValueParser.typeOfArray(fieldValue, this.getDefaultValue(type, defaultValue, [], options), this.name, __assign(__assign({}, options), { type: itemType }), this.options, CustomValueParser);
-            case Object:
-                return ValueParser.typeOfObject(fieldValue, this.getDefaultValue(type, defaultValue, {}, options), this.name);
+            case BasicPresets.Any:
+                return fieldValue;
+            case BasicPresets.String:
+                return valueParser.toString(fieldName, fieldValue, this.getDefaultValue(type, defaultValue, ""));
+            case BasicPresets.Number:
+                return valueParser.toNumber(fieldName, fieldValue, this.getDefaultValue(type, defaultValue, null));
+            case BasicPresets.Boolean:
+                return valueParser.toBoolean(fieldName, fieldValue, this.getDefaultValue(type, defaultValue, null));
+            case BasicPresets.Object:
+                return valueParser.toObject(fieldName, fieldValue, this.getDefaultValue(type, defaultValue, {}));
+            case BasicPresets.Array:
+                return valueParser.toArray(fieldName, fieldValue, this.getDefaultValue(type, defaultValue, []), function (subItem, subIndex) { return _this.convertDefinedField({
+                    type: itemType,
+                    name: "".concat(fieldName, "[").concat(subIndex, "]")
+                }, subItem); });
             default:
-                if (type instanceof DataX) {
-                    return ValueParser.typeOfDefault(type, fieldValue, this.name, this.options);
-                }
-                return CustomValueParser(this.name, fieldConfig, fieldValue, options);
+                return this.convertObject(type, fieldValue || null);
         }
+    };
+    Convertor.prototype.convertArray = function (name, data) {
+        var _this = this;
+        return data.map(function (item) { return _this.convertObject(name, item); });
+    };
+    Convertor.prototype.convertObject = function (name, data) {
+        var _this = this;
+        var preset = PresetCollection.get(name);
+        var keys = Object.keys(preset);
+        var values = {};
+        // 收集已配置的数据
+        values = keys.reduce(function (formatValues, key) {
+            formatValues[key] = _this.convertDefinedField(__assign(__assign({}, preset[key]), { name: key }), data);
+            return formatValues;
+        }, values);
+        // 收集未配置的数据
+        values = Object.keys(data).reduce(function (formatValues, key) {
+            if (!keys.includes(key)) {
+                formatValues[key] = data[key];
+            }
+            return formatValues;
+        }, values);
+        return values;
     };
     return Convertor;
 }());

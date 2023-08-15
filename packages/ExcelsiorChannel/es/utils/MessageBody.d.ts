@@ -17,7 +17,7 @@ export interface MessageResponseError {
     message: string;
     data?: any;
 }
-export declare class MessageBody<T extends any> {
+export declare class MessageBody<T> {
     private jsonrpc;
     static type: string;
     static checkProtocol(data: any): boolean;
