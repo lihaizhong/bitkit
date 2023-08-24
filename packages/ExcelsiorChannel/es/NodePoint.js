@@ -24,7 +24,7 @@ var NodePoint = /** @class */ (function (_super) {
             if (event.data === POINT_SIGNALS.CONNECT) {
                 var port = event.ports[0];
                 _this.connect(port);
-                _this.logger.debug('连接成功！');
+                _this.journal.debug('连接成功！');
                 port.postMessage(POINT_SIGNALS.OK);
                 _this.ready();
             }

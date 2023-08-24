@@ -20,13 +20,13 @@ export class MainPoint extends CorePoint {
     if (target) {
       // 发起连接请求
       target.postMessage(POINT_SIGNALS.CONNECT, '*', [port]);
-      this.logger.debug('发起连接请求...');
+      this.journal.debug('发起连接请求...');
     }
   }
 
   protected handleSignalMessage(event: MessageEvent<any>): void {
     if (event.data === POINT_SIGNALS.OK) {
-      this.logger.debug('握手完成！');
+      this.journal.debug('握手完成！');
       this.ready();
     }
   }

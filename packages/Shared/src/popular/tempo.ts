@@ -10,7 +10,7 @@ export class Tempo {
     ONE_SECOND: 1000
   }
 
-  static remainTime: number = 0
+  static remainTime = 0
 
   static getRemainByStandardTime(standardTime: number, gapStr: string): string {
     if (Tempo.remainTime === 0) {
@@ -26,7 +26,7 @@ export class Tempo {
 
   format(
     value: any,
-    format: string = "yyyy/MM/dd hh:mm:ss"
+    format = "yyyy/MM/dd hh:mm:ss"
   ): string {
     const date: Date | null = this.toDate(value)
 
@@ -46,7 +46,7 @@ export class Tempo {
     }
 
     return format.replace(/([yMdhmsqS])+/g, (all: string, t: string) => {
-      let fn: () => number = map[t]
+      const fn: () => number = map[t]
 
       if (t === "y") {
         return String(fn()).substring(4 - all.length)
@@ -56,7 +56,7 @@ export class Tempo {
         let valStr: string = String(fn())
 
         if (all.length > 1) {
-          valStr = "0" + valStr
+          valStr = `0${valStr}`
           valStr = valStr.substring(valStr.length - 2)
         }
 
@@ -67,7 +67,7 @@ export class Tempo {
     })
   }
 
-  toRemainTime(value: number, format: string = 'd天h小时m分钟s秒'): string {
+  toRemainTime(value: number, format = 'd天h小时m分钟s秒'): string {
     if (!TypeChecker.isNumber(+value) || Number.isNaN(value) || Number.isFinite(value)) {
       return ''
     }
@@ -91,7 +91,7 @@ export class Tempo {
     })
   }
 
-  toDate(value: any, strict: boolean = false): Date | null {
+  toDate(value: any, strict = false): Date | null {
     if (value instanceof Date) {
       return value
     }
@@ -122,7 +122,7 @@ export class Tempo {
     return null
   }
 
-  toTimestamp(value: any, strict: boolean = false): number {
+  toTimestamp(value: any, strict = false): number {
     if (TypeChecker.isValidDate(value)) {
       return new Date(value).getTime()
     }

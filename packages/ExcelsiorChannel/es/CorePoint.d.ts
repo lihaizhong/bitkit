@@ -12,7 +12,7 @@ export declare class CorePoint {
         error: (error: any) => void;
     }>;
     protected isReady: boolean;
-    protected logger: Journal;
+    protected journal: Journal;
     /**
      * 包装端口封装
      * @param endpoint

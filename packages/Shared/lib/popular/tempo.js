@@ -39,14 +39,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
                 S: () => date.getMilliseconds(), // 毫秒
             };
             return format.replace(/([yMdhmsqS])+/g, (all, t) => {
-                let fn = map[t];
+                const fn = map[t];
                 if (t === "y") {
                     return String(fn()).substring(4 - all.length);
                 }
                 if (type_checker_1.default.isFunction(fn)) {
                     let valStr = String(fn());
                     if (all.length > 1) {
-                        valStr = "0" + valStr;
+                        valStr = `0${valStr}`;
                         valStr = valStr.substring(valStr.length - 2);
                     }
                     return valStr;

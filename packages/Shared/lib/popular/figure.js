@@ -29,7 +29,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
         },
         toPercent(value) {
             if (type_checker_1.default.isNumber(value)) {
-                return (value / 100) + '%';
+                return `${value / 100}%`;
             }
             return '';
         }

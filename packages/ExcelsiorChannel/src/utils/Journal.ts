@@ -19,13 +19,13 @@ export interface JournalGroupExpose {
 }
 
 export class Journal {
-  static levels: string[] = ['error', 'warn', 'log', 'info']
+  static levels: string[] = ['log', 'info', 'warn', 'error']
 
   private inst: JournalConsole;
 
   private label: string | null = null;
 
-  private level = 'error';
+  private level = 'info';
 
   constructor(inst: JournalConsole = console) {
     this.inst = inst;

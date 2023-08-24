@@ -36,12 +36,12 @@ var MainPoint = /** @class */ (function (_super) {
         if (target) {
             // 发起连接请求
             target.postMessage(signals_1.POINT_SIGNALS.CONNECT, '*', [port]);
-            this.logger.debug('发起连接请求...');
+            this.journal.debug('发起连接请求...');
         }
     };
     MainPoint.prototype.handleSignalMessage = function (event) {
         if (event.data === signals_1.POINT_SIGNALS.OK) {
-            this.logger.debug('握手完成！');
+            this.journal.debug('握手完成！');
             this.ready();
         }
     };

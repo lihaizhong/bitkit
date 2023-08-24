@@ -45,15 +45,15 @@ export default class AsyncReady {
     }
   }
 
-  wait() {
+  wait(): void {
     this.status = AsyncReady.ReadyStatus.pending
   }
 
-  reset() {
+  reset(): void {
     this.status = AsyncReady.ReadyStatus.initialize
   }
 
-  complete() {
+  complete(): void {
     this.status = AsyncReady.ReadyStatus.completed
     this.callbacks.forEach(callback => AsyncReady.callReadyFunc(callback, this.params))
     this.callbacks = []

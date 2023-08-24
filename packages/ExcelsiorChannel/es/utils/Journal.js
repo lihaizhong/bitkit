@@ -2,7 +2,7 @@ export var Journal = /** @class */ (function () {
     function Journal(inst) {
         if (inst === void 0) { inst = console; }
         this.label = null;
-        this.level = 'error';
+        this.level = 'info';
         this.inst = inst;
     }
     Journal.style = function (background, color) {
@@ -94,7 +94,7 @@ export var Journal = /** @class */ (function () {
             _this.inst.error('%cerror', Journal.style('#FF2442'), message);
         });
     };
-    Journal.levels = ['error', 'warn', 'log', 'info'];
+    Journal.levels = ['log', 'info', 'warn', 'error'];
     return Journal;
 }());
 //# sourceMappingURL=Journal.js.map

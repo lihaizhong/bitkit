@@ -29,11 +29,11 @@ export function IdCardValidator(code: string): boolean {
     const codeArr: string[] = code.split('')
     const factor: ReadonlyArray<number> = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
     const parity: ReadonlyArray<string | number> = [1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2]
-    let sum: number = 0
-    let ai: number = 0
-    let wi: number = 0
+    let sum = 0
+    let ai = 0
+    let wi = 0
 
-    for(let i: number = 0; i < 17; i++) {
+    for(let i = 0; i < 17; i++) {
       ai = +codeArr[i]
       wi = factor[i]
       sum += ai * wi

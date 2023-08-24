@@ -14,7 +14,7 @@ export const Figure = {
     },
     toPercent(value) {
         if (TypeChecker.isNumber(value)) {
-            return (value / 100) + '%';
+            return `${value / 100}%`;
         }
         return '';
     }
