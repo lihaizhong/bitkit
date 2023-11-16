@@ -1,4 +1,4 @@
-import { TypeChecker } from "@lihzsky/type-checker";
+import { TypeChecker, checkOfStrict, isFunction, isNull, isObject, isString } from "@lihzsky/type-checker";
 import { FieldConfig, PresetConfig } from "typings";
 import { BasicPresets, PresetCollection } from "./PresetCollection";
 import { ValueParser } from "./valueParser";
@@ -11,8 +11,8 @@ export class Convertor {
 	 * @param {any} placeholderValue 系统定义的默认数值
 	 * @returns {any}
 	 */
-	private getDefaultValue(type: string, defaultValue: any, placeValue: any): any {
-		if (PresetCollection.check(type, placeValue) || TypeChecker.isNull(defaultValue)) {
+	private getDefaultValue(type: any, defaultValue: any, placeValue: any): any {
+		if (checkOfStrict(type, placeValue) || isNull(defaultValue)) {
 			return defaultValue;
 		}
 
@@ -26,17 +26,17 @@ export class Convertor {
 	 * @param {string} defaultField
 	 */
 	private parseFieldValue(target: any, field: any, defaultField: string): any {
-		if (TypeChecker.isObject(target)) {
-			if (TypeChecker.isString(field)) {
+		if (isObject(target)) {
+			if (isString(field)) {
 				return target[field];
 			}
 
-			if (TypeChecker.isFunction(field)) {
+			if (isFunction(field)) {
 				return field(target);
 			}
 
 			if (
-				TypeChecker.isString(defaultField) &&
+				isString(defaultField) &&
 				/^[a-zA-Z_]+\w*$/.test(defaultField)
 			) {
 				return target[defaultField];
@@ -80,33 +80,31 @@ export class Convertor {
 		const valueParser = new ValueParser();
 
 		switch (type) {
-			case BasicPresets.Any:
-				return fieldValue;
-			case BasicPresets.String:
+			case String:
 				return valueParser.toString(
 					fieldName,
 					fieldValue,
 					this.getDefaultValue(type, defaultValue, ""),
 				);
-			case BasicPresets.Number:
+			case Number:
 				return valueParser.toNumber(
 					fieldName,
 					fieldValue,
 					this.getDefaultValue(type, defaultValue, null),
 				);
-			case BasicPresets.Boolean:
+			case Boolean:
 				return valueParser.toBoolean(
 					fieldName,
 					fieldValue,
 					this.getDefaultValue(type, defaultValue, null),
 				);
-			case BasicPresets.Object:
+			case Object:
 				return valueParser.toObject(
 					fieldName,
 					fieldValue,
 					this.getDefaultValue(type, defaultValue, {}),
 				);
-			case BasicPresets.Array:
+			case Array:
           return valueParser.toArray(
             fieldName,
             fieldValue,
