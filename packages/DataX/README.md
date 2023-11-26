@@ -1,6 +1,10 @@
 # @lihzsky/data-x
 
-前后端交互中，数据格式化及扩展工具。帮助前端对后端数据的结构化处理，减少页面中的非空判断逻辑
+前后端交互中，我们常常依赖后端返回的数据。由于客观原因，后端有时候返回的数据结构并不完全符合预期，这时候就需要我们的工具派上用场了。我们的工具主要做以下几件事：
+
+1. 数据校验处理，减少页面中对数据类型的判断。
+2. 数据标准化处理，保证输出内容符合预期。
+3. 数据增强处理，可扩展数据字段。
 
 ## Usage
 
@@ -9,16 +13,17 @@ import { DataX } from "@lihzsky/data-x";
 
 export class TestModel extends DataX {
   name = {
-    type: String
+    type: String // 数据校验并进行标准化输出
   }
 
   id = {
     type: Number,
-    field: 'useId'
+    field: 'useId' // 字段配对
   }
 
   sexStr = {
     type: String,
+    // 数据增强，可自定义数据
     field: (data) => {
       if (data.sex === 0) {
         return '男'
@@ -31,8 +36,6 @@ export class TestModel extends DataX {
       return ''
     }
   }
-
-
 }
 
 function testFn() {
@@ -72,8 +75,6 @@ function testFn() {
 
 testFn()
 ```
-
-该工具会尽可能地帮你完成数据的转换。因为工具的解析方式有限，且为了尽可能避免出现数据误解析的问题，解析器只做了一些标准解析方式。如有特殊需求，可以使用field的方法方式，对返回值进行处理，以保证标准解析方式能通过解析。
 
 ## Recommend
 
