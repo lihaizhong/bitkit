@@ -25,21 +25,31 @@ export class MessageSink {
     // 根据数据规范判断响应类型
     if ('method' in this.payload && 'params' in this.payload) {
       if ('id' in this.payload) {
-        this.handlers.request.forEach((handler: MessageSinkCallback) => handler(this.payload));
+        for (const request of this.handlers.request) {
+          request(this.payload);
+        }
       } else {
-        this.handlers.notify.forEach((handler: MessageSinkCallback) => handler(this.payload));
+        for (const notify of this.handlers.notify) {
+          notify(this.payload);
+        }
       }
     } else if ('id' in this.payload && 'result' in this.payload) {
-      this.handlers.response.forEach((handler: MessageSinkCallback) => handler(this.payload));
+      for (const response of this.handlers.response) {
+        response(this.payload);
+      }
     } else {
-      this.handlers.error.forEach((handler: MessageSinkCallback) => handler(this.payload));
+      for (const error of this.handlers.error) {
+        error(this.payload);
+      }
     }
   }
 
   clean(): void {
-    Object.keys(this.handlers).forEach((key: string) => {
+    const keys = Object.keys(this.handlers);
+
+    for (const key of keys) {
       this.handlers[key] = [];
-    });
+    }
   }
 
   onNotify(fn: MessageSinkCallback): void {

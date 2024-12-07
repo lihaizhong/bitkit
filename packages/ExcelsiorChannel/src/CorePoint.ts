@@ -2,8 +2,8 @@ import { MessageStatus, MessageTypeEnum } from "./constants/message";
 import { POINT_SIGNAL_REG } from "./constants/signals";
 import { ChannelError } from "./utils/ChannelError";
 import { Journal } from "./utils/Journal";
-import { MessageBody, MessageNotification, MessageRequest, MessageResponse } from "./utils/MessageBody";
-import { MessageQueue, MessageReadyBody } from "./utils/MessageQueue";
+import { MessageBody, type MessageNotification, type MessageRequest, type MessageResponse } from "./utils/MessageBody";
+import { MessageQueue, type MessageReadyBody } from "./utils/MessageQueue";
 import { MessageSink } from "./utils/MessageSink";
 
 export type PointController = (...params: any[]) => any;
@@ -208,7 +208,7 @@ export class CorePoint {
 
     this.isReady = true;
     // 循环调用等待队列，直到所有消息发送完成
-    // rome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+    // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
     while (data = this.queue.pop()) {
       this.port?.postMessage(data.body);
     }
